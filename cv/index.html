@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Currículum · Francisco Marín</title>
+<link rel="icon" type="image/png" href="../img/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--fondo:#0f1129;--superficie:#161936;--linea:#2b2f5e;--texto:#f4f1ff;--tenue:#a9a7c9;--degradado:linear-gradient(120deg,#ff5c7a,#9d7bff 52%,#4d9bff)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--fondo);color:var(--texto);font:1rem/1.6 "Instrument Sans",system-ui,sans-serif;min-height:100vh}
+  body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(40rem 30rem at 90% 0%,rgba(157,123,255,.16),transparent 70%),radial-gradient(36rem 28rem at 0% 100%,rgba(255,92,122,.1),transparent 70%)}
+  header{position:sticky;top:0;z-index:5;background:rgba(15,17,41,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--linea)}
+  .barra{max-width:1000px;margin:0 auto;padding:0 clamp(1rem,4vw,2rem);height:80px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+  .marca{display:flex;align-items:center;gap:.7rem;text-decoration:none;color:inherit;font:800 1.25rem "Bricolage Grotesque",sans-serif}
+  .marca img{width:42px;height:42px;border-radius:10px;border:1px solid var(--linea)}
+  .acciones{display:flex;gap:.6rem;flex-wrap:wrap}
+  .boton{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.15rem;border-radius:8px;font:600 .95rem "Instrument Sans",sans-serif;text-decoration:none;color:var(--texto);border:1px solid var(--linea);background:var(--superficie);transition:border-color .2s,filter .2s}
+  .boton:hover{border-color:#9d7bff}
+  .boton.principal{background:var(--degradado);border:0;color:#fff}
+  .boton.principal:hover{filter:brightness(1.08)}
+  .boton svg{width:16px;height:16px}
+  main{max-width:1000px;margin:0 auto;padding:clamp(1.5rem,4vw,3rem) clamp(1rem,4vw,2rem) 4rem}
+  h1{font:800 clamp(2rem,5vw,3rem)/1.05 "Bricolage Grotesque",sans-serif;letter-spacing:-.03em;margin-bottom:.4rem}
+  p.intro{color:var(--tenue);margin-bottom:1.8rem}
+  .hoja{border-radius:14px;padding:1.5px;background:var(--degradado);box-shadow:0 40px 80px -40px rgba(0,0,0,.8)}
+  .hoja img{display:block;width:100%;height:auto;border-radius:13px;background:#fff}
+  @media(max-width:560px){.barra .acciones .secundario{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="barra">
+    <a class="marca" href="../index.html#sobre-mi"><img src="../img/avatar-192.png" alt="">frmarin.dev</a>
+    <div class="acciones">
+      <a class="boton secundario" href="../index.html#sobre-mi">Volver al portfolio</a>
+      <a class="boton principal" href="CV_Francisco_Marin.pdf" download="CV_Francisco_Marin.pdf">Descargar PDF
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 2v9M4 7l4 4 4-4M3 14h10"/></svg></a>
+    </div>
+  </div>
+</header>
+<main>
+  <h1>Currículum</h1>
+  <p class="intro">Francisco Marín Narbona · Desarrollador web. Puedes descargarlo en PDF con el botón de arriba.</p>
+  <div class="hoja"><img src="cv.webp" alt="Currículum de Francisco Marín Narbona: formación, experiencia, herramientas e idiomas" width="1407" height="1989"></div>
+  <p style="margin-top:1.5rem"><a class="boton principal" href="CV_Francisco_Marin.pdf" download="CV_Francisco_Marin.pdf">Descargar currículum en PDF
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 2v9M4 7l4 4 4-4M3 14h10"/></svg></a></p>
+</main>
+</body>
+</html>

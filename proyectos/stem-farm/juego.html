@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>STEM Farm</title>
+<style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#11142b;color:#f4f1ff;font-family:system-ui,sans-serif;text-align:center;padding:1rem}a{color:#ffc857}</style></head><body>
+<script>
+  // Añadido para el portfolio: si pulsas "Cancelar" en cualquier ventana, la partida termina.
+  const promptOriginal = window.prompt.bind(window);
+  window.prompt = (mensaje) => {
+    const respuesta = promptOriginal(mensaje);
+    if (respuesta === null) throw new Error("Partida terminada por el jugador");
+    return respuesta;
+  };
+</script>
+<script>
+    //---------------------------------DECLARACIONES----------------------------------------------------
+    let menu = 0
+    let dias = 0 //(Iteraciones)
+    let finJuego = false
+    let cantidadAnimal = 0
+    let animalesEnfermos = false; let animalesEnfermosMsg = ""
+    const MAXCORAZON = 4; const MAXALIMENTO = 4; const MAXLIMPIEZA = 6; const MINALIMENTO = 0;
+    const MAXANIMALES = 99; const MINANIMALES = 0
+    const CACASPARAENFERMAR = 4
+    const PRECIOALIMENTO = 100
+    const OBJETOSMUESTRATIENDA = 4
+    let animalesNacen = 0; let animalesMueren = 0
+    let iteracionAnimales = false
+    let pasaDia = false
+    let mantenerEnTienda = false
+    let haComprado = false
+    let yaRealizado = false
+    let arrayCorazon = []; let arrayTrigo = []; let arrayCaca = []
+    let nombreUsuario = prompt("👤 Ingrese tu nombre 👤");
+    let nombreGranja = prompt("🏡 Ingrese el nombre de su granja 🏡")
+    let numerosAleatorios = []
+    let numeroAleatorio = 0
+    let dinero = 1000; const DINEROMAX = 9999
+    const OBJETOSMERCADO = ["💧 bebedero de agua", "🛖 refugio de animales", "🧸 Juguetes para animales", "⛱️ Malla de Sombra", "🚰 Sistema de Riego", "🧹 Herramientas de limpieza", "💡 Luz Solar Artificial", "🚧 Cercado mejorado"]
+    const OBJETOSPRECIOS = [200, 500, 150, 300, 400, 100, 350, 600]
+    const SINOBJETOSCOMPRADOS = 0
+    let objetosComprados = []
+    let mercadoOpcion = ""
+    let mensajeMercado = ""
+    let dineroGanado = 0
+    let mensajeInfo = ""; let mensajeInfoSinObjetos = ""
+    let primeraIteracion = true
+    let contadorMensajeEnfermo = 0
+    //--------------------------------------------------FUNCIONES---------------------------------------------    
+    function elegirMenu(eleccionJugador) {
+        if (eleccionJugador == 1) { menu1(eleccionJugador) }
+        else if (eleccionJugador == 2) { menu2() }
+        else if (eleccionJugador == 3) { menu3() }
+        else if (eleccionJugador == 4) { menu4() }
+        else if (eleccionJugador == 5) { menu5(mensajeInfoSinObjetos, mensajeInfo) }
+        else if (eleccionJugador == 6) { menu6() }
+        else if (eleccionJugador == 7) { menu7() }
+    }
+        function menu1() {
+            let respuestaMenu1 = "";
+        if (arrayTrigo.length <= MINALIMENTO) {
+            respuestaMenu1 = "No tienes alimento para animales";
+            alert(respuestaMenu1);
+            return;
+        }
+        pasaDia = true;
+        let queComida = Number(prompt("¿Con qué quieres alimentar a los animales?\n1. Alimentar con forraje🌾\n2. Alimentar con fruta🍎"));
+        while (queComida !== 1 && queComida !== 2) {
+            queComida = Number(prompt("❌ Opción no válida.\n¿Con qué quieres alimentar a los animales?\n1. Alimentar con forraje🌾\n2. Alimentar con fruta🍎"));
+        }
+        if (queComida === 1) {
+            arrayTrigo.pop();
+            respuestaMenu1 = "Alimentaste a los animales con forraje";
+            console.log(respuestaMenu1);
+        } else if (queComida === 2) {
+            if (animalesEnfermos) {
+                respuestaMenu1 = "Los animales enfermos no pueden comer fruta";
+                alert(respuestaMenu1);
+                pasaDia = false;
+            } else {
+                arrayTrigo.pop();
+                arrayCorazon.push("❤️");
+                respuestaMenu1 = "Alimentaste a los animales con fruta";
+                console.log(respuestaMenu1);
+            }
+        }
+    }
+    function menu2() {
+        if (arrayCaca.length < CACASPARAENFERMAR && arrayTrigo.length > 0 && animalesEnfermos == false) {
+            arrayCorazon.push("❤️");
+            arrayTrigo.pop()
+            dineroGanado = Math.floor(Math.random() * (200 - 100 + 1)) + 100;
+            console.log("Has Jugado con los animales su felicidad aumento y disminuyo el alimento")
+            alert("has ganado: " + dineroGanado + "g 🪙")
+            dinero += dineroGanado
+            pasaDia = true
+        }
+        else if (arrayCaca.length >= CACASPARAENFERMAR) {
+            alert("El establo está demasiado sucio para jugar")
+        }
+        else if (arrayTrigo.length <= MINALIMENTO) {
+            alert("No tienes alimentos para jugar con los animales")
+        }
+        else if (animalesEnfermos == true) {
+            alert("Los animales enfermos no pueden jugar")
+        }
+    }
+    function menu3() {
+        let respuestaMenu3 = ""
+        arrayCaca = []
+        respuestaMenu3 = "El establo ahora esta limpio"
+        pasaDia = true
+        return console.log(respuestaMenu3);
+    }
+    function menu4() {
+        let respuestaMenu4 = ""
+        if (dinero < PRECIOALIMENTO) {
+            respuestaMenu4 = "No tienes dinero para comprar comida"
+        } else {
+            respuestaMenu4 = "Has comprado 4 unidades de forraje"
+            dinero -= PRECIOALIMENTO
+            for (let i = 1; i < (MAXALIMENTO + 1); i++) {
+                arrayTrigo.push("🌾")
+            }
+            pasaDia = true
+        }
+
+        if (pasaDia == true) {
+            return console.log(respuestaMenu4);
+        } else { return alert(respuestaMenu4) }
+
+    }
+    function menu5(mensajeSinObjetos, mensaje) {
+        let respuestaMenu5 = ""
+        if (objetosComprados.length == SINOBJETOSCOMPRADOS) {
+            respuestaMenu5 = mensajeSinObjetos
+        } else { respuestaMenu5 = mensaje }
+        pasaDia = false
+        return alert(respuestaMenu5)
+    }
+    function menu6() {
+        let respuestaMenu6 = ""
+        if (animalesEnfermos == false) {
+            respuestaMenu6 = "los animales no están enfermos"
+        } else {
+            respuestaMenu6 = "has curado a los animales"
+            animalesEnfermos = false
+            pasaDia = true
+        }
+        return alert(respuestaMenu6)
+    }
+    function menu7() {
+        let respuestaMenu7 = ""
+        mantenerEnTienda = true
+        while (mantenerEnTienda == true) {
+            mercadoOpcion = Number(prompt("Cantidad oro: " + dinero + "g 🪙\n" + mensajeMercado))
+            while ((mercadoOpcion < 1 || mercadoOpcion > 5) || !Number.isInteger(mercadoOpcion)) {
+                alert(" ❌Opción no válida.¡Ingrese un numero entero de 1 al 5!")
+                mercadoOpcion = Number(prompt("Cantidad oro: " + dinero + "g 🪙\n" + mensajeMercado))
+            }
+            if (mercadoOpcion == 5) {
+                if (haComprado == true) {
+                    pasaDia = true
+                    haComprado = false
+                } else {
+                    pasaDia = false
+                }
+                mantenerEnTienda = false
+            }
+            else {
+                if (dinero >= OBJETOSPRECIOS[numerosAleatorios[mercadoOpcion]]) {
+                    if (objetosComprados.includes(OBJETOSMERCADO[numerosAleatorios[mercadoOpcion]])) {
+                        alert("Ya tíenes ese articulo")
+                        haComprado = false
+                    } else {
+                        dinero -= OBJETOSPRECIOS[numerosAleatorios[mercadoOpcion]]
+                        objetosComprados.push(OBJETOSMERCADO[numerosAleatorios[mercadoOpcion]])
+                        OBJETOSMERCADO[numerosAleatorios[mercadoOpcion]] = OBJETOSMERCADO[numerosAleatorios[mercadoOpcion]]
+                        MensajeObjetosRandom()
+                        console.log("has comprado" + OBJETOSMERCADO[numerosAleatorios[mercadoOpcion]]);
+                        mantenerEnTienda = true
+                        haComprado = true
+                    }
+                } else {
+                    alert("Dinero insuficiente")
+                }
+            }
+        }
+    }
+    function eventosAutomaticos(diaPasado) {
+        if (diaPasado == true) {
+            dias++
+            cantidadAnimal = animalesFinalDia(cantidadAnimal)
+            gameOver(cantidadAnimal)
+            if (finJuego==true) return;
+            if (yaRealizado == true) {
+                yaRealizado = false
+            }
+        }
+
+        if (arrayCorazon.length > MAXCORAZON) { arrayCorazon.length = MAXCORAZON }
+        if (arrayTrigo.length > MAXALIMENTO) { arrayTrigo.length = MAXALIMENTO }
+        if (arrayCaca.length > MAXLIMPIEZA) { arrayCaca.length = MAXLIMPIEZA }
+        if (dinero >= DINEROMAX) { dinero = DINEROMAX }
+        if (dias > 0) { primeraIteracion = false }
+
+        if (yaRealizado == false) {
+            if (dias % 3 == 0 && primeraIteracion == false) {
+                arrayCaca.push("💩")
+                arrayCorazon.pop()
+            }
+            if (arrayCaca.length >= CACASPARAENFERMAR && animalesEnfermos == false) {
+                animalesEnfermos = true;
+                alert("Hay " + arrayCaca.length + " cacas y los animales han enfermado 🤒");
+            }
+            animalesEnfermosMsg = animalesEnfermos ? "🤒" : "☺️​";
+            if (dias % 5 == 0) {
+                numerosAleatorios = []
+                for (let i = 0; i < 5; i++) {
+                    numeroAleatorio = Math.floor(Math.random() * 7) + 1
+                    numerosAleatorios.push(numeroAleatorio)
+                }
+                MensajeObjetosRandom()
+                if (primeraIteracion == false) {
+                    alert("Los objetos de la tienda han cambiado échales un vistazo")
+                }
+            }
+            yaRealizado = true
+        }
+        if (objetosComprados.length == 0) {
+            mensajeInfoSinObjetos = "👤 nombre del Jugador: " + nombreUsuario + "\n🏡 nombre de la granja: " + nombreGranja + "\n🔂 Dias Jugados: " + dias + "\n💲 Dinero: " + dinero + " g 🪙" + "\n🐾 cantidad de animales: " + cantidadAnimal + "\n\n🛄 Objetos Comprados:\n" + objetosComprados.join("\n") + "No tienes ningún objeto compra alguno en el mercado"
+        }
+        else {
+            mensajeInfo = "👤 nombre del Jugador: " + nombreUsuario + "\n🏡 nombre de la granja: " + nombreGranja + "\n🔂 Dias Jugados: " + dias + "\n💲 Dinero: " + dinero + " g 🪙" + "\n🐾 cantidad de animales: " + cantidadAnimal + "\n\n🛄 Objetos Comprados:\n" + objetosComprados.join("\n")
+        }
+
+        menu = (prompt("Felicidad: " + arrayCorazon.join("") + "\nAlimentos Disponibles: " + arrayTrigo.join("") + " \nEstablo: " + arrayCaca.join("") + "\nEstado de los animales: " + animalesEnfermosMsg + "\nDinero: " + dinero + "g 🪙" + " \n\nAcciones: \n🥕 1.Alimentar a los Animales 🥕\n⚽ 2.Jugar con los animales ⚽\n🚿 3.Limpiar el establo 🚿\n💲 4.comprar comida 💲\n🧾 5.consultar datos 🧾\n💊 6.Curar a los animales 💊\n🛒 7.Mercado 🛒"))
+        while (menu < 1 || menu > 7) {
+            menu = (prompt("Felicidad: " + arrayCorazon.join("") + "\nAlimentos Disponibles: " + arrayTrigo.join("") + " \nEstablo: " + arrayCaca.join("") + "\nEstado de los animales: " + animalesEnfermosMsg + "\nDinero: " + dinero + "g 🪙" + " \n\nAcciones: \n🥕 1.Alimentar a los Animales 🥕\n⚽ 2.Jugar con los animales ⚽\n🚿 3.Limpiar el establo 🚿\n💲 4.comprar comida 💲\n🧾 5.consultar datos 🧾\n💊 6.Curar a los animales 💊\n🛒 7.Mercado 🛒"))
+        }
+    }
+    function gameOver(numeroAnimales,MAXANIMALES=99,MINANIMALES=0) {
+        if (numeroAnimales >= MAXANIMALES || numeroAnimales <= MINANIMALES) {
+            finJuego = true
+            alert("GAME OVER")
+            console.log("Game Over")
+        }
+    }
+    function animalesFinalDia(animalesActuales) {
+        let animalesRestan = 0
+        let animalesSuman = 0
+        animalesRestan = Math.floor(Math.random() * 5) + 1
+        animalesSuman = Math.floor(Math.random() * 10) + 1
+        animalesActuales += animalesSuman
+        animalesActuales -= animalesRestan
+        return animalesActuales
+    }
+    function MensajeObjetosRandom() {
+        mensajeMercado = ""
+        for (let i = 1; i <= OBJETOSMUESTRATIENDA; i++) {
+            mensajeMercado += "\n" + i + "." + OBJETOSMERCADO[numerosAleatorios[i]] + " --> " + OBJETOSPRECIOS[numerosAleatorios[i]] + "g"
+            if (objetosComprados.includes(OBJETOSMERCADO[numerosAleatorios[i]])) {
+                mensajeMercado += "✅"
+            }
+        }
+        mensajeMercado += "\n5.exit"
+    }
+
+    //---------------------------------Inicio----------------------------------------------------
+
+    cantidadAnimal = Math.floor(Math.random() * 20) + 10
+    while (finJuego == false) {
+        eventosAutomaticos(pasaDia)
+        elegirMenu(menu)
+    }
+
+</script>
+<main><h1>Partida terminada</h1><p><a href="index.html">Volver a empezar</a></p></main>
+</body></html>

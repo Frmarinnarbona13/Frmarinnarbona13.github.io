@@ -1,0 +1,53 @@
+
+<!ELEMENT parking (origen, elaborado, tarifas, plazas, abonados,camaras,accesos)>
+
+<!ELEMENT origen (nombre,web,language,nota_legal)>
+<!ELEMENT nombre (#PCDATA)>
+<!ELEMENT web (#PCDATA)>
+<!ELEMENT language (#PCDATA)>
+<!ELEMENT nota_legal (#PCDATA)>
+
+<!ELEMENT elaborado (#PCDATA)>
+
+<!ELEMENT tarifas (tarifa+)>
+<!ATTLIST tarifas moneda CDATA #REQUIRED>
+<!ELEMENT tarifa (descripcion, precio_hora?, max_diario?,precio_mensual?,acceso_24h?)>
+<!ATTLIST tarifa id ID #REQUIRED>
+<!ATTLIST tarifa tipo CDATA #REQUIRED>
+<!ELEMENT descripcion (#PCDATA)>
+<!ELEMENT precio_hora (#PCDATA)>
+<!ELEMENT max_diario (#PCDATA)>
+<!ELEMENT acceso_24h (#PCDATA)>
+<!ELEMENT precio_mensual (#PCDATA)>
+
+<!ELEMENT plazas (plaza+)>
+<!ATTLIST plazas total CDATA #REQUIRED>
+<!ATTLIST plaza id ID #REQUIRED>
+<!ATTLIST plaza planta CDATA #REQUIRED>
+<!ATTLIST plaza tipo CDATA #REQUIRED>
+<!ATTLIST plaza estado CDATA #REQUIRED>
+<!ELEMENT plaza (matricula?,entrada?,observacion?,carga_kw?)>
+<!ELEMENT matricula (#PCDATA)>
+<!ELEMENT entrada (#PCDATA)>
+<!ELEMENT observacion (#PCDATA)>
+<!ELEMENT carga_kw (#PCDATA)>
+
+<!ELEMENT abonados (abonado+)>
+
+<!ELEMENT abonado (nombre,matricula,vigencia_desde,vigencia_hasta,tarifa_ref)>
+<!ATTLIST abonado id ID #REQUIRED>
+<!ATTLIST abonado tipo CDATA #REQUIRED>
+<!ELEMENT vigencia_desde (#PCDATA)>
+<!ELEMENT vigencia_hasta (#PCDATA)>
+<!ELEMENT tarifa_ref (#PCDATA)>
+
+<!ELEMENT accesos (registro+)>
+<!ELEMENT registro (fecha_hora,matricula,plaza_ref?)>
+<!ATTLIST registro id ID #REQUIRED>
+<!ATTLIST registro evento CDATA #REQUIRED>
+<!ELEMENT fecha_hora (#PCDATA)>
+<!ELEMENT plaza_ref (#PCDATA)>
+
+<!ELEMENT camaras (camara+)>
+<!ELEMENT camara (nombre,horas_grabacion?)>
+<!ELEMENT horas_grabacion (#PCDATA)>

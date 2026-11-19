@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/registro_de_accesos/registro_de_accesos.xsl"?>
+
+<accesos>
+  <registro id="R-001" evento="entrada">
+    <fecha_hora>2025-12-01T07:45:00</fecha_hora>
+    <matricula>1234KLM</matricula>
+    <plaza_ref>PZ-001</plaza_ref>
+  </registro>
+
+  <registro id="R-002" evento="entrada">
+    <fecha_hora>2025-12-01T08:10:00</fecha_hora>
+    <matricula>5678BCD</matricula>
+    <plaza_ref>PZ-003</plaza_ref>
+  </registro>
+
+  <registro id="R-003" evento="salida">
+    <fecha_hora>2025-12-01T08:25:00</fecha_hora>
+    <matricula>9999ZZZ</matricula>
+  </registro>
+
+  <registro id="R-004" evento="entrada">
+    <fecha_hora>2025-12-01T06:55:00</fecha_hora>
+    <matricula>9012FGH</matricula>
+    <plaza_ref>PZ-006</plaza_ref>
+  </registro>
+</accesos>

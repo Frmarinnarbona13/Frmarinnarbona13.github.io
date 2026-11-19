@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gestión de cines · Francisco Marín</title>
+<link rel="icon" href="../../img/favicon-32.png">
+<link rel="stylesheet" href="../sim/sim.css">
+</head>
+<body>
+<header class="barra-sim">
+  <div class="izq"><img src="../../img/avatar-192.png" alt=""><h1>Gestión de cines</h1><span class="etq">Consola Java simulada</span></div>
+  <a class="volver" href="../../index.html#proyectos">Volver al portfolio</a>
+</header>
+<main class="contenido">
+  <p class="intro">Aplicación de consola en <strong>Java orientado a objetos</strong> (Programación, 2.º trimestre). Al arrancar, una clase <code>Faker</code> crea cines, salas de 10×20 butacas, películas y proyecciones sin solapes. Esta es una réplica en JavaScript de sus menús: escribe el número de la opción y pulsa Enter.</p>
+  <div class="terminal">
+    <div class="cab"><i></i><i></i><i></i><span>java Main</span></div>
+    <div class="salida" id="salida" aria-live="polite"></div>
+    <form id="form"><span class="prompt">&gt;</span><input id="entrada" autocomplete="off" aria-label="Entrada de la consola" autofocus></form>
+  </div>
+  <div class="atajos" id="atajos"></div>
+</main>
+<script>
+// ---------- Datos generados como hacía la clase Faker ----------
+const azar = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
+const elegir = (l) => l[azar(0, l.length - 1)];
+const NOMBRES = ["Lucía", "Hugo", "Martina", "Mateo", "Sofía", "Leo", "Valeria", "Daniel", "Carmen", "Pablo"];
+const APELLIDOS = ["García", "López", "Martín", "Sánchez", "Romero", "Navarro", "Torres", "Ruiz"];
+const PELICULAS = [
+  { titulo: "Dune: Parte Dos", genero: "Ciencia ficción", duracion: 166, director: "Denis Villeneuve" },
+  { titulo: "Oppenheimer", genero: "Drama", duracion: 180, director: "Christopher Nolan" },
+  { titulo: "Del revés 2", genero: "Animación", duracion: 96, director: "Kelsey Mann" },
+  { titulo: "Robot salvaje", genero: "Animación", duracion: 102, director: "Chris Sanders" },
+  { titulo: "Interstellar", genero: "Ciencia ficción", duracion: 169, director: "Christopher Nolan" },
+];
+const LETRAS = "ABCDEFGHIJKLMNOPQRST";
+const aMin = (h) => { const [a, b] = h.split(":").map(Number); return a * 60 + b; };
+const aHora = (m) => `${String(Math.floor(m / 60) % 24).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
+
+function nuevaProyeccion(peli, hora) {
+  return { pelicula: peli, hora, fin: aHora(aMin(hora) + peli.duracion), butacas: {}, clientes: [] };
+}
+const cines = ["Kinepolis", "Cines Nevada", "Yelmo Serrallo"].map((nombre, i) => ({
+  nombre, ciudad: ["Granada", "Armilla", "Granada"][i],
+  salas: ["SALA1", "SALA2", "SALA3"].map((id) => ({ id, proyecciones: [] })),
+}));
+const solapa = (sala, ini, fin) => sala.proyecciones.some((p) => aMin(ini) < aMin(p.fin) && aMin(fin) > aMin(p.hora));
+cines.forEach((cine) => {
+  for (let i = 0; i < 4; i++) {
+    const peli = elegir(PELICULAS), sala = elegir(cine.salas);
+    let hora, intentos = 0;
+    do { hora = aHora(azar(16, 22) * 60 + azar(0, 1) * 30); intentos++; } while (solapa(sala, hora, aHora(aMin(hora) + peli.duracion)) && intentos < 20);
+    if (intentos >= 20) continue;
+    const p = nuevaProyeccion(peli, hora);
+    for (let c = 0; c < azar(5, 15); c++) {
+      let butaca; do { butaca = `${azar(1, 10)}${LETRAS[azar(0, 19)]}`; } while (p.butacas[butaca]);
+      const cliente = { dni: `${azar(10000000, 99999999)}${LETRAS[azar(0, 19)]}`, nombre: `${elegir(NOMBRES)} ${elegir(APELLIDOS)}`, edad: azar(8, 75), entrada: elegir(["General", "Reducida", "VIP"]), butaca };
+      p.butacas[butaca] = cliente; p.clientes.push(cliente);
+    }
+    sala.proyecciones.push(p);
+  }
+});
+
+// ---------- Consola ----------
+const salida = document.getElementById("salida");
+const entrada = document.getElementById("entrada");
+let resolver = null;
+function escribir(t = "") { salida.textContent += t + "\n"; salida.scrollTop = salida.scrollHeight; }
+function leer(pregunta) {
+  if (pregunta) escribir(pregunta);
+  return new Promise((r) => (resolver = r));
+}
+document.getElementById("form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const v = entrada.value; entrada.value = "";
+  escribir("> " + v);
+  if (resolver) { const r = resolver; resolver = null; r(v.trim()); }
+});
+async function leerOpcion(menu, min, max) {
+  while (true) {
+    const v = await leer(menu);
+    const n = Number(v);
+    if (!Number.isInteger(n) || v === "") escribir("Error: Por favor, introduce un número válido entero.");
+    else if (n < min || n > max) escribir(`Error: Elige una opción del ${min} al ${max}.`);
+    else return n;
+  }
+}
+const buscarCine = (n) => cines.find((c) => c.nombre.toLowerCase() === n.toLowerCase());
+const buscarSala = (c, id) => c.salas.find((s) => s.id.toLowerCase() === id.toLowerCase());
+function matriz(p) {
+  let t = "\n--- PANTALLA ---\n\n     " + [...LETRAS].map((l) => ` ${l}  `).join("") + "\n";
+  for (let f = 1; f <= 10; f++) t += String(f).padStart(2, " ") + "   " + [...LETRAS].map((l) => (p.butacas[f + l] ? "[X] " : "[O] ")).join("") + "\n";
+  return t;
+}
+async function pedirProyeccion() {
+  const cine = buscarCine(await leer("Introduce el nombre del cine:"));
+  if (!cine) { escribir("Ese cine no existe."); return null; }
+  const sala = buscarSala(cine, await leer("Introduce el identificador de la sala:"));
+  if (!sala) { escribir("Esa sala no existe."); return null; }
+  if (!sala.proyecciones.length) { escribir("No hay proyecciones programadas."); return null; }
+  sala.proyecciones.forEach((p, i) => escribir(`${i + 1}. ${p.pelicula.titulo} | Hora: ${p.hora}`));
+  const n = await leerOpcion("Elige la proyección:", 1, sala.proyecciones.length);
+  return { cine, sala, p: sala.proyecciones[n - 1] };
+}
+
+const MENU = "\n===== GESTIÓN DE EMPRESA =====\n1. Gestionar Cines\n2. Gestionar Salas\n3. Gestionar Películas\n4. Gestionar Clientes\n5. Salir\nSeleccione una opción: ";
+const SUB = [
+  "===== GESTIÓN DE CINES =====\n1. Listar Cines\n2. Ver detalles de un cine\n3. Volver al menú\nSeleccione una opción: ",
+  "===== GESTIÓN DE SALAS =====\n1. Listar salas de un cine\n2. Consultar disponibilidad de una Sala\n3. Programar una pelicula en una sala\n4. Cancelar proyección\n5. Volver al menú\nSeleccione una opción: ",
+  "===== GESTIÓN DE PELICULAS =====\n1. Listar todas las peliculas\n2. Ver detalle de una pelicula\n3. Ver proyecciones de una pelicula\n4. Volver al menú\nSeleccione una opción: ",
+  "===== GESTIÓN DE CLIENTES =====\n1. Registrar cliente en una proyeccion\n2. Cancelar asistencia de una proyeccion\n3. Ver lista de clientes en una proyeccion\n4. Ver número total de asistentes\n5. Volver al menú\nSeleccione una opción: ",
+];
+const ATAJOS = { 0: ["1", "2", "3", "4", "5"] };
+
+async function principal() {
+  escribir("Datos de prueba generados con Faker: 3 cines, 9 salas y " + cines.reduce((t, c) => t + c.salas.reduce((s, x) => s + x.proyecciones.length, 0), 0) + " proyecciones.");
+  escribir("Cines: " + cines.map((c) => c.nombre).join(", ") + " · Salas: SALA1, SALA2, SALA3");
+  while (true) {
+    const op = await leerOpcion(MENU, 1, 5);
+    if (op === 5) { escribir("Saliendo del programa... ¡Hasta pronto!"); escribir("\n(Recarga la página para volver a empezar.)"); return; }
+    if (op === 1) {
+      const s = await leerOpcion(SUB[0], 1, 3);
+      if (s === 1) { escribir("\n--- CINES DISPONIBLES ---"); cines.forEach((c) => escribir(`- ${c.nombre} (${c.ciudad})`)); escribir("-------------------------"); }
+      if (s === 2) {
+        const c = buscarCine(await leer("¿De qué cine quieres ver detalles? (Escribe el nombre)"));
+        if (!c) escribir("Ese cine no existe");
+        else escribir(`Cine: ${c.nombre}\nCiudad: ${c.ciudad}\nSalas: ${c.salas.length}\nProyecciones: ${c.salas.reduce((t, s) => t + s.proyecciones.length, 0)}`);
+      }
+    }
+    if (op === 2) {
+      const s = await leerOpcion(SUB[1], 1, 5);
+      if (s === 1) {
+        const c = buscarCine(await leer("Ingrese el nombre del cine que quieres revisar las Salas"));
+        if (!c) escribir("Ese cine no existe o no tiene salas.");
+        else { escribir(`\n--- SALAS EN ${c.nombre.toUpperCase()} ---`); c.salas.forEach((x) => escribir(`- ${x.id} (${x.proyecciones.length} proyecciones)`)); escribir("-------------------------"); }
+      }
+      if (s === 2) { const r = await pedirProyeccion(); if (r) { escribir(`\nResumen visual de la proyección (${r.p.pelicula.titulo} - ${r.p.hora})`); escribir(matriz(r.p)); escribir(`Ocupadas: ${r.p.clientes.length} / 200`); } }
+      if (s === 3) {
+        const c = buscarCine(await leer("¿En qué cine quieres crear la proyeccion?"));
+        if (!c) { escribir("Ese cine no existe"); continue; }
+        const sala = buscarSala(c, await leer("¿En qué sala quieres programarla?"));
+        if (!sala) { escribir("Esa sala no existe"); continue; }
+        escribir("\n--- Catálogo de Películas ---"); PELICULAS.forEach((p) => escribir("- " + p.titulo)); escribir("-----------------------------");
+        const tituloPeli = (await leer("¿Qué pelicula quieres programar?")).toLowerCase();
+        const peli = PELICULAS.find((p) => p.titulo.toLowerCase() === tituloPeli);
+        if (!peli) { escribir("Esa pelicula no existe en el sistema."); continue; }
+        let hora;
+        while (true) { hora = await leer("Hora de inicio (hh:mm):"); if (/^([01]\d|2[0-3]):[0-5]\d$/.test(hora)) break; escribir("Error: Formato de hora incorrecto. Recuerda usar hh:mm (ej: 21:30)."); }
+        const fin = aHora(aMin(hora) + peli.duracion);
+        if (solapa(sala, hora, fin)) escribir("Error: la proyección se solapa con otra de la misma sala.");
+        else { sala.proyecciones.push(nuevaProyeccion(peli, hora)); escribir(`Proyección programada con éxito. Termina a las ${fin}.`); }
+      }
+      if (s === 4) { const r = await pedirProyeccion(); if (r) { r.sala.proyecciones = r.sala.proyecciones.filter((x) => x !== r.p); escribir("Se eliminó sin problema"); } }
+    }
+    if (op === 3) {
+      const s = await leerOpcion(SUB[2], 1, 4);
+      if (s === 1) { escribir("\n--- Todas las películas ---"); PELICULAS.forEach((p) => escribir("- " + p.titulo)); }
+      if (s === 2 || s === 3) {
+        escribir("\n--- Todas las películas ---"); PELICULAS.forEach((p) => escribir("- " + p.titulo));
+        const tituloPeli = (await leer(s === 2 ? "¿De cuál quieres ver detalles?" : "¿De qué película quieres ver proyecciones?")).toLowerCase();
+        const peli = PELICULAS.find((p) => p.titulo.toLowerCase() === tituloPeli);
+        if (!peli) { escribir("Esa película no existe."); continue; }
+        if (s === 2) escribir(`Título: ${peli.titulo}\nDirector: ${peli.director}\nGénero: ${peli.genero}\nDuración: ${peli.duracion} min`);
+        else {
+          let hay = false;
+          cines.forEach((c) => c.salas.forEach((sa) => sa.proyecciones.filter((p) => p.pelicula === peli).forEach((p) => { hay = true; escribir(`Cine: ${c.nombre} | Sala: ${sa.id} | Inicio: ${p.hora} | Fin: ${p.fin}`); })));
+          if (!hay) escribir("No hay proyecciones para esta película.");
+        }
+      }
+    }
+    if (op === 4) {
+      const s = await leerOpcion(SUB[3], 1, 5);
+      if (s === 5) continue;
+      const r = await pedirProyeccion(); if (!r) continue;
+      if (s === 1) {
+        const nombre = await leer("Ingrese datos del cliente\nNombre: ");
+        let dni; while (true) { dni = (await leer("DNI:")).toUpperCase(); if (/^\d{8}[A-Z]$/.test(dni)) break; escribir("Error: El DNI debe tener exactamente 8 números y 1 letra (Ej: 12345678A)."); }
+        let butaca; while (true) { butaca = (await leer("Butaca (ej: 5C):")).toUpperCase(); if (!/^(10|[1-9])[A-T]$/.test(butaca)) { escribir("Error: La butaca debe tener 1 o 2 números y 1 letra (Ej: 1A, 10C)."); continue; } if (r.p.butacas[butaca]) { escribir("Esa butaca ya está ocupada."); continue; } break; }
+        const tipo = await leer("Tipo de Entrada: ");
+        const cli = { dni, nombre, edad: 0, entrada: tipo || "General", butaca };
+        r.p.butacas[butaca] = cli; r.p.clientes.push(cli);
+        escribir(`Cliente registrado en la butaca ${butaca}. Entrada nº ${r.p.clientes.length}.`);
+      }
+      if (s === 2) {
+        const dni = (await leer("DNI del cliente:")).toUpperCase();
+        const cli = r.p.clientes.find((c) => c.dni === dni);
+        if (!cli) escribir("Error: No se encontró ningún cliente con ese DNI.");
+        else { delete r.p.butacas[cli.butaca]; r.p.clientes = r.p.clientes.filter((c) => c !== cli); escribir("Asistencia cancelada. Total asistentes ahora: " + r.p.clientes.length); }
+      }
+      if (s === 3) {
+        escribir(`\n--- Asistentes en Cine: ${r.cine.nombre} | Sala: ${r.sala.id} | ${r.p.pelicula.titulo} ---`);
+        if (!r.p.clientes.length) escribir("No hay asistentes registrados en esta proyección.");
+        r.p.clientes.forEach((c, i) => escribir(`${i + 1}. ${c.nombre} | DNI: ${c.dni} | Butaca: ${c.butaca} | ${c.entrada}`));
+      }
+      if (s === 4) escribir(`\n--------------------------------------------------\nCine: ${r.cine.nombre}\nSala: ${r.sala.id}\nPelícula: ${r.p.pelicula.titulo}\nHora: ${r.p.hora}\nNÚMERO TOTAL DE ASISTENTES: ${r.p.clientes.length}\n--------------------------------------------------`);
+    }
+  }
+}
+// Botones rápidos para móvil
+["1", "2", "3", "4", "5", "Kinepolis", "SALA1"].forEach((t) => {
+  const b = document.createElement("button"); b.className = "boton peq"; b.type = "button"; b.textContent = t;
+  b.onclick = () => { entrada.value = t; document.getElementById("form").requestSubmit(); };
+  document.getElementById("atajos").append(b);
+});
+principal();
+</script>
+</body>
+</html>

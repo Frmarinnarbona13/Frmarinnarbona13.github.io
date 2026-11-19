@@ -1,0 +1,1557 @@
+/* -------------------------------------------------------
+   Variables de tema: colores, sombras, radios y transiciones
+------------------------------------------------------- */
+:root {
+    --color-fondo: #0b0d1f;
+    --color-fondo-alt: #11142b;
+    --color-superficie: #161a35;
+    --color-superficie-alt: #1c2147;
+    --color-borde: #2a2f5a;
+    --color-borde-fuerte: #3a4280;
+    --color-texto: #eef0ff;
+    --color-texto-suave: #9aa0c7;
+    --color-acento: #7c3aed;
+    --color-acento-2: #22d3ee;
+    --color-acento-3: #3b82f6;
+    --color-acento-hover: #a855f7;
+    --color-acento-suave: rgba(124, 58, 237, 0.18);
+    --color-exito: #22c55e;
+    --color-peligro: #f87171;
+    --color-aviso: #fbbf24;
+    --gradiente-primario: linear-gradient(135deg, #7c3aed 0%, #3b82f6 50%, #22d3ee 100%);
+    --gradiente-tenue: linear-gradient(135deg, rgba(124, 58, 237, 0.15) 0%, rgba(59, 130, 246, 0.10) 60%, rgba(34, 211, 238, 0.05) 100%);
+    --sombra-suave: 0 2px 6px rgba(0, 0, 0, 0.35);
+    --sombra-media: 0 8px 20px rgba(0, 0, 0, 0.45);
+    --sombra-fuerte: 0 14px 38px rgba(124, 58, 237, 0.25);
+    --resplandor: 0 0 18px rgba(124, 58, 237, 0.45);
+    --radio: 14px;
+    --radio-sm: 8px;
+    --transicion: 0.25s ease-in-out;
+}
+
+/* -------------------------------------------------------
+   Reset básico: quita márgenes y aplica box-sizing global
+------------------------------------------------------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+/* Fondo degradado radial fijo para dar profundidad a la página */
+body {
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    color: var(--color-texto);
+    line-height: 1.55;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--color-fondo);
+    background-image:
+        radial-gradient(1200px 600px at 80% -10%, rgba(124, 58, 237, 0.15), transparent 60%),
+        radial-gradient(900px 500px at -10% 10%, rgba(59, 130, 246, 0.12), transparent 55%),
+        radial-gradient(700px 400px at 50% 110%, rgba(34, 211, 238, 0.08), transparent 60%);
+    background-attachment: fixed;
+}
+
+/* -------------------------------------------------------
+   Tipografía general
+------------------------------------------------------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    margin-top: 0;
+}
+
+/* h1 con franja de color a la izquierda usando el gradiente principal */
+h1 {
+    font-size: 2.2rem;
+    border-left: 4px solid transparent;
+    border-image: var(--gradiente-primario) 1;
+    padding-left: 14px;
+    margin-bottom: 1.25rem;
+}
+
+a {
+    color: var(--color-acento-2);
+    text-decoration: none;
+    transition: color var(--transicion);
+}
+
+a:hover {
+    color: var(--color-acento-hover);
+}
+
+p {
+    margin: 0.4rem 0;
+}
+
+/* Clases de utilidad para texto */
+.text-muted {
+    color: var(--color-texto-suave) !important;
+}
+
+.text-danger {
+    color: var(--color-peligro) !important;
+    font-weight: 600;
+}
+
+/* -------------------------------------------------------
+   Layout: contenedor centrado con ancho máximo
+------------------------------------------------------- */
+.container,
+.container-fluid {
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 1.75rem 1.25rem;
+}
+
+.container-fluid {
+    max-width: 100%;
+}
+
+/* Clases de utilidad para márgenes */
+.mt-3 {
+    margin-top: 1rem;
+}
+
+.mt-4 {
+    margin-top: 1.5rem;
+}
+
+.mb-0 {
+    margin-bottom: 0;
+}
+
+.mb-1 {
+    margin-bottom: 0.25rem;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.mb-3 {
+    margin-bottom: 1rem;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem;
+}
+
+.mb-5 {
+    margin-bottom: 3rem;
+}
+
+/* Clases de utilidad para flexbox */
+.d-flex {
+    display: flex;
+}
+
+.justify-content-between {
+    justify-content: space-between;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+/* -------------------------------------------------------
+   NAVBAR: barra de navegación fija en la parte superior
+------------------------------------------------------- */
+.navbar {
+    background-color: var(--color-superficie-alt);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--color-borde);
+    padding: 0.75rem 0;
+    box-shadow: var(--sombra-suave);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar .container-fluid {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    max-width: 1320px;
+}
+
+.navbar-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    transition: transform var(--transicion), filter var(--transicion);
+}
+
+.navbar-brand:hover {
+    transform: translateY(-1px);
+    filter: drop-shadow(0 0 10px rgb(0, 255, 213));
+}
+
+.navbar-brand img {
+    background-color: whitesmoke;
+    height: 38px;
+    width: auto;
+    display: block;
+    border-radius: 10px;
+}
+
+.navbar-nav {
+    list-style: none;
+    display: flex;
+    gap: 0.25rem;
+    margin: 0 0 0 auto;
+    padding: 0;
+}
+
+.nav-item {
+    display: inline-block;
+}
+
+.nav-link {
+    color: var(--color-texto) !important;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radio-sm);
+    font-weight: 500;
+    transition: background-color var(--transicion), color var(--transicion);
+}
+
+.nav-link:hover {
+    background-color: var(--color-acento-suave);
+    color: #ffffff !important;
+}
+
+/* -------------------------------------------------------
+   CARDS genéricas: usadas en la vista de detalle de juego
+------------------------------------------------------- */
+.card {
+    background-color: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    overflow: hidden;
+    box-shadow: var(--sombra-suave);
+}
+
+.card-header {
+    background-color: var(--color-superficie-alt);
+    border-bottom: 1px solid var(--color-borde);
+    padding: 1rem 1.25rem;
+}
+
+.card-header h2,
+.card-header h5 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 1.1rem;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+.card-body p {
+    margin: 0.5rem 0;
+    color: var(--color-texto);
+}
+
+/* -------------------------------------------------------
+   LIST-GROUP: lista de elementos con bordes entre filas
+   Usada para mostrar plataformas y reseñas en el detalle.
+------------------------------------------------------- */
+.list-group {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-radius: var(--radio);
+    overflow: hidden;
+    border: 1px solid var(--color-borde);
+    background-color: var(--color-superficie);
+}
+
+.list-group-item {
+    padding: 0.9rem 1.1rem;
+    background-color: transparent;
+    border-bottom: 1px solid var(--color-borde);
+    color: var(--color-texto);
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+}
+
+/* -------------------------------------------------------
+   CATÁLOGO: cabecera con título + buscador combinado
+   El buscador contiene dos <select> y un <input type="search">
+------------------------------------------------------- */
+.catalogo-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Contenedor de los filtros: flex en fila, envuelve en móvil */
+.buscador {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    flex: 1 1 280px;
+    max-width: 520px;
+}
+
+.buscador input {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--color-borde-fuerte);
+    border-radius: 999px;
+    background-color: var(--color-superficie);
+    color: var(--color-texto);
+    font-size: 0.95rem;
+    transition: border-color var(--transicion), box-shadow var(--transicion);
+}
+
+.buscador input::placeholder {
+    color: var(--color-texto-suave);
+}
+
+.buscador input:focus {
+    outline: none;
+    border-color: var(--color-acento);
+    box-shadow: 0 0 0 4px var(--color-acento-suave);
+}
+
+/* -------------------------------------------------------
+   Secciones de plataforma: título + carrusel horizontal
+------------------------------------------------------- */
+.seccion-plataforma {
+    margin-bottom: 2.5rem;
+}
+
+.seccion-plataforma__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.9rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-borde);
+}
+
+.seccion-plataforma__titulo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0;
+    font-size: 1.3rem;
+}
+
+/* Pastilla pequeña que muestra el fabricante de la plataforma */
+.seccion-plataforma__titulo .badge-fabricante {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.25rem 0.55rem;
+    border-radius: 999px;
+    background: var(--gradiente-tenue);
+    border: 1px solid var(--color-borde);
+    color: var(--color-texto-suave);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* -------------------------------------------------------
+   Carrusel: pista de tarjetas con flechas superpuestas
+------------------------------------------------------- */
+
+/* Contenedor relativo para posicionar las flechas encima */
+.carrusel {
+    position: relative;
+}
+
+.flecha-carrusel {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--color-borde-fuerte);
+    background-color: rgba(11, 13, 31, 0.78);
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: var(--sombra-media);
+    z-index: 5;
+    transition: background-color var(--transicion), border-color var(--transicion), opacity var(--transicion);
+}
+
+.flecha-carrusel:hover {
+    background-color: var(--color-acento-suave);
+    border-color: var(--color-acento);
+    color: #ffffff;
+}
+
+/* La flecha desactivada se vuelve semitransparente */
+.flecha-carrusel:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+}
+
+.flecha-carrusel--prev {
+    left: 0.5rem;
+}
+
+.flecha-carrusel--next {
+    right: 0.5rem;
+}
+
+/* Pista horizontal con scroll suave y snap por tarjeta */
+.carrusel-pista {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    padding: 0.25rem 0.25rem 1rem;
+    margin: 0 -0.25rem;
+    list-style: none;
+}
+
+/* Scrollbar fina y estilizada (solo en navegadores WebKit) */
+.carrusel-pista::-webkit-scrollbar {
+    height: 6px;
+}
+
+.carrusel-pista::-webkit-scrollbar-thumb {
+    background: var(--color-borde-fuerte);
+    border-radius: 999px;
+}
+
+.carrusel-pista::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* -------------------------------------------------------
+   CARD DE JUEGO: tarjeta de 240px usada en el carrusel
+------------------------------------------------------- */
+.card-juego {
+    flex: 0 0 240px;
+    scroll-snap-align: start;
+    background-color: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra-suave);
+    overflow: hidden;
+    transition: transform var(--transicion), box-shadow var(--transicion), border-color var(--transicion);
+}
+
+/* Al pasar el ratón la tarjeta se eleva levemente */
+.card-juego:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--sombra-fuerte);
+    border-color: var(--color-acento);
+}
+
+.card-juego a {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    color: var(--color-texto);
+    text-decoration: none;
+}
+
+/* Imagen cuadrada de portada del juego */
+.card-juego__imagen {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+    background-color: var(--color-superficie-alt);
+    border-bottom: 1px solid var(--color-borde);
+}
+
+.card-juego__cuerpo {
+    padding: 0.85rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    flex-grow: 1;
+}
+
+.card-juego__titulo {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.25;
+}
+
+/* Fila inferior: género a la izquierda, PEGI a la derecha */
+.card-juego__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.78rem;
+}
+
+/* Pastilla de género con fondo degradado tenue */
+.juego-genero {
+    background: var(--gradiente-tenue);
+    color: var(--color-acento-2);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-borde);
+}
+
+/* Pastilla de clasificación PEGI */
+.juego-pegi {
+    background: var(--color-acento-suave);
+    color: #ffffff;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    font-weight: 700;
+    border: 1px solid var(--color-borde-fuerte);
+}
+
+/* Mensaje cuando no hay resultados en la búsqueda */
+.sin-resultados {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    color: var(--color-texto-suave);
+    border: 2px dashed var(--color-borde);
+    border-radius: var(--radio);
+}
+
+/* -------------------------------------------------------
+   DETALLE DE JUEGO: galería de imágenes + lightbox
+------------------------------------------------------- */
+.galeria {
+    background-color: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    overflow: hidden;
+    box-shadow: var(--sombra-suave);
+    margin-bottom: 1.5rem;
+}
+
+/* Imagen principal con relación de aspecto 16:9 */
+.galeria__principal {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: var(--color-superficie-alt);
+}
+
+/* Al hacer clic en la imagen se abre el lightbox (zoom-in) */
+.galeria__principal img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    cursor: zoom-in;
+}
+
+/* Flechas de navegación dentro de la galería */
+.galeria__flecha {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--color-borde-fuerte);
+    background-color: rgba(11, 13, 31, 0.7);
+    color: #ffffff;
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+    transition: background-color var(--transicion), border-color var(--transicion);
+}
+
+.galeria__flecha:hover {
+    background-color: var(--color-acento-suave);
+    border-color: var(--color-acento);
+}
+
+.galeria__flecha--prev {
+    left: 0.6rem;
+}
+
+.galeria__flecha--next {
+    right: 0.6rem;
+}
+
+/* Indicador de posición: "2 / 5" en la esquina inferior derecha */
+.galeria__indicador {
+    position: absolute;
+    bottom: 0.6rem;
+    right: 0.9rem;
+    background-color: rgba(11, 13, 31, 0.75);
+    color: #ffffff;
+    padding: 0.2rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    border: 1px solid var(--color-borde);
+}
+
+/* Tira de miniaturas debajo de la imagen principal */
+.galeria__miniaturas {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.6rem;
+    overflow-x: auto;
+    background-color: var(--color-superficie-alt);
+    border-top: 1px solid var(--color-borde);
+}
+
+.galeria__miniaturas button {
+    flex: 0 0 84px;
+    height: 56px;
+    border-radius: var(--radio-sm);
+    border: 2px solid transparent;
+    overflow: hidden;
+    cursor: pointer;
+    padding: 0;
+    background-color: var(--color-superficie);
+    transition: border-color var(--transicion);
+}
+
+.galeria__miniaturas button img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* La miniatura de la imagen activa tiene borde morado */
+.galeria__miniaturas button.activa {
+    border-color: var(--color-acento);
+}
+
+/* -------------------------------------------------------
+   LIGHTBOX: modal oscuro para ver la imagen a pantalla completa
+------------------------------------------------------- */
+.lightbox {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(5, 6, 18, 0.92);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 1rem;
+    cursor: zoom-out;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.lightbox img {
+    max-width: 95vw;
+    max-height: 92vh;
+    object-fit: contain;
+    border-radius: var(--radio-sm);
+    box-shadow: var(--sombra-fuerte);
+}
+
+/* Botón X para cerrar el lightbox */
+.lightbox__cerrar {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid var(--color-borde-fuerte);
+    background-color: rgba(11, 13, 31, 0.8);
+    color: #ffffff;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+/* -------------------------------------------------------
+   FORMULARIO DE RESEÑA: para escribir y enviar una reseña
+------------------------------------------------------- */
+.form-resenia {
+    background-color: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--sombra-suave);
+}
+
+.form-resenia h3 {
+    margin: 0 0 1rem;
+    font-size: 1.2rem;
+}
+
+.form-resenia label {
+    display: block;
+    color: var(--color-texto-suave);
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+    font-size: 0.9rem;
+}
+
+.form-resenia input,
+.form-resenia textarea {
+    width: 100%;
+    background-color: var(--color-superficie-alt);
+    color: var(--color-texto);
+    border: 1px solid var(--color-borde-fuerte);
+    border-radius: var(--radio-sm);
+    padding: 0.6rem 0.8rem;
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: border-color var(--transicion), box-shadow var(--transicion);
+    resize: vertical;
+}
+
+.form-resenia input:focus,
+.form-resenia textarea:focus {
+    outline: none;
+    border-color: var(--color-acento);
+    box-shadow: 0 0 0 3px var(--color-acento-suave);
+}
+
+.form-resenia textarea {
+    min-height: 90px;
+}
+
+/* Espacio entre cada campo del formulario */
+.form-resenia__campo {
+    margin-bottom: 1rem;
+}
+
+/* -------------------------------------------------------
+   ESTRELLAS: selector de valoración de 1 a 5 estrellas
+------------------------------------------------------- */
+.estrellas {
+    display: inline-flex;
+    gap: 0.15rem;
+    font-size: 1.8rem;
+    line-height: 1;
+    user-select: none;
+}
+
+.estrellas .estrella {
+    cursor: pointer;
+    color: var(--color-borde-fuerte);
+    transition: color var(--transicion), transform var(--transicion);
+}
+
+/* Estrella seleccionada: amarilla con resplandor sutil */
+.estrellas .estrella.activa {
+    color: var(--color-aviso);
+    text-shadow: 0 0 8px rgba(251, 191, 36, 0.45);
+    transform: scale(1.05);
+}
+
+.estrellas .estrella:hover {
+    transform: scale(1.12);
+}
+
+/* Zona de mensaje de éxito o error debajo del formulario */
+.form-resenia__mensaje {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    min-height: 1.2em;
+}
+
+.form-resenia__mensaje.ok {
+    color: var(--color-exito);
+}
+
+.form-resenia__mensaje.error {
+    color: var(--color-peligro);
+}
+
+/* Estrellas estáticas que se muestran en cada reseña existente */
+.resenia-estrellas {
+    color: var(--color-aviso);
+    letter-spacing: 1px;
+    font-size: 0.95rem;
+}
+
+/* -------------------------------------------------------
+   BOTONES: estilos base + variantes de color
+------------------------------------------------------- */
+.btn {
+    display: inline-block;
+    padding: 0.6rem 1.3rem;
+    border: 1px solid transparent;
+    border-radius: var(--radio-sm);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-align: center;
+    transition: transform var(--transicion), box-shadow var(--transicion), filter var(--transicion);
+    text-decoration: none;
+    font-family: inherit;
+}
+
+/* Pequeño efecto de elevación al pasar el ratón */
+.btn:hover {
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+/* Botón principal con gradiente */
+.btn-primary {
+    background: var(--gradiente-primario);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
+}
+
+.btn-primary:hover {
+    color: #ffffff;
+    filter: brightness(1.1);
+    box-shadow: var(--resplandor);
+}
+
+/* Botón secundario con borde y fondo transparente */
+.btn-outline {
+    background-color: transparent;
+    color: var(--color-texto);
+    border-color: var(--color-borde-fuerte);
+}
+
+.btn-outline:hover {
+    color: #ffffff;
+    border-color: var(--color-acento);
+    background-color: var(--color-acento-suave);
+}
+
+/* Botón de enlace sin fondo ni borde */
+.btn-link {
+    background: transparent;
+    color: var(--color-acento-2);
+    padding: 0.25rem 0;
+    border: none;
+}
+
+.btn-link:hover {
+    color: var(--color-acento-hover);
+    text-decoration: underline;
+    transform: none;
+}
+
+/* -------------------------------------------------------
+   PÁGINA DE INICIO (index.html): hero + features + CTA
+------------------------------------------------------- */
+
+/* Sección hero: presentación principal con degradado de fondo */
+.hero {
+    background: var(--gradiente-tenue);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    padding: 3.5rem 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* El h1 del hero usa el gradiente como color de texto */
+.hero h1 {
+    border-left: none;
+    padding-left: 0;
+    font-size: 2.8rem;
+    margin-bottom: 1rem;
+    background: var(--gradiente-primario);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+    font-size: 1.15rem;
+    color: var(--color-texto-suave);
+    max-width: 720px;
+    margin: 0 auto 1.5rem;
+}
+
+/* Fila de botones centrada dentro del hero */
+.hero .acciones {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+/* Encabezado de sección centrado */
+.seccion-titulo {
+    text-align: center;
+    margin: 2rem 0 1.5rem;
+}
+
+.seccion-titulo h2 {
+    font-size: 1.8rem;
+    border-left: none;
+}
+
+.seccion-titulo p {
+    color: var(--color-texto-suave);
+}
+
+/* Grid de tarjetas de características (4 columnas adaptables) */
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+/* Tarjeta individual de característica */
+.feature {
+    background-color: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: var(--sombra-suave);
+    transition: transform var(--transicion), border-color var(--transicion);
+}
+
+.feature:hover {
+    transform: translateY(-3px);
+    border-color: var(--color-acento);
+}
+
+.feature .icono {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.feature h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.feature p {
+    color: var(--color-texto-suave);
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* -------------------------------------------------------
+   SOBRE NOSOTROS: bloques de información del equipo
+------------------------------------------------------- */
+
+/* Bloque genérico con fondo de superficie */
+.bloque {
+    background-color: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    padding: 1.75rem;
+    margin-bottom: 1.25rem;
+    box-shadow: var(--sombra-suave);
+}
+
+/* El h2 dentro de cada bloque usa el gradiente como color */
+.bloque h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0.75rem;
+    background: var(--gradiente-primario);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Grid de miembros del equipo (columnas adaptables) */
+.equipo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+/* Tarjeta de cada miembro del equipo */
+.miembro {
+    background-color: var(--color-superficie-alt);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    padding: 1.25rem;
+    text-align: center;
+}
+
+/* Avatar circular con gradiente e inicial del nombre */
+.miembro .avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--gradiente-primario);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 auto 0.75rem;
+}
+
+.miembro h4 {
+    margin: 0 0 0.25rem;
+    font-size: 1.05rem;
+}
+
+.miembro p {
+    margin: 0;
+    color: var(--color-texto-suave);
+    font-size: 0.9rem;
+}
+
+/* -------------------------------------------------------
+   FOOTER: pie de página pegado al final de la pantalla
+------------------------------------------------------- */
+footer {
+    margin-top: auto;
+    background-color: rgba(11, 13, 31, 0.85);
+    border-top: 1px solid var(--color-borde);
+    padding: 1.5rem 1rem;
+    text-align: center;
+    color: var(--color-texto-suave);
+    font-size: 0.95rem;
+}
+
+footer a {
+    color: var(--color-acento-2);
+    margin-left: 0.5rem;
+}
+
+footer a:hover {
+    color: var(--color-acento-hover);
+}
+
+/* -------------------------------------------------------
+   ACCESIBILIDAD Y ANIMACIONES
+------------------------------------------------------- */
+
+/* Selección de texto con color del acento */
+::selection {
+    background-color: var(--color-acento);
+    color: #ffffff;
+}
+
+/* Anillo de foco visible solo al navegar con teclado */
+:focus-visible {
+    outline: 2px solid var(--color-acento-2);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+/* El contenido principal aparece con fade-in al cargar */
+#root {
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* -------------------------------------------------------
+   FILTROS DEL CATÁLOGO: select de género y plataforma
+------------------------------------------------------- */
+
+/* <select> estilizado para que encaje con el tema oscuro */
+.filtro-select {
+    background: var(--color-superficie);
+    color: var(--color-texto);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    padding: 0.5rem 0.75rem;
+    font: inherit;
+    cursor: pointer;
+    min-width: 160px;
+}
+
+.filtro-select:focus {
+    outline: 2px solid var(--color-acento);
+    outline-offset: 1px;
+}
+
+/* -------------------------------------------------------
+   GRID DE RESULTADOS: vista plana cuando hay filtros activos
+------------------------------------------------------- */
+
+/* Cuadrícula de tarjetas adaptable (mínimo 220px por columna) */
+.grid-resultados {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+/* -------------------------------------------------------
+   NAVBAR: enlace de modo admin activo
+------------------------------------------------------- */
+
+/* El enlace "Salir del modo admin" se resalta con color de peligro */
+.nav-link--admin-activo {
+    color: var(--color-peligro) !important;
+    font-weight: 700;
+}
+
+.nav-link--admin-activo:hover {
+    background-color: rgba(248, 113, 113, 0.15);
+    color: var(--color-peligro) !important;
+}
+
+/* Franja de alerta visible en toda la página cuando el modo admin está activo */
+body.modo-admin::before {
+    content: '⚠ MODO ADMINISTRADOR ACTIVO';
+    display: block;
+    background: linear-gradient(90deg, rgba(248, 113, 113, 0.18), rgba(251, 191, 36, 0.14));
+    border-bottom: 1px solid rgba(248, 113, 113, 0.4);
+    color: var(--color-peligro);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-align: center;
+    padding: 0.3rem 1rem;
+}
+
+/* -------------------------------------------------------
+   PANEL DE ADMINISTRACIÓN: cabecera, tabla y formularios
+------------------------------------------------------- */
+
+/* Cabecera con botón de volver, título y botón de añadir */
+.admin-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-borde);
+}
+
+.admin-header h1 {
+    margin: 0;
+    font-size: 1.6rem;
+    flex: 1 1 auto;
+}
+
+/* Contenedor con scroll horizontal para la tabla en pantallas pequeñas */
+.tabla-admin-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra-suave);
+}
+
+/* Tabla principal de registros del panel admin */
+.tabla-admin {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.tabla-admin thead {
+    background-color: var(--color-superficie-alt);
+    border-bottom: 2px solid var(--color-borde-fuerte);
+}
+
+.tabla-admin th {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    color: var(--color-texto-suave);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.tabla-admin td {
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--color-borde);
+    color: var(--color-texto);
+    vertical-align: middle;
+}
+
+/* Fila de datos estándar */
+.tabla-admin__fila {
+    background-color: var(--color-superficie);
+    transition: background-color var(--transicion);
+}
+
+.tabla-admin__fila:hover {
+    background-color: var(--color-superficie-alt);
+}
+
+/* Última fila no lleva borde inferior */
+.tabla-admin__fila:last-of-type td {
+    border-bottom: none;
+}
+
+/* Celda con el mensaje de tabla vacía */
+.tabla-admin__vacio {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    color: var(--color-texto-suave);
+    font-style: italic;
+}
+
+/* Celda de botones de acción (editar y eliminar) */
+.tabla-admin__acciones {
+    white-space: nowrap;
+    text-align: right;
+}
+
+/* Fila oculta que contiene el formulario de edición inline */
+.tabla-admin__form-row td {
+    padding: 0;
+    background-color: var(--color-fondo-alt);
+    border-bottom: 2px solid var(--color-acento);
+}
+
+/* Botones de emoji (✏️ 🗑️) en cada fila */
+.btn-admin {
+    background: transparent;
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-sm);
+    padding: 0.3rem 0.55rem;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    transition: background-color var(--transicion), border-color var(--transicion);
+    margin-left: 0.25rem;
+}
+
+.btn-admin:hover {
+    background-color: var(--color-acento-suave);
+    border-color: var(--color-acento);
+}
+
+/* -------------------------------------------------------
+   FORMULARIOS DEL PANEL ADMIN
+------------------------------------------------------- */
+
+/* Contenedor del formulario de crear/editar */
+.form-admin {
+    background-color: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--sombra-media);
+}
+
+.form-admin h3 {
+    margin: 0 0 1.25rem;
+    font-size: 1.15rem;
+    background: var(--gradiente-primario);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Grid de campos: dos columnas en pantallas medianas */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+/* Campo que ocupa el ancho completo (textarea, checkboxes, etc.) */
+.form-grid__full {
+    grid-column: 1 / -1;
+}
+
+/* Labels y campos del formulario */
+.form-admin label,
+.form-grid label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    color: var(--color-texto-suave);
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+.form-admin input,
+.form-admin textarea,
+.form-admin select {
+    width: 100%;
+    background-color: var(--color-superficie-alt);
+    color: var(--color-texto);
+    border: 1px solid var(--color-borde-fuerte);
+    border-radius: var(--radio-sm);
+    padding: 0.55rem 0.75rem;
+    font-size: 0.92rem;
+    font-family: inherit;
+    transition: border-color var(--transicion), box-shadow var(--transicion);
+}
+
+.form-admin textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.form-admin input:focus,
+.form-admin textarea:focus,
+.form-admin select:focus {
+    outline: none;
+    border-color: var(--color-acento);
+    box-shadow: 0 0 0 3px var(--color-acento-suave);
+}
+
+/* Fieldset para grupos de checkboxes (plataformas, desarrolladoras) */
+.form-admin fieldset {
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-sm);
+    padding: 0.75rem 1rem;
+}
+
+.form-admin legend {
+    color: var(--color-texto-suave);
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 0 0.4rem;
+}
+
+/* Contenedor de los checkboxes individuales */
+.checks-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin-top: 0.4rem;
+}
+
+/* Checkbox con etiqueta en línea */
+.check-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-texto);
+    font-size: 0.9rem;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.check-inline input[type="checkbox"] {
+    width: auto;
+    accent-color: var(--color-acento);
+    cursor: pointer;
+}
+
+/* Fila de botones al pie del formulario */
+.form-admin__acciones {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+/* Mensaje de éxito o error debajo de los botones */
+.form-admin__mensaje {
+    margin-top: 0.6rem;
+    font-size: 0.9rem;
+    min-height: 1.2em;
+}
+
+.form-admin__mensaje.ok {
+    color: var(--color-exito);
+}
+
+.form-admin__mensaje.error {
+    color: var(--color-peligro);
+}
+
+/* -------------------------------------------------------
+   DASHBOARD ADMIN (index.html en modo admin):
+   bienvenida + tarjetas de acceso rápido
+------------------------------------------------------- */
+
+/* Bloque de bienvenida con título y botón principal */
+.admin-bienvenida {
+    background: var(--gradiente-tenue);
+    border: 1px solid var(--color-borde);
+    border-left: 4px solid var(--color-acento);
+    border-radius: var(--radio);
+    padding: 2.5rem 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--sombra-suave);
+}
+
+.admin-bienvenida h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.admin-bienvenida p {
+    color: var(--color-texto-suave);
+    margin-bottom: 1.25rem;
+    max-width: 620px;
+}
+
+/* Grid de tarjetas de acceso rápido (una por recurso) */
+.admin-accesos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+/* Tarjeta de acceso rápido a un recurso del admin */
+.admin-acceso-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    background-color: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    padding: 1.5rem 1rem;
+    text-decoration: none;
+    color: var(--color-texto);
+    box-shadow: var(--sombra-suave);
+    transition: transform var(--transicion), border-color var(--transicion), box-shadow var(--transicion);
+}
+
+.admin-acceso-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-acento);
+    box-shadow: var(--sombra-fuerte);
+    color: #ffffff;
+}
+
+.admin-acceso-card__icono {
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.admin-acceso-card__nombre {
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+/* -------------------------------------------------------
+   PANEL ADMIN (admin.html): cabecera del dashboard y tabs
+------------------------------------------------------- */
+
+/* Cabecera del panel con título y botón de volver */
+.admin-dashboard-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-borde);
+}
+
+.admin-dashboard-header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0.2rem;
+}
+
+/* Barra de pestañas: fila de botones con scroll en móvil */
+.tabs-admin {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--color-borde);
+    padding-bottom: 0.75rem;
+}
+
+/* Pestaña individual */
+.tab-admin {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1.1rem;
+    background-color: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-sm);
+    color: var(--color-texto-suave);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color var(--transicion), border-color var(--transicion), color var(--transicion);
+    font-family: inherit;
+}
+
+.tab-admin:hover {
+    background-color: var(--color-acento-suave);
+    border-color: var(--color-acento);
+    color: #ffffff;
+}
+
+/* Pestaña activa: fondo acento y sin borde inferior */
+.tab-admin.activa {
+    background: var(--gradiente-primario);
+    border-color: transparent;
+    color: #ffffff;
+    box-shadow: 0 2px 10px rgba(124, 58, 237, 0.35);
+}
+
+.tab-admin__icono {
+    font-size: 1rem;
+}
+
+/* Sección de la tabla que aparece bajo los tabs */
+.seccion-tabla {
+    min-height: 120px;
+}
+
+/* Barra encima de la tabla: contador de registros + botón añadir */
+.admin-tabla-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Texto de carga o placeholder */
+.texto-cargando {
+    color: var(--color-texto-suave);
+    font-style: italic;
+    padding: 2rem 0;
+}

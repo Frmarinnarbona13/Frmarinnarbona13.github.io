@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<parking xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="parking.xsd">
+
+  <origen>
+    <nombre>Parking GUEMI Centro</nombre>
+    <web>https://www.parking-guemi.es</web>
+    <language>es</language>
+    <nota_legal>https://www.parking-guemi.es/legal</nota_legal>
+  </origen>
+
+  <elaborado>2025-12-01T08:30:00</elaborado>
+
+  <tarifas moneda="EUR">
+    <tarifa id="T-001" tipo="rotacion">
+      <descripcion>Rotación por horas</descripcion>
+      <precio_hora>2.20</precio_hora>
+      <max_diario>18.00</max_diario>
+    </tarifa>
+
+    <tarifa id="T-002" tipo="abonado">
+      <descripcion>Abono mensual</descripcion>
+      <precio_mensual>95.00</precio_mensual>
+      <acceso_24h>true</acceso_24h>
+    </tarifa>
+
+    <tarifa id="T-003" tipo="abonado">
+      <descripcion>Abono nocturno</descripcion>
+      <precio_mensual>55.00</precio_mensual>
+      <acceso_24h>false</acceso_24h>
+    </tarifa>
+  </tarifas>
+
+  <plazas total="60">
+    <plaza id="PZ-001" planta="-1" tipo="coche" estado="ocupada">
+      <matricula>1234KLM</matricula>
+      <entrada>2025-12-01T07:45:00</entrada>
+    </plaza>
+
+    <plaza id="PZ-002" planta="-1" tipo="coche" estado="libre" />
+
+    <plaza id="PZ-003" planta="-1" tipo="moto" estado="ocupada">
+      <matricula>5678BCD</matricula>
+      <entrada>2025-12-01T08:10:00</entrada>
+    </plaza>
+
+    <plaza id="PZ-004" planta="0" tipo="pmr" estado="libre" />
+
+    <plaza id="PZ-005" planta="0" tipo="coche" estado="mantenimiento">
+      <observacion>Sensor de ocupación en revisión</observacion>
+    </plaza>
+
+    <plaza id="PZ-006" planta="1" tipo="electrico" estado="ocupada">
+      <matricula>9012FGH</matricula>
+      <entrada>2025-12-01T06:55:00</entrada>
+      <carga_kw>11</carga_kw>
+    </plaza>
+  </plazas>
+
+  <abonados>
+    <abonado id="A-001" tipo="mensual">
+      <nombre>María López</nombre>
+      <matricula>1111AAA</matricula>
+      <vigencia_desde>2025-01-01</vigencia_desde>
+      <vigencia_hasta>2025-12-31</vigencia_hasta>
+      <tarifa_ref>T-002</tarifa_ref>
+    </abonado>
+
+    <abonado id="A-002" tipo="nocturno">
+      <nombre>Carlos Pérez</nombre>
+      <matricula>2222BBB</matricula>
+      <vigencia_desde>2025-06-01</vigencia_desde>
+      <vigencia_hasta>2025-12-31</vigencia_hasta>
+      <tarifa_ref>T-003</tarifa_ref>
+    </abonado>
+
+    <abonado id="A-003" tipo="mensual">
+      <nombre>Lucía Sánchez</nombre>
+      <matricula>3333CCC</matricula>
+      <vigencia_desde>2025-09-01</vigencia_desde>
+      <vigencia_hasta>2026-08-31</vigencia_hasta>
+      <tarifa_ref>T-002</tarifa_ref>
+    </abonado>
+  </abonados>
+  <camaras>
+    <camara>
+      <nombre>Camara 1</nombre>
+      <horas_grabacion>8</horas_grabacion>
+    </camara>
+    
+    <camara>
+      <nombre>Camara 2</nombre>
+      <horas_grabacion>8</horas_grabacion>
+    </camara>
+
+    <camara>
+      <nombre>Camara 3</nombre>
+    </camara>
+  </camaras>
+
+
+  <accesos>
+    <registro id="R-001" evento="entrada">
+      <fecha_hora>2025-12-01T07:45:00</fecha_hora>
+      <matricula>1234KLM</matricula>
+      <plaza_ref>PZ-001</plaza_ref>
+    </registro>
+
+    <registro id="R-002" evento="entrada">
+      <fecha_hora>2025-12-01T08:10:00</fecha_hora>
+      <matricula>5678BCD</matricula>
+      <plaza_ref>PZ-003</plaza_ref>
+    </registro>
+
+    <registro id="R-003" evento="salida">
+      <fecha_hora>2025-12-01T08:25:00</fecha_hora>
+      <matricula>9999ZZZ</matricula>
+    </registro>
+
+    <registro id="R-004" evento="entrada">
+      <fecha_hora>2025-12-01T06:55:00</fecha_hora>
+      <matricula>9012FGH</matricula>
+      <plaza_ref>PZ-006</plaza_ref>
+    </registro>
+  </accesos>
+</parking>

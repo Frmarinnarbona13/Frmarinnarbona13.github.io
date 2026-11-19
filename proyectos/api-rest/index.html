@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>API REST simulada · Francisco Marín</title>
+<link rel="icon" href="../../img/favicon-32.png">
+<link rel="stylesheet" href="../sim/sim.css">
+<style>
+  .metodo{display:flex;gap:.5rem;flex-wrap:wrap}
+  .peticion{display:grid;grid-template-columns:120px 1fr auto;gap:.5rem;align-items:center}
+  @media(max-width:600px){.peticion{grid-template-columns:1fr}}
+  .estado{font:600 .9rem var(--mono)}
+  .rutas button{display:flex;gap:.6rem;align-items:center;width:100%;text-align:left;background:none;border:0;color:var(--texto);font:400 .88rem var(--mono);padding:.45rem .5rem;border-radius:6px;cursor:pointer}
+  .rutas button:hover{background:var(--superficie-2)}
+  .verbo{display:inline-block;min-width:58px;font-weight:600}
+  .verbo.GET{color:var(--verde)} .verbo.POST{color:var(--azul)} .verbo.PUT{color:#ffc857} .verbo.DELETE{color:var(--rojo)}
+  pre.respuesta{background:#0a0b1c;border:1px solid var(--linea);border-radius:10px;padding:1rem;min-height:140px;max-height:360px;overflow:auto;white-space:pre-wrap}
+  .pestanas{display:flex;gap:.4rem;margin-bottom:1rem;flex-wrap:wrap}
+  .pestanas .boton[aria-pressed=true]{background:var(--degradado);border-color:transparent}
+</style>
+</head>
+<body>
+<header class="barra-sim">
+  <div class="izq"><img src="../../img/avatar-192.png" alt=""><h1 id="titulo">API REST</h1><span class="etq">Simulación</span></div>
+  <a class="volver" href="../../index.html#proyectos">Volver al portfolio</a>
+</header>
+<main class="contenido">
+  <p class="intro" id="intro"></p>
+  <div class="pestanas" id="pestanas"></div>
+  <div class="rejilla dos">
+    <section class="tarjeta">
+      <h2 style="font:600 1.05rem var(--display);margin-bottom:.8rem">Endpoints del controlador</h2>
+      <div class="rutas" id="rutas"></div>
+      <hr style="border:0;border-top:1px solid var(--linea);margin:1rem 0">
+      <h2 style="font:600 1.05rem var(--display);margin-bottom:.8rem">Petición</h2>
+      <div class="peticion">
+        <select id="verbo" aria-label="Método HTTP"><option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option></select>
+        <input type="text" id="url" aria-label="Ruta">
+        <button class="boton principal" id="enviar" type="button">Enviar</button>
+      </div>
+      <div class="campo" style="margin-top:.8rem">
+        <label for="cuerpo">Cuerpo JSON (para POST y PUT)</label>
+        <textarea id="cuerpo" rows="8"></textarea>
+      </div>
+    </section>
+    <section class="tarjeta">
+      <h2 style="font:600 1.05rem var(--display);margin-bottom:.8rem">Respuesta <span class="estado" id="estado"></span></h2>
+      <pre class="respuesta mono" id="respuesta">Elige un endpoint y pulsa Enviar.</pre>
+      <h2 style="font:600 1.05rem var(--display);margin:1.2rem 0 .6rem">Base de datos H2 (en memoria)</h2>
+      <div class="tabla-scroll"><table id="tabla"></table></div>
+      <div style="margin-top:.8rem"><button class="boton peq" id="reiniciar" type="button">Restablecer datos</button></div>
+    </section>
+  </div>
+</main>
+<script>
+// Cada app replica el controlador, el modelo y los datos de ejemplo del proyecto original.
+const APPS = {
+  taskify: {
+    titulo: "Taskify",
+    intro: "<strong>Taskify</strong> es una API REST hecha con Spring Boot y JPA para gestionar tareas. En el proyecto real se probaba con Postman; aquí puedes lanzar las mismas peticiones al controlador <code>TareaController</code> y ver cómo cambia la tabla.",
+    base: "/api/tareas",
+    campos: ["id", "titulo", "descripcion", "fechaLimite", "completada"],
+    ejemplo: { titulo: "Preparar el portfolio", descripcion: "Subirlo a GitHub Pages", fechaLimite: "2026-12-01", completada: false },
+    datos: [
+      { id: 1, titulo: "Estudiar JPA", descripcion: "Repasar relaciones OneToMany", fechaLimite: "2026-11-25", completada: false },
+      { id: 2, titulo: "Entregar práctica DWES", descripcion: "Subir el repositorio a GitHub", fechaLimite: "2026-11-22", completada: true },
+      { id: 3, titulo: "Comprar dominio", descripcion: "frmarin.dev", fechaLimite: "2026-11-30", completada: false },
+    ],
+  },
+  mascotas: {
+    titulo: "CRUD de mascotas",
+    intro: "<strong>miniAppCrud</strong> fue mi primera API REST completa con Spring Boot: modelo, repositorio, servicio y controlador para gestionar mascotas. Aquí puedes probar las mismas peticiones de <code>MascotaController</code>.",
+    base: "/api/mascotas",
+    campos: ["id", "nombre", "raza", "nacimiento", "volador", "numeroPatas"],
+    ejemplo: { nombre: "Kiwi", raza: "Agapornis", nacimiento: "2024-04-10", volador: true, numeroPatas: 2 },
+    datos: [
+      { id: 1, nombre: "Toby", raza: "Beagle", nacimiento: "2021-06-14", volador: false, numeroPatas: 4 },
+      { id: 2, nombre: "Luna", raza: "Gato europeo", nacimiento: "2022-01-30", volador: false, numeroPatas: 4 },
+      { id: 3, nombre: "Pipo", raza: "Periquito", nacimiento: "2023-09-02", volador: true, numeroPatas: 2 },
+    ],
+  },
+};
+
+const $ = (s) => document.querySelector(s);
+const params = new URLSearchParams(location.search);
+let clave = APPS[params.get("app")] ? params.get("app") : "taskify";
+let datos = {};
+
+function cargarDatos(k) {
+  try { const g = sessionStorage.getItem("api-" + k); if (g) return JSON.parse(g); } catch {}
+  return structuredClone(APPS[k].datos);
+}
+function guardar() { try { sessionStorage.setItem("api-" + clave, JSON.stringify(datos[clave])); } catch {} }
+
+function pintarPestanas() {
+  $("#pestanas").innerHTML = "";
+  Object.entries(APPS).forEach(([k, app]) => {
+    const b = document.createElement("button");
+    b.className = "boton peq"; b.type = "button"; b.textContent = app.titulo;
+    b.setAttribute("aria-pressed", k === clave);
+    b.onclick = () => { clave = k; history.replaceState(null, "", "?app=" + k); iniciar(); };
+    $("#pestanas").append(b);
+  });
+}
+
+function iniciar() {
+  const app = APPS[clave];
+  datos[clave] = datos[clave] || cargarDatos(clave);
+  document.title = app.titulo + " · API simulada";
+  $("#titulo").textContent = app.titulo;
+  $("#intro").innerHTML = app.intro;
+  pintarPestanas();
+  const rutas = [
+    ["GET", app.base, "Listar todas"],
+    ["GET", app.base + "/1", "Obtener por id"],
+    ["POST", app.base, "Crear"],
+    ["PUT", app.base + "/1", "Actualizar"],
+    ["DELETE", app.base + "/2", "Eliminar"],
+  ];
+  $("#rutas").innerHTML = "";
+  rutas.forEach(([v, r, t]) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.innerHTML = `<span class="verbo ${v}">${v}</span><span>${r}</span><span style="margin-left:auto;color:var(--tenue);font-family:var(--cuerpo)">${t}</span>`;
+    b.onclick = () => {
+      $("#verbo").value = v; $("#url").value = r;
+      $("#cuerpo").value = (v === "POST" || v === "PUT") ? JSON.stringify(v === "PUT" ? { ...app.ejemplo, titulo: app.ejemplo.titulo, nombre: app.ejemplo.nombre } : app.ejemplo, null, 2) : "";
+    };
+    $("#rutas").append(b);
+  });
+  $("#verbo").value = "GET"; $("#url").value = app.base; $("#cuerpo").value = "";
+  $("#respuesta").textContent = "Elige un endpoint y pulsa Enviar."; $("#estado").textContent = "";
+  pintarTabla();
+}
+
+function pintarTabla() {
+  const app = APPS[clave];
+  const filas = datos[clave].map((d) => "<tr>" + app.campos.map((c) => `<td>${String(d[c] ?? "")}</td>`).join("") + "</tr>").join("");
+  $("#tabla").innerHTML = "<thead><tr>" + app.campos.map((c) => `<th>${c}</th>`).join("") + "</tr></thead><tbody>" + (filas || `<tr><td colspan="${app.campos.length}">La tabla está vacía.</td></tr>`) + "</tbody>";
+}
+
+// Lógica equivalente al servicio de Spring Boot
+function procesar(verbo, url, cuerpo) {
+  const app = APPS[clave], lista = datos[clave];
+  if (!url.startsWith(app.base)) return [404, { error: "Not Found", path: url }];
+  const resto = url.slice(app.base.length).replace(/^\//, "");
+  const id = resto ? Number(resto) : null;
+  if (resto && !Number.isInteger(id)) return [400, { error: "Bad Request", message: "El id debe ser numérico" }];
+  const limpio = (obj) => Object.fromEntries(app.campos.filter((c) => c !== "id" && c in obj).map((c) => [c, obj[c]]));
+  if (verbo === "GET") {
+    if (id == null) return [200, lista];
+    const e = lista.find((x) => x.id === id);
+    return e ? [200, e] : [200, null];
+  }
+  if (verbo === "POST" && id == null) {
+    const nuevo = { id: lista.reduce((m, x) => Math.max(m, x.id), 0) + 1, ...limpio(cuerpo) };
+    lista.push(nuevo); return [200, nuevo];
+  }
+  if (verbo === "PUT" && id != null) {
+    const e = lista.find((x) => x.id === id);
+    if (!e) return [200, null];
+    Object.assign(e, limpio(cuerpo)); return [200, e];
+  }
+  if (verbo === "DELETE" && id != null) {
+    datos[clave] = lista.filter((x) => x.id !== id); return [200, ""];
+  }
+  return [405, { error: "Method Not Allowed" }];
+}
+
+$("#enviar").onclick = async () => {
+  const verbo = $("#verbo").value, url = $("#url").value.trim();
+  let cuerpo = {};
+  if (verbo === "POST" || verbo === "PUT") {
+    try { cuerpo = JSON.parse($("#cuerpo").value || "{}"); }
+    catch { $("#estado").innerHTML = '<span class="mal">400</span>'; $("#respuesta").textContent = "El cuerpo no es un JSON válido."; return; }
+  }
+  $("#respuesta").textContent = "Enviando…";
+  await new Promise((r) => setTimeout(r, 180));
+  const [estado, res] = procesar(verbo, url, cuerpo);
+  guardar(); pintarTabla();
+  $("#estado").innerHTML = `<span class="${estado < 300 ? "ok" : "mal"}">${estado} ${estado < 300 ? "OK" : ""}</span>`;
+  $("#respuesta").textContent = res === "" ? "(sin contenido)" : JSON.stringify(res, null, 2);
+};
+$("#reiniciar").onclick = () => { datos[clave] = structuredClone(APPS[clave].datos); guardar(); pintarTabla(); };
+iniciar();
+</script>
+</body>
+</html>

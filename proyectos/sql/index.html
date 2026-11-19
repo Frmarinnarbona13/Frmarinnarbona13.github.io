@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Consola SQL · Francisco Marín</title>
+<link rel="icon" href="../../img/favicon-32.png">
+<link rel="stylesheet" href="../sim/sim.css">
+<style>
+  .consultas{display:flex;flex-direction:column;gap:.35rem}
+  .consultas button{text-align:left;background:var(--fondo);border:1px solid var(--linea);color:var(--texto);border-radius:8px;padding:.55rem .7rem;font:500 .88rem var(--cuerpo);cursor:pointer}
+  .consultas button:hover{border-color:var(--morado)}
+  .tablas{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.6rem}
+  .pestanas{display:flex;gap:.4rem;margin-bottom:1rem;flex-wrap:wrap}
+  .pestanas .boton[aria-pressed=true]{background:var(--degradado);border-color:transparent}
+  #editor{min-height:170px}
+  .error{background:rgba(255,92,122,.1);border:1px solid rgba(255,92,122,.4);color:#ffb3c1;padding:.7rem .9rem;border-radius:8px;font:400 .86rem var(--mono)}
+</style>
+</head>
+<body>
+<header class="barra-sim">
+  <div class="izq"><img src="../../img/avatar-192.png" alt=""><h1 id="titulo">Consola SQL</h1><span class="etq">Simulación</span></div>
+  <a class="volver" href="../../index.html#proyectos">Volver al portfolio</a>
+</header>
+<main class="contenido">
+  <p class="intro" id="intro"></p>
+  <div class="pestanas" id="pestanas"></div>
+  <div class="rejilla dos">
+    <section class="tarjeta">
+      <h2 style="font:600 1.05rem var(--display);margin-bottom:.6rem">Consultas de ejemplo</h2>
+      <div class="consultas" id="consultas"></div>
+      <h2 style="font:600 1.05rem var(--display);margin:1.2rem 0 .3rem">Tablas</h2>
+      <div class="tablas" id="tablas"></div>
+    </section>
+    <section class="tarjeta">
+      <label for="editor">Escribe tu consulta SQL</label>
+      <textarea id="editor" spellcheck="false"></textarea>
+      <div style="display:flex;gap:.5rem;margin:.7rem 0 1rem;flex-wrap:wrap">
+        <button class="boton principal" id="ejecutar" type="button">Ejecutar (Ctrl+Enter)</button>
+        <button class="boton" id="reiniciar" type="button">Restablecer base de datos</button>
+      </div>
+      <div id="resultado"><p style="color:var(--tenue)">Cargando el motor SQL…</p></div>
+    </section>
+  </div>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+<script>
+const BASES = {
+  redsocial: {
+    titulo: "Red social",
+    intro: "Modelo relacional de una <strong>red social</strong> (Bases de Datos, 1.º DAW): usuarios, famosos, publicaciones, comentarios, seguidores, mejores amigos, «me gusta» y republicaciones. Es mi script original, adaptado de MySQL a SQLite para que funcione en el navegador.",
+    consultas: [
+      ["Usuarios con más seguidores", "SELECT u.nick, u.nombre_comun, COUNT(s.nick_seguidor) AS seguidores\nFROM Usuario u\nLEFT JOIN Sigue s ON s.nick_seguido = u.nick\nGROUP BY u.nick\nORDER BY seguidores DESC;"],
+      ["Publicaciones con más «me gusta»", "SELECT p.n_publicacion, p.tipo, p.nick_autor, COUNT(m.nick_usuario) AS megusta\nFROM Publicacion p\nLEFT JOIN Me_Gusta m ON m.n_publicacion = p.n_publicacion\nGROUP BY p.n_publicacion\nORDER BY megusta DESC;"],
+      ["Comentarios de cada publicación", "SELECT c.id_publicacion, c.nick_autor, c.texto\nFROM Comentario c\nORDER BY c.id_publicacion;"],
+      ["Famosos y su categoría", "SELECT f.nick_usuario, u.nombre_comun, f.categoria\nFROM Famoso f JOIN Usuario u ON u.nick = f.nick_usuario;"],
+      ["Seguimientos mutuos", "SELECT a.nick_seguidor AS usuario, a.nick_seguido AS sigue_a\nFROM Sigue a\nJOIN Sigue b ON a.nick_seguidor = b.nick_seguido AND a.nick_seguido = b.nick_seguidor;"],
+    ],
+  },
+  cines: {
+    titulo: "Base de datos de cines",
+    intro: "Base de datos <strong>stemos_en_el_cine</strong> del proyecto intermodular (Bases de Datos, 2.º trimestre): cines, salas, películas, actores, proyecciones y entradas. Las tablas son las mías; he añadido datos de ejemplo y adaptado las consultas de estadísticas a SQLite.",
+    consultas: [
+      ["Proyecciones llenas en la última semana", "SELECT p.id_proyeccion, pel.nombre AS pelicula, p.fecha, p.hora\nFROM Proyeccion p\nJOIN Pelicula pel ON p.id_pelicula = pel.id_pelicula\nWHERE p.asientos_libres = 0\n  AND p.fecha BETWEEN date('2026-11-19','-7 day') AND '2026-11-19';"],
+      ["Asientos vacíos de la semana", "SELECT SUM(asientos_libres) AS total_asientos_vacios\nFROM Proyeccion\nWHERE fecha BETWEEN date('2026-11-19','-7 day') AND '2026-11-19';"],
+      ["Media de asistentes este mes", "SELECT ROUND(AVG(s.aforo - p.asientos_libres), 1) AS media_asistentes_mes\nFROM Proyeccion p JOIN Sala s ON p.id_sala = s.id_sala\nWHERE strftime('%Y-%m', p.fecha) = '2026-11' AND p.fecha <= '2026-11-19';"],
+      ["Películas con baja asistencia (30 días)", "SELECT pel.nombre, COUNT(p.id_proyeccion) AS proyecciones_baja_asistencia\nFROM Pelicula pel\nJOIN Proyeccion p ON pel.id_pelicula = p.id_pelicula\nJOIN Sala s ON p.id_sala = s.id_sala\nWHERE (s.aforo - p.asientos_libres) < (s.aforo / 2.0)\n  AND p.fecha BETWEEN date('2026-11-19','-30 day') AND '2026-11-19'\nGROUP BY pel.id_pelicula, pel.nombre\nORDER BY proyecciones_baja_asistencia DESC;"],
+      ["Actor con más entradas vendidas este mes", "SELECT a.nombre AS actor, COUNT(e.id_entrada) AS entradas_vendidas\nFROM Actor a\nJOIN Pelicula_Actor pa ON a.id_actor = pa.id_actor\nJOIN Proyeccion p ON pa.id_pelicula = p.id_pelicula\nJOIN Entrada e ON p.id_proyeccion = e.id_proyeccion\nWHERE strftime('%Y-%m', e.hora_compra) = '2026-11'\nGROUP BY a.id_actor, a.nombre\nORDER BY entradas_vendidas DESC\nLIMIT 1;"],
+      ["Comprar una entrada (lo que hacía mi procedimiento)", "-- En MySQL era el procedimiento comprar_entrada; SQLite no tiene procedimientos,\n-- así que aquí van sus dos pasos: insertar la entrada y restar un asiento libre.\nINSERT INTO Entrada (precio, hora_compra, minusvalido, numero_asiento, id_proyeccion)\nSELECT 8.90, datetime('now'), 0, (s.aforo - p.asientos_libres) + 1, p.id_proyeccion\nFROM Proyeccion p JOIN Sala s ON p.id_sala = s.id_sala WHERE p.id_proyeccion = 2;\nUPDATE Proyeccion SET asientos_libres = asientos_libres - 1 WHERE id_proyeccion = 2;\nSELECT * FROM Entrada ORDER BY id_entrada DESC LIMIT 3;"],
+    ],
+  },
+};
+
+const $ = (s) => document.querySelector(s);
+const params = new URLSearchParams(location.search);
+let clave = BASES[params.get("db")] ? params.get("db") : "redsocial";
+let SQL, db, scripts;
+
+function pintarPestanas() {
+  $("#pestanas").innerHTML = "";
+  Object.entries(BASES).forEach(([k, b]) => {
+    const btn = document.createElement("button");
+    btn.className = "boton peq"; btn.type = "button"; btn.textContent = b.titulo;
+    btn.setAttribute("aria-pressed", k === clave);
+    btn.onclick = () => { clave = k; history.replaceState(null, "", "?db=" + k); abrir(); };
+    $("#pestanas").append(btn);
+  });
+}
+
+function abrir() {
+  const base = BASES[clave];
+  document.title = base.titulo + " · Consola SQL";
+  $("#titulo").textContent = base.titulo;
+  $("#intro").innerHTML = base.intro;
+  pintarPestanas();
+  db = new SQL.Database();
+  db.exec(scripts[clave]);
+  $("#consultas").innerHTML = "";
+  base.consultas.forEach(([t, q]) => {
+    const b = document.createElement("button"); b.type = "button"; b.textContent = t;
+    b.onclick = () => { $("#editor").value = q; ejecutar(); };
+    $("#consultas").append(b);
+  });
+  const tablas = db.exec("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")[0].values.map((v) => v[0]);
+  $("#tablas").innerHTML = "";
+  tablas.forEach((t) => {
+    const b = document.createElement("button"); b.className = "boton peq"; b.type = "button"; b.textContent = t;
+    b.onclick = () => { $("#editor").value = `SELECT * FROM ${t};`; ejecutar(); };
+    $("#tablas").append(b);
+  });
+  $("#editor").value = base.consultas[0][1];
+  ejecutar();
+}
+
+function ejecutar() {
+  const cont = $("#resultado");
+  try {
+    const res = db.exec($("#editor").value);
+    if (!res.length) { cont.innerHTML = '<p class="ok">Consulta ejecutada. No devuelve filas.</p>'; return; }
+    const r = res[res.length - 1];
+    const esc = (v) => String(v ?? "NULL").replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+    cont.innerHTML = `<p style="color:var(--tenue);font-size:.85rem;margin-bottom:.4rem">${r.values.length} fila(s)</p><div class="tabla-scroll"><table><thead><tr>${r.columns.map((c) => `<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${r.values.map((f) => `<tr>${f.map((v) => `<td>${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+  } catch (e) {
+    cont.innerHTML = `<div class="error">${String(e.message).replace(/</g, "&lt;")}</div>`;
+  }
+}
+
+$("#ejecutar").onclick = ejecutar;
+$("#reiniciar").onclick = abrir;
+$("#editor").addEventListener("keydown", (e) => { if ((e.ctrlKey || e.metaKey) && e.key === "Enter") ejecutar(); });
+
+Promise.all([
+  initSqlJs({ locateFile: (f) => "https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/" + f }),
+  fetch("datos.json").then((r) => r.json()),
+]).then(([s, d]) => { SQL = s; scripts = d; abrir(); })
+  .catch(() => { $("#resultado").innerHTML = '<div class="error">No se pudo cargar el motor SQL. Revisa tu conexión y recarga la página.</div>'; });
+</script>
+</body>
+</html>

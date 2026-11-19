@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/abonados/abonados.xsl"?>
+
+<abonados>
+  <abonado id="A-001" tipo="mensual">
+    <nombre>María López</nombre>
+    <matricula>1111AAA</matricula>
+    <vigencia_desde>2025-01-01</vigencia_desde>
+    <vigencia_hasta>2025-12-31</vigencia_hasta>
+    <tarifa_ref>T-002</tarifa_ref>
+  </abonado>
+
+  <abonado id="A-002" tipo="nocturno">
+    <nombre>Carlos Pérez</nombre>
+    <matricula>2222BBB</matricula>
+    <vigencia_desde>2025-06-01</vigencia_desde>
+    <vigencia_hasta>2025-12-31</vigencia_hasta>
+    <tarifa_ref>T-003</tarifa_ref>
+  </abonado>
+
+  <abonado id="A-003" tipo="mensual">
+    <nombre>Lucía Sánchez</nombre>
+    <matricula>3333CCC</matricula>
+    <vigencia_desde>2025-09-01</vigencia_desde>
+    <vigencia_hasta>2026-08-31</vigencia_hasta>
+    <tarifa_ref>T-002</tarifa_ref>
+  </abonado>
+
+  <camaras>
+    <camara>
+      <nombre>Camara 1</nombre>
+      <horas_grabacion>8</horas_grabacion>
+    </camara>
+    <camara>
+      <nombre>Camara 2</nombre>
+      <horas_grabacion>8</horas_grabacion>
+    </camara>
+    <camara>
+      <nombre>Camara 3</nombre>
+    </camara>
+  </camaras>
+  
+</abonados>

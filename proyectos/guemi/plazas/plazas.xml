@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/plazas/plazas.xsl"?>
+
+<plazas total="60">
+  <plaza id="PZ-001" planta="-1" tipo="coche" estado="ocupada">
+    <matricula>1234KLM</matricula>
+    <entrada>2025-12-01T07:45:00</entrada>
+  </plaza>
+
+  <plaza id="PZ-002" planta="-1" tipo="coche" estado="libre" />
+
+  <plaza id="PZ-003" planta="-1" tipo="moto" estado="ocupada">
+    <matricula>5678BCD</matricula>
+    <entrada>2025-12-01T08:10:00</entrada>
+  </plaza>
+
+  <plaza id="PZ-004" planta="0" tipo="pmr" estado="libre" />
+
+  <plaza id="PZ-005" planta="0" tipo="coche" estado="mantenimiento">
+    <observacion>Sensor de ocupación en revisión</observacion>
+  </plaza>
+
+  <plaza id="PZ-006" planta="1" tipo="electrico" estado="ocupada">
+    <matricula>9012FGH</matricula>
+    <entrada>2025-12-01T06:55:00</entrada>
+    <carga_kw>11</carga_kw>
+  </plaza>
+</plazas>

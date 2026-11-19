@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar personajes | R&M Wiki</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+        <header class="site-header">
+    <!--<div class="brand">
+      <span class="brand__logo">R&M</span>
+      <span class="brand__name">R&M Wiki</span>
+    </div>
+-->
+ <div>
+  <a href="index.html">
+    <img src="img/logo.png" alt="Logo de R&M Wiki" id="logo_nav">
+  </a>
+</div>
+
+    <nav class="site-nav">
+      <a class="site-nav__link"  href="index.html">Inicio</a>
+      <a class="site-nav__link" href="sobre_nosotros.html">Sobre nosotros</a>
+      <a class="site-nav__link" href="buscar_personajes.html">Buscar Personaje</a>
+    </nav>
+  </header>
+
+    <main class="contenedor-busqueda">
+        <section class="busqueda">
+            <h2 class="h2BuscarPersonaje">Buscar personaje por nombre o id</h2>
+            <input type="text" id="busqueda-personaje" placeholder="Escribe un nombre o un id">
+            <button id="btn-buscar">Buscar</button>
+
+            <div id="resultado-busqueda"></div>
+            <p id="error-busqueda"></p>
+        </section>
+
+        <section class="aleatorio">
+            <h2 class="h2BuscarPersonaje">Personaje aleatorio</h2>
+            <button id="btn-aleatorio">Mostrar personaje aleatorio</button>
+
+            <div id="resultado-aleatorio"></div>
+            <p id="error-aleatorio"></p>
+        </section>
+    </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__links">
+      <a href="https://imgs.search.brave.com/fp6HAlePR6VZAK21vH-5_cpoxBfN67lOIqNQTuGBA18/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly82NC5t/ZWRpYS50dW1ibHIu/Y29tL2E2MWQ0Yjc2/YzMwMjFlZTJhMWY1/Y2ZkYTVkOTBjYmYy/LzFmYWRlNmYzMzhj/NDU0NzAtMDkvczUw/MHg3NTAvNjIzNzRh/NGE1MTBhNDhlMWFj/NTViY2FkMGY0ZjA4/NzQxNWVmYzVhNi5n/aWZ2"
+        class="site-footer__link"><img src="img/Instagram_logo.png" alt="" id="Instagram"></a>
+      <a href="https://imgs.search.brave.com/fp6HAlePR6VZAK21vH-5_cpoxBfN67lOIqNQTuGBA18/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly82NC5t/ZWRpYS50dW1ibHIu/Y29tL2E2MWQ0Yjc2/YzMwMjFlZTJhMWY1/Y2ZkYTVkOTBjYmYy/LzFmYWRlNmYzMzhj/NDU0NzAtMDkvczUw/MHg3NTAvNjIzNzRh/NGE1MTBhNDhlMWFj/NTViY2FkMGY0ZjA4/NzQxNWVmYzVhNi5n/aWZ2"
+        class="site-footer__link"><img src="img/X_logo.png" alt="" id="X_logo"></a>
+      <a href="https://imgs.search.brave.com/fp6HAlePR6VZAK21vH-5_cpoxBfN67lOIqNQTuGBA18/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly82NC5t/ZWRpYS50dW1ibHIu/Y29tL2E2MWQ0Yjc2/YzMwMjFlZTJhMWY1/Y2ZkYTVkOTBjYmYy/LzFmYWRlNmYzMzhj/NDU0NzAtMDkvczUw/MHg3NTAvNjIzNzRh/NGE1MTBhNDhlMWFj/NTViY2FkMGY0ZjA4/NzQxNWVmYzVhNi5n/aWZ2"
+        class="site-footer__link"><img src="img/youtube_logo.png" alt="" id="youtube_logo"></a>
+    </div>
+<p class="site-footer__text">Contacto: <a href="mailto:contacto@rmwiki.com">contacto@rmwiki.com</a></p>
+</footer>
+</body>
+</html>

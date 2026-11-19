@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="parking">
+        <xs:complexType>
+            <xs:sequence>
+
+                <xs:element name="origen">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="nombre" type="xs:string" />
+                            <xs:element name="web" type="xs:string" />
+                            <xs:element name="language" type="xs:string" />
+                            <xs:element name="nota_legal" type="xs:string" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="elaborado" type="xs:dateTime" />
+
+                <xs:element name="tarifas">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="tarifa" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="descripcion" type="xs:string" />
+                                        <xs:element name="precio_hora" type="xs:decimal"
+                                            minOccurs="0" />
+                                        <xs:element name="max_diario" type="xs:decimal"
+                                            minOccurs="0" />
+                                        <xs:element name="precio_mensual" type="xs:decimal"
+                                            minOccurs="0" />
+                                        <xs:element name="acceso_24h" type="xs:boolean"
+                                            minOccurs="0" />
+                                    </xs:sequence>
+                                    <xs:attribute name="id" use="required">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:pattern value="[A-Z]{0,3}-\d{3}" />
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                    <xs:attribute name="tipo" type="xs:string" use="required" />
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="moneda" type="xs:string" use="required" />
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="plazas">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="plaza" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="matricula" minOccurs="0">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:pattern value="[0-9]{4}[A-Z]{3}" />
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                        <xs:element name="entrada" type="xs:dateTime" minOccurs="0" />
+                                        <xs:element name="observacion" type="xs:string"
+                                            minOccurs="0" />
+                                        <xs:element name="carga_kw" type="xs:decimal" minOccurs="0" />
+                                    </xs:sequence>
+                                    <xs:attribute name="id" use="required">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:pattern value="[A-Z]{0,3}-\d{3}" />
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                    <xs:attribute name="planta" type="xs:integer" use="required" />
+                                    <xs:attribute name="tipo" type="xs:string" use="required" />
+                                    <xs:attribute name="estado" type="xs:string" use="required" />
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="total" type="xs:integer" use="required" />
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="abonados">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="abonado" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="nombre" type="xs:string" />
+                                        <xs:element name="matricula" minOccurs="0">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:pattern value="[0-9]{4}[A-Z]{3}" />
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                        <xs:element name="vigencia_desde" type="xs:date" />
+                                        <xs:element name="vigencia_hasta" type="xs:date" />
+                                        <xs:element name="tarifa_ref">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:pattern value="T-\d{3}" />
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="id" use="required">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:pattern value="[A-Z]{0,3}-\d{3}" />
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                    <xs:attribute name="tipo" type="xs:string" use="required" />
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="camaras">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="camara" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="nombre" type="xs:string" />
+                                        <xs:element name="horas_grabacion" minOccurs="0">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:integer">
+                                                    <xs:pattern value="[0-9]{1}" />
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="accesos">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="registro" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="fecha_hora" type="xs:dateTime" />
+                                        <xs:element name="matricula" minOccurs="0">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:pattern value="[0-9]{4}[A-Z]{3}" />
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                        <xs:element name="plaza_ref" minOccurs="0">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:pattern value="[A-Z]{0,3}-\d{3}" />
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="id" use="required">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:pattern value="R-\d{3}" />
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                    <xs:attribute name="evento" type="xs:string" use="required" />
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

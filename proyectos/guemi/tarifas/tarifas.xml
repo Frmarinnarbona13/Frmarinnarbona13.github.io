@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/tarifas/tarifas.xsl"?>
+
+<tarifas moneda="EUR">
+  <tarifa id="T-001" tipo="rotacion">
+    <descripcion>Rotación por horas</descripcion>
+    <precio_hora>2.20</precio_hora>
+    <max_diario>18.00</max_diario>
+  </tarifa>
+
+  <tarifa id="T-002" tipo="abonado">
+    <descripcion>Abono mensual</descripcion>
+    <precio_mensual>95.00</precio_mensual>
+    <acceso_24h>Si</acceso_24h>
+  </tarifa>
+
+  <tarifa id="T-003" tipo="abonado">
+    <descripcion>Abono nocturno</descripcion>
+    <precio_mensual>55.00</precio_mensual>
+    <acceso_24h>No</acceso_24h>
+  </tarifa>
+</tarifas>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terminal Linux simulada · Francisco Marín</title>
+<link rel="icon" href="../../img/favicon-32.png">
+<link rel="stylesheet" href="../sim/sim.css">
+<style>.pestanas{display:flex;gap:.4rem;margin-bottom:1rem;flex-wrap:wrap}.pestanas .boton[aria-pressed=true]{background:var(--degradado);border-color:transparent}</style>
+</head>
+<body>
+<header class="barra-sim">
+  <div class="izq"><img src="../../img/avatar-192.png" alt=""><h1 id="titulo">Terminal Linux</h1><span class="etq">Simulación</span></div>
+  <a class="volver" href="../../index.html#proyectos">Volver al portfolio</a>
+</header>
+<main class="contenido">
+  <p class="intro" id="intro"></p>
+  <div class="pestanas" id="pestanas"></div>
+  <div class="terminal">
+    <div class="cab"><i></i><i></i><i></i><span>fran@ubuntu: ~</span></div>
+    <div class="salida" id="salida" aria-live="polite"></div>
+    <form id="form"><span class="prompt" id="prompt">fran@ubuntu:~$</span><input id="entrada" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Comando"></form>
+  </div>
+  <div class="atajos" id="atajos"></div>
+</main>
+<script>
+// ---------- Sistema simulado: usuarios, grupos y sistema de ficheros ----------
+const sys = {
+  grupos: { root: { gid: 0, miembros: [] }, fran: { gid: 1000, miembros: [] }, sudo: { gid: 27, miembros: ["fran"] } },
+  usuarios: { root: { uid: 0, grupo: "root", home: "/root", bloqueado: false }, fran: { uid: 1000, grupo: "fran", home: "/home/fran", bloqueado: false } },
+  dirs: { "/": { dueno: "root", grupo: "root", modo: "755" }, "/home": { dueno: "root", grupo: "root", modo: "755" }, "/home/fran": { dueno: "fran", grupo: "fran", modo: "750" }, "/home/fran/proyectos": { dueno: "fran", grupo: "fran", modo: "755" }, "/opt": { dueno: "root", grupo: "root", modo: "755" } },
+  ficheros: { "/home/fran/proyecto.sh": "script", "/home/fran/notas.txt": "texto", "/home/fran/proyectos/index.html": "html" },
+  cwd: "/home/fran", sigGid: 1001, sigUid: 1001, log: [],
+};
+const MODOS = {
+  usuarios: {
+    titulo: "Usuarios y permisos en Linux",
+    intro: "Proyecto de <strong>Sistemas Informáticos</strong> (1.er trimestre): crear grupos y usuarios por lotes, montar la carpeta compartida <code>/opt/compartido</code> y dar a cada grupo los permisos justos. Pulsa <strong>Ejecutar mi script</strong> para verlo paso a paso, o escribe comandos como <code>id tecnico1</code>, <code>getent group desarrolladores</code> o <code>ls -l /opt/compartido</code>.",
+    atajos: ["Ejecutar mi script", "ls -l /opt/compartido", "getent group tecnicos", "id desarrollador1", "cat /etc/group", "help"],
+  },
+  script: {
+    titulo: "Consola de comandos en Bash",
+    intro: "Proyecto de <strong>Sistemas Informáticos</strong> (2.º trimestre): un único script, <code>proyecto.sh</code>, con opciones para crear carpetas, contar procesos, listar ficheros, hacer copias de seguridad, gestionar usuarios y grupos… y algún easter egg. Prueba <code>./proyecto.sh -m Fibo Fibo 10</code>.",
+    atajos: ["./proyecto.sh -m Fibo Fibo 10", "./proyecto.sh -d web + css + js", "./proyecto.sh -lo", "./proyecto.sh -g alumnos", "./proyecto.sh -u ana alumnos", "./proyecto.sh -b backup", "help"],
+  },
+};
+const params = new URLSearchParams(location.search);
+let modo = MODOS[params.get("modo")] ? params.get("modo") : "usuarios";
+
+const salida = document.getElementById("salida"), entrada = document.getElementById("entrada");
+const out = (t = "") => { salida.textContent += t + "\n"; salida.scrollTop = salida.scrollHeight; };
+const ruta = (p) => {
+  if (!p || p === "~") return "/home/fran";
+  if (p.startsWith("~/")) p = "/home/fran/" + p.slice(2);
+  if (!p.startsWith("/")) p = sys.cwd.replace(/\/$/, "") + "/" + p;
+  const partes = [];
+  p.split("/").forEach((x) => { if (!x || x === ".") return; if (x === "..") partes.pop(); else partes.push(x); });
+  return "/" + partes.join("/");
+};
+const permisos = (m) => "d" + m.split("").map((n) => { n = +n; return (n & 4 ? "r" : "-") + (n & 2 ? "w" : "-") + (n & 1 ? "x" : "-"); }).join("");
+const expandir = (s) => s.replace(/\{(\d+)\.\.(\d+)\}/g, (_, a, b) => Array.from({ length: b - a + 1 }, (_, i) => +a + i).join(","))
+  .replace(/(\S*)\{([^}]+)\}(\S*)/g, (_, pre, lista, post) => lista.split(",").map((x) => pre + x + post).join(" "));
+function mkdir(p, padres) {
+  p = ruta(p);
+  const padre = p.slice(0, p.lastIndexOf("/")) || "/";
+  if (!sys.dirs[padre]) { if (padres) mkdir(padre, true); else return out(`mkdir: no se puede crear el directorio «${p}»: No existe el archivo o el directorio`); }
+  if (!sys.dirs[p]) sys.dirs[p] = { dueno: "fran", grupo: "fran", modo: "755" };
+}
+function useradd(args) {
+  let crearHome = false, grupos = [], principal = null, nombre = null;
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === "-m") crearHome = true;
+    else if (args[i] === "-M") crearHome = false;
+    else if (args[i] === "-G") grupos = args[++i].split(",");
+    else if (args[i] === "-g") principal = args[++i];
+    else if (args[i] === "-s" || args[i] === "-d") i++;
+    else nombre = args[i];
+  }
+  if (!nombre) return out("useradd: falta el nombre de usuario"), 1;
+  if (sys.usuarios[nombre]) return out(`useradd: el usuario «${nombre}» ya existe`), 9;
+  for (const g of [...grupos, principal].filter(Boolean)) if (!sys.grupos[g]) return out(`useradd: el grupo «${g}» no existe`), 6;
+  const nuevoId = Math.max(sys.sigUid, sys.sigGid);
+  sys.sigUid = sys.sigGid = nuevoId + 1;
+  if (!principal) { principal = nombre; sys.grupos[nombre] = { gid: nuevoId, miembros: [] }; }
+  sys.usuarios[nombre] = { uid: nuevoId, grupo: principal, home: "/home/" + nombre, bloqueado: false };
+  grupos.forEach((g) => sys.grupos[g].miembros.push(nombre));
+  if (crearHome) sys.dirs["/home/" + nombre] = { dueno: nombre, grupo: principal, modo: "750" };
+  return 0;
+}
+const COMANDOS = {
+  help: () => out("Comandos: ls [-l] [ruta], cd, pwd, mkdir [-p], groupadd, groupdel, useradd [-m] [-G grupos], userdel, usermod -L|-U|-aG, id, groups, getent group|passwd, cat /etc/group|/etc/passwd, chown [-R] u:g ruta, chmod [-R] modo ruta, chpasswd, chage, whoami, clear, ./proyecto.sh <opción>"),
+  clear: () => (salida.textContent = ""),
+  whoami: () => out("fran"),
+  pwd: () => out(sys.cwd),
+  cd: (a) => { const p = ruta(a[0]); if (sys.dirs[p]) { sys.cwd = p; actualizarPrompt(); } else out(`bash: cd: ${a[0]}: No existe el archivo o el directorio`); },
+  mkdir: (a) => { const p = a.includes("-p"); a.filter((x) => x !== "-p").forEach((d) => mkdir(d, p)); },
+  ls: (a) => {
+    const largo = a.includes("-l") || a.includes("-la"), objetivo = ruta(a.find((x) => !x.startsWith("-")) || sys.cwd);
+    if (!sys.dirs[objetivo]) return out(`ls: no se puede acceder a '${objetivo}': No existe el archivo o el directorio`);
+    const hijos = Object.keys(sys.dirs).filter((d) => d !== objetivo && d.startsWith(objetivo === "/" ? "/" : objetivo + "/") && !d.slice(objetivo.length + 1).includes("/") && d !== "/");
+    const fich = Object.keys(sys.ficheros).filter((f) => f.slice(0, f.lastIndexOf("/")) === objetivo);
+    if (!largo) return out([...hijos, ...fich].map((x) => x.split("/").pop()).join("  "));
+    out("total " + (hijos.length + fich.length) * 4);
+    hijos.forEach((d) => { const i = sys.dirs[d]; out(`${permisos(i.modo)} 2 ${i.dueno.padEnd(5)} ${i.grupo.padEnd(15)} 4096 nov 19 16:00 ${d.split("/").pop()}`); });
+    fich.forEach((f) => out(`-rwxr-xr-x 1 fran  fran            ${f.endsWith(".sh") ? "8214" : " 512"} nov 19 16:00 ${f.split("/").pop()}`));
+  },
+  groupadd: (a) => { const n = a[a.length - 1]; if (sys.grupos[n]) return out(`groupadd: el grupo «${n}» ya existe`); sys.grupos[n] = { gid: a.includes("-g") ? +a[a.indexOf("-g") + 1] : Math.max(sys.sigGid, sys.sigUid), miembros: [] }; if (!a.includes("-g")) sys.sigGid = sys.sigUid = sys.grupos[n].gid + 1; },
+  groupdel: (a) => { if (!sys.grupos[a[0]]) return out(`groupdel: el grupo «${a[0]}» no existe`); delete sys.grupos[a[0]]; },
+  useradd: (a) => useradd(a),
+  userdel: (a) => { const n = a[a.length - 1]; if (!sys.usuarios[n]) return out(`userdel: el usuario «${n}» no existe`); delete sys.usuarios[n]; Object.values(sys.grupos).forEach((g) => (g.miembros = g.miembros.filter((m) => m !== n))); if (a.includes("-r") || a.includes("--remove-home")) delete sys.dirs["/home/" + n]; },
+  deluser: (a) => COMANDOS.userdel(a),
+  usermod: (a) => {
+    const n = a[a.length - 1], u = sys.usuarios[n]; if (!u) return out(`usermod: el usuario «${n}» no existe`);
+    if (a.includes("-L")) u.bloqueado = true;
+    if (a.includes("-U")) u.bloqueado = false;
+    const i = a.findIndex((x) => x === "-aG" || x === "-G"); if (i >= 0) a[i + 1].split(",").forEach((g) => sys.grupos[g] && !sys.grupos[g].miembros.includes(n) && sys.grupos[g].miembros.push(n));
+  },
+  id: (a) => {
+    const n = a[0] || "fran", u = sys.usuarios[n]; if (!u) return out(`id: «${n}»: no existe ese usuario`);
+    const sec = Object.entries(sys.grupos).filter(([, g]) => g.miembros.includes(n));
+    out(`uid=${u.uid}(${n}) gid=${sys.grupos[u.grupo].gid}(${u.grupo}) grupos=${[[u.grupo, sys.grupos[u.grupo]], ...sec].map(([k, g]) => `${g.gid}(${k})`).join(",")}${u.bloqueado ? "   [cuenta bloqueada]" : ""}`);
+  },
+  groups: (a) => { const n = a[0] || "fran"; out([sys.usuarios[n]?.grupo, ...Object.entries(sys.grupos).filter(([, g]) => g.miembros.includes(n)).map(([k]) => k)].join(" ")); },
+  getent: (a) => {
+    if (a[0] === "group") Object.entries(sys.grupos).filter(([k]) => !a[1] || k === a[1]).forEach(([k, g]) => out(`${k}:x:${g.gid}:${g.miembros.join(",")}`));
+    else if (a[0] === "passwd") Object.entries(sys.usuarios).filter(([k]) => !a[1] || k === a[1]).forEach(([k, u]) => out(`${k}:x:${u.uid}:${sys.grupos[u.grupo]?.gid}::${u.home}:/bin/bash`));
+  },
+  cat: (a) => { if (a[0] === "/etc/group") COMANDOS.getent(["group"]); else if (a[0] === "/etc/passwd") COMANDOS.getent(["passwd"]); else out(`cat: ${a[0]}: contenido no disponible en la simulación`); },
+  chown: (a) => {
+    const r = a.includes("-R"), [ug, p] = a.filter((x) => x !== "-R"), [u, g] = ug.split(":"), base = ruta(p);
+    if (!sys.dirs[base]) return out(`chown: no se puede acceder a '${p}': No existe el archivo o el directorio`);
+    if (g && !sys.grupos[g]) return out(`chown: grupo no válido: «${ug}»`);
+    Object.keys(sys.dirs).filter((d) => d === base || (r && d.startsWith(base + "/"))).forEach((d) => { sys.dirs[d].dueno = u || sys.dirs[d].dueno; if (g) sys.dirs[d].grupo = g; });
+  },
+  chmod: (a) => {
+    const r = a.includes("-R"), [m, p] = a.filter((x) => x !== "-R"), base = ruta(p);
+    if (m === "+x") return;
+    if (!sys.dirs[base]) return out(`chmod: no se puede acceder a '${p}': No existe el archivo o el directorio`);
+    if (!/^[0-7]{3}$/.test(m)) return out(`chmod: modo no válido: «${m}»`);
+    Object.keys(sys.dirs).filter((d) => d === base || (r && d.startsWith(base + "/"))).forEach((d) => (sys.dirs[d].modo = m));
+  },
+  chpasswd: () => {}, chage: () => {}, echo: (a) => out(a.join(" ").replace(/^"|"$/g, "")),
+  "./proyecto.sh": (a) => proyecto(a),
+  "bash": (a) => (a[0] === "proyecto.sh" ? proyecto(a.slice(1)) : out("bash: solo se puede ejecutar proyecto.sh")),
+};
+
+// Réplica de mi proyecto.sh
+function proyecto(a) {
+  const op = a[0], resto = a.slice(1);
+  let exito = true;
+  const fecha = new Date().toISOString().slice(0, 16).replace("T", " ");
+  if (op === "-m" || op === "--manual") {
+    const t = resto.join(" ");
+    if (t === "R1, R1, círculo, R2, arriba, abajo, arriba, abajo, arriba, abajo") out("Ah shit, here we go again.  (truco de GTA San Andreas)");
+    else if (/^Fibo Fibo (\d+)$/.test(t)) { const n = +t.match(/(\d+)$/)[1]; let x = 0, y = 1, r = []; for (let i = 0; i < Math.min(n, 80); i++) { r.push(x); [x, y] = [y, x + y]; } out(r.join(" ")); }
+    else { out("Error: falta algún parámetro o formato incorrecto"); exito = false; }
+  } else if (op === "-d" || op === "--dir") {
+    out(` lista de parametros ${a.join(" ")}  cantidad parametros : ${a.length} `);
+    if (resto.length < 1) { out("Error ingrese algún parámetro"); exito = false; }
+    else {
+      out("opción elegida dir"); let anterior = sys.cwd;
+      for (let i = 0; i < resto.length; i++) {
+        if (resto[i] === "+") { mkdir(anterior + "/" + resto[i + 1], true); anterior = ruta(anterior + "/" + resto[++i]); }
+        else if (resto[i] === "-") { mkdir(ruta(anterior + "/..") + "/" + resto[i + 1], true); anterior = ruta(anterior + "/../" + resto[++i]); }
+        else { mkdir(resto[i], true); anterior = ruta(resto[i]); }
+      }
+      out("Carpetas creadas. Compruébalo con: ls -l");
+    }
+  } else if (op === "-p" || op === "--process") {
+    out(`total de procesos : ${resto[0] === "root" ? 142 : 37}`);
+  } else if (op === "-l" || op === "--list") {
+    const d = ruta(resto[0] || "~"); if (!sys.dirs[d]) { out("la carpeta debe existir"); exito = false; }
+    else { const n = Object.keys(sys.ficheros).filter((f) => f.startsWith(d + "/")).length; out(`Total de ficheros encontrados: ${n}`); out(`Log guardado en: ${d}/ficheros_${Date.now()}.log`); }
+  } else if (op === "-k" || op === "--kill") {
+    out(`Estas seguro que quierer matar el proceso ${resto[0] || "?"}  Y/N`); out("Y"); out("proceso kill realizado");
+  } else if (op === "-b" || op === "--backup") {
+    if (resto[0] !== "backup") { out("Opción no válida. Debes usar backup"); exito = false; }
+    else { out("copia de seguridad creada"); out("Copia de seguridad completada con éxito."); out(`Guardada en: /home/fran/backup_${fecha.replace(/\D/g, "")}.zip`); sys.ficheros[`/home/fran/backup_${fecha.replace(/\D/g, "")}.zip`] = "zip"; }
+  } else if (op === "-g" || op === "--group") {
+    if (!resto.length) COMANDOS.groups([]);
+    else if (resto[0] === "-r") COMANDOS.groupdel([resto[1]]);
+    else COMANDOS.groupadd(resto.length === 1 ? [resto[0]] : ["-g", resto[1], resto[0]]);
+    if (resto.length && resto[0] !== "-r") out(`Grupo ${resto[0]} creado.`);
+  } else if (op === "-u" || op === "--user") {
+    if (!resto.length) out("Francisco Marín");
+    else if (resto[0] === "-r") COMANDOS.userdel([resto[1]]);
+    else {
+      const [u, g, ...sec] = resto;
+      if (!g) { out("Uso: ./proyecto.sh -u <usuario> <grupo_principal> [grupos secundarios]"); exito = false; }
+      else if (useradd(["-m", "-g", g, ...(sec.length ? ["-G", sec.join(",")] : []), u]) === 0) out(`Usuario ${u} creado. Contraseña generada: ${Math.floor(100000 + Math.random() * 900000)}`);
+      else exito = false;
+    }
+  } else if (op === "-lo" || op === "--list-ordered") {
+    const d = ruta(resto[0] || "."); if (!sys.dirs[d]) { out(`Error: El directorio '${resto[0]}' no existe.`); exito = false; }
+    else [...Object.keys(sys.dirs), ...Object.keys(sys.ficheros)].filter((x) => x !== d && x.slice(0, x.lastIndexOf("/") || 1) === d).map((x) => x.split("/").pop()).sort((x, y) => x.length - y.length).forEach((x) => out(x));
+  } else if (op === "-n" || op === "--network") {
+    out("Seleccione una opción de red:\n  [1] Ping\n  [2] Copia Remota\n> 1\nHaciendo ping a 8.8.8.8, por favor espere...\n¡Conexión exitosa! El host 8.8.8.8 responde correctamente.");
+  } else if (op === "-log") {
+    out(sys.log.length ? sys.log.join("\n") : "gestion.log está vacío");
+  } else {
+    out("Opciones: -m (manual/easter eggs), -d (carpetas), -p (procesos), -l (listar), -k (kill), -b backup, -s (sql), -g (grupos), -u (usuarios), -lo (listar ordenado), -n (red), -log");
+    exito = false;
+  }
+  sys.log.push(`${fecha} ./proyecto.sh ${a.join(" ")} ${exito}`);
+}
+
+function ejecutar(linea) {
+  linea = linea.trim(); if (!linea) return;
+  if (linea.startsWith("#")) return;
+  const partes = expandir(linea).match(/"[^"]*"|\S+/g) || [];
+  if (partes[0] === "sudo") partes.shift();
+  const [cmd, ...args] = partes;
+  const f = COMANDOS[cmd];
+  if (!f) return out(`${cmd}: orden no encontrada (escribe help)`);
+  f(args.map((x) => x.replace(/^"|"$/g, "")));
+}
+function actualizarPrompt() { document.getElementById("prompt").textContent = `fran@ubuntu:${sys.cwd.replace("/home/fran", "~")}$`; }
+document.getElementById("form").addEventListener("submit", (e) => {
+  e.preventDefault(); const l = entrada.value; entrada.value = "";
+  out(document.getElementById("prompt").textContent + " " + l);
+  if (l.trim() === "Ejecutar mi script") return ejecutarScript();
+  ejecutar(l);
+});
+
+// Script del proyecto T1, línea a línea
+const SCRIPT_T1 = [
+  "# 1. Crear grupos", "sudo groupadd tecnicos", "sudo groupadd desarrolladores", "sudo groupadd administradores",
+  "# 2. Crear usuarios", ...[1, 2, 3, 4, 5].map((i) => `sudo useradd -m -G tecnicos tecnico${i}`), ...[1, 2, 3, 4, 5].map((i) => `sudo useradd -m -G desarrolladores desarrollador${i}`), ...[1, 2].map((i) => `sudo useradd -m -G administradores administrador${i}`),
+  "# 3. Crear estructura de directorios", "sudo mkdir -p /opt/compartido/{src,docs,config,recovery}",
+  "# 4. Asignar propietarios y grupos", "sudo chown -R root:administradores /opt/compartido", "sudo chown -R root:desarrolladores /opt/compartido/src", "sudo chown -R root:tecnicos /opt/compartido/docs",
+  "# 5. Asignar permisos", "sudo chmod 755 /opt/compartido", "sudo chmod 751 /opt/compartido/config", "sudo chmod 775 /opt/compartido/src", "sudo chmod 775 /opt/compartido/docs", "sudo chmod 744 /opt/compartido/recovery",
+  "# 6. Comprobar permisos", "ls -l /opt/compartido", "getent group desarrolladores",
+];
+let scriptHecho = false;
+async function ejecutarScript() {
+  if (scriptHecho) return out("El script ya se ha ejecutado. Recarga la página para empezar de cero.");
+  scriptHecho = true;
+  for (const l of SCRIPT_T1) {
+    await new Promise((r) => setTimeout(r, 140));
+    out((l.startsWith("#") ? "" : "$ ") + l);
+    ejecutar(l);
+  }
+  out("\nListo. Prueba ahora: id tecnico1, usermod -L desarrollador1, groups administrador2…");
+}
+
+function pintar() {
+  const m = MODOS[modo];
+  document.getElementById("titulo").textContent = m.titulo; document.title = m.titulo + " · Simulación";
+  document.getElementById("intro").innerHTML = m.intro;
+  const p = document.getElementById("pestanas"); p.innerHTML = "";
+  Object.entries(MODOS).forEach(([k, v]) => { const b = document.createElement("button"); b.className = "boton peq"; b.type = "button"; b.textContent = v.titulo; b.setAttribute("aria-pressed", k === modo); b.onclick = () => { modo = k; history.replaceState(null, "", "?modo=" + k); pintar(); }; p.append(b); });
+  const at = document.getElementById("atajos"); at.innerHTML = "";
+  m.atajos.forEach((t) => { const b = document.createElement("button"); b.className = "boton peq" + (t === "Ejecutar mi script" ? " principal" : ""); b.type = "button"; b.textContent = t; b.onclick = () => { entrada.value = t; document.getElementById("form").requestSubmit(); }; at.append(b); });
+  salida.textContent = ""; out(modo === "usuarios" ? "Ubuntu 24.04 LTS · simulación en el navegador. Escribe help para ver los comandos." : "Ubuntu 24.04 LTS · proyecto.sh está en tu carpeta personal. Escribe ./proyecto.sh para ver sus opciones.");
+}
+pintar();
+</script>
+</body>
+</html>

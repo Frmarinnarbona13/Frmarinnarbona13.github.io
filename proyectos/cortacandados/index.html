@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Operación Cortacandados · Francisco Marín</title>
+<link rel="icon" href="../../img/favicon-32.png">
+<link rel="stylesheet" href="../sim/sim.css">
+<style>
+  .pasos{display:flex;gap:.5rem;margin-bottom:1.25rem;flex-wrap:wrap}
+  .paso{font:500 .85rem var(--mono);color:var(--tenue);border:1px solid var(--linea);border-radius:999px;padding:.2rem .7rem}
+  .paso.activo{color:#fff;background:var(--degradado);border-color:transparent}
+  .pista{background:var(--fondo);border:1px solid var(--linea);border-radius:10px;padding:.9rem 1rem;margin-bottom:.7rem}
+  .pista h3{font:600 .95rem var(--mono);color:var(--morado);margin-bottom:.2rem}
+  .opciones{display:flex;gap:1rem;margin-top:.5rem}
+  .opciones label{display:flex;gap:.4rem;align-items:center;color:var(--texto);margin:0;cursor:pointer}
+  .opciones input{accent-color:var(--morado)}
+  .dos-col{display:grid;gap:0 1rem}
+  @media(min-width:640px){.dos-col{grid-template-columns:1fr 1fr}}
+  .prioridad{display:inline-block;font:800 1.1rem var(--display);padding:.2rem .8rem;border-radius:8px}
+  .BAJA{background:rgba(94,224,160,.15);color:var(--verde)} .MEDIA{background:rgba(255,200,87,.15);color:#ffc857} .ALTA{background:rgba(255,92,122,.15);color:var(--rojo)}
+</style>
+</head>
+<body>
+<header class="barra-sim">
+  <div class="izq"><img src="../../img/avatar-192.png" alt=""><h1>Operación Cortacandados</h1><span class="etq">PHP simulado</span></div>
+  <a class="volver" href="../../index.html#proyectos">Volver al portfolio</a>
+</header>
+<main class="contenido">
+  <p class="intro">Examen práctico de <strong>Desarrollo Web en Entorno Servidor</strong> (2.º DAW): una unidad de investigación recibe denuncias de bicicletas robadas. <code>generarExpediente.php</code> elige pistas al azar sin repetir y <code>analizarExpediente.php</code> valora las decisiones del investigador. La lógica es la misma que en mis PHP, ejecutada aquí en JavaScript.</p>
+  <div class="pasos"><span class="paso" data-p="1">denuncia.html</span><span class="paso" data-p="2">generarExpediente.php</span><span class="paso" data-p="3">analizarExpediente.php</span></div>
+  <section class="tarjeta" id="pantalla"></section>
+</main>
+<script>
+// Datos de datosRobo.php
+const modelos = { urbana: { nombre: "Bicicleta urbana", precio: 240 }, montana: { nombre: "Bicicleta de montaña", precio: 550 }, carretera: { nombre: "Bicicleta de carretera", precio: 950 }, electrica: { nombre: "Bicicleta eléctrica", precio: 1500 } };
+const barrios = { centro: "Centro", zaidin: "Zaidín", chana: "La Chana", realejo: "Realejo" };
+const pistas = {
+  camara: { descripcion: "Una cámara registra el robo y se reconoce claramente la bicicleta.", fiable: true, valor: 3 },
+  testigo: { descripcion: "Una persona que presenció el robo puede describir lo sucedido y la hora.", fiable: true, valor: 2 },
+  gps: { descripcion: "El GPS de la bicicleta transmite una ubicación reciente y comprobable.", fiable: true, valor: 4 },
+  candado: { descripcion: "Aparece el candado cortado de la bicicleta junto al aparcabicis.", fiable: true, valor: 1 },
+  anuncio: { descripcion: "Un anuncio de compraventa muestra un número de serie que coincide con la denuncia.", fiable: true, valor: 3 },
+  rumor: { descripcion: "En un chat dicen que conocen al ladrón, pero nadie aporta pruebas.", fiable: false, valor: 0 },
+  foto: { descripcion: "En redes circula una fotografía de una bicicleta de un modelo distinto.", fiable: false, valor: 0 },
+  anonimo: { descripcion: "Llega un mensaje anónimo que acusa a alguien sin datos comprobables.", fiable: false, valor: 0 },
+};
+const $ = (s) => document.querySelector(s);
+const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const euros = (n) => n.toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " €";
+const prioridad = (v) => (v <= 2 ? "BAJA" : v <= 5 ? "MEDIA" : "ALTA");
+const ucfirst = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+function paso(n) { document.querySelectorAll(".paso").forEach((p) => p.classList.toggle("activo", +p.dataset.p === n)); }
+const opts = (o) => Object.entries(o).map(([k, v]) => `<option value="${k}">${esc(v.nombre || v)}</option>`).join("");
+
+function denuncia(error = "") {
+  paso(1);
+  $("#pantalla").innerHTML = `${error ? `<p class="mal" style="margin-bottom:1rem">${error}</p>` : ""}
+    <h2 style="font:800 1.4rem var(--display);margin-bottom:1rem">Denuncia de robo</h2>
+    <form id="f1"><div class="dos-col">
+      <div class="campo"><label for="nombre">Nombre de la persona denunciante</label><input type="text" id="nombre" maxlength="120"></div>
+      <div class="campo"><label for="barrio">Barrio</label><select id="barrio">${opts(barrios)}</select></div>
+      <div class="campo"><label for="modelo">Modelo de bicicleta</label><select id="modelo">${opts(modelos)}</select></div>
+      <div class="campo"><label for="antiguedad">Antigüedad (0 a 5 años)</label><input type="number" id="antiguedad" min="0" max="5" value="2"></div>
+      <div class="campo"><label for="cantidad">Pistas a examinar (3 a 5)</label><input type="number" id="cantidad" min="3" max="5" value="4"></div>
+    </div><button class="boton principal" type="submit">Generar expediente</button></form>`;
+  $("#f1").onsubmit = (e) => {
+    e.preventDefault();
+    generarExpediente({ nombre: $("#nombre").value, barrio: $("#barrio").value, modelo: $("#modelo").value, antiguedad: $("#antiguedad").value, cantidad: $("#cantidad").value });
+  };
+}
+
+const enteroEn = (v, min, max) => (/^\d+$/.test(String(v)) && +v >= min && +v <= max ? +v : false);
+
+// generarExpediente.php
+function generarExpediente(post) {
+  const nombre = post.nombre.trim(), antiguedad = enteroEn(post.antiguedad, 0, 5), cantidad = enteroEn(post.cantidad, 3, 5);
+  if (!nombre || nombre.length > 120 || !barrios[post.barrio] || !modelos[post.modelo] || antiguedad === false || cantidad === false)
+    return denuncia("Datos del expediente incorrectos. Revisa el formulario.");
+  paso(2);
+  // array_rand: claves al azar sin repetir
+  const claves = Object.keys(pistas).sort(() => Math.random() - 0.5).slice(0, cantidad);
+  $("#pantalla").innerHTML = `<h2 style="font:800 1.4rem var(--display);margin-bottom:.6rem">Expediente generado</h2>
+    <p>Denunciante: <strong>${esc(nombre)}</strong> · Barrio: ${barrios[post.barrio]} · ${modelos[post.modelo].nombre} · ${antiguedad} años</p>
+    <p style="color:var(--tenue);margin:.4rem 0 1rem">Revisa las siguientes ${claves.length} pistas. Puedes dejar alguna sin decidir.</p>
+    <form id="f2">${claves.map((k) => `<div class="pista"><h3>Pista: ${k}</h3><p>${esc(pistas[k].descripcion)}</p>
+      <div class="opciones"><label><input type="radio" name="d-${k}" value="investigar"> Investigar</label><label><input type="radio" name="d-${k}" value="descartar"> Descartar</label></div></div>`).join("")}
+      <button class="boton principal" type="submit">Analizar expediente</button></form>`;
+  $("#f2").onsubmit = (e) => {
+    e.preventDefault();
+    const decisiones = {};
+    claves.forEach((k) => { const r = document.querySelector(`input[name="d-${k}"]:checked`); if (r) decisiones[k] = r.value; });
+    analizarExpediente({ nombre, barrio: post.barrio, modelo: post.modelo, antiguedad, pistas: claves, decisiones });
+  };
+}
+
+// analizarExpediente.php
+function analizarExpediente(post) {
+  paso(3);
+  let coincidencias = 0, valorTotal = 0, avisoGps = false;
+  const filas = post.pistas.map((k) => {
+    const ficha = pistas[k], esperada = ficha.fiable ? "investigar" : "descartar", decision = post.decisiones[k] || "";
+    const coincide = decision !== "" && decision === esperada; if (coincide) coincidencias++;
+    const aportacion = ficha.fiable && decision === "investigar" ? ficha.valor : 0; valorTotal += aportacion;
+    if (k === "gps" && aportacion > 0) avisoGps = true;
+    return { texto: ficha.descripcion, decision: decision ? ucfirst(decision) : "Sin decidir", esperada: ucfirst(esperada), resultado: decision === "" ? "Sin decidir" : coincide ? "Coincide" : "No coincide", aportacion };
+  });
+  const precio = modelos[post.modelo].precio, descuento = precio * post.antiguedad * 0.1;
+  const p = prioridad(valorTotal);
+  $("#pantalla").innerHTML = `<h2 style="font:800 1.4rem var(--display);margin-bottom:.6rem">Informe de investigación</h2>
+    <p>Denunciante: <strong>${esc(post.nombre)}</strong> · Barrio: ${barrios[post.barrio]} · ${modelos[post.modelo].nombre}</p>
+    <div class="rejilla dos" style="margin:1rem 0">
+      <div class="pista"><h3 style="font-family:var(--cuerpo);color:var(--texto)">Valoración económica</h3>
+        <p>Precio original: ${euros(precio)}<br>Antigüedad: ${post.antiguedad} años<br>Depreciación: ${post.antiguedad * 10} %<br>Descuento: ${euros(descuento)}<br><strong>Valor actual estimado: ${euros(precio - descuento)}</strong></p></div>
+      <div class="pista"><h3 style="font-family:var(--cuerpo);color:var(--texto)">Resultado</h3>
+        <p>Coincidencias: ${coincidencias} de ${filas.length}<br>Valor de investigación: ${valorTotal}</p>
+        <p style="margin-top:.5rem">Prioridad: <span class="prioridad ${p}">${p}</span></p>
+        ${avisoGps ? '<p class="aviso" style="margin-top:.5rem">Revisar la ubicación del rastreador GPS</p>' : ""}</div>
+    </div>
+    <div class="tabla-scroll"><table><thead><tr><th>Pista</th><th>Decisión</th><th>Recomendada</th><th>Resultado</th><th>Aporta</th></tr></thead><tbody>
+      ${filas.map((f) => `<tr><td>${esc(f.texto)}</td><td>${f.decision}</td><td>${f.esperada}</td><td class="${f.resultado === "Coincide" ? "ok" : f.resultado === "No coincide" ? "mal" : ""}">${f.resultado}</td><td>${f.aportacion}</td></tr>`).join("")}
+    </tbody></table></div>
+    <button class="boton" type="button" id="otra" style="margin-top:1rem">Nueva denuncia</button>`;
+  $("#otra").onclick = () => denuncia();
+}
+denuncia();
+</script>
+</body>
+</html>

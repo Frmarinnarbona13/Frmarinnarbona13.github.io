@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>R&M Wiki | Contribuir</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <!--<div class="brand">
+      <span class="brand__logo">R&M</span>
+      <span class="brand__name">R&M Wiki</span>
+    </div>
+-->
+ <div>
+  <a href="index.html">
+    <img src="img/logo.png" alt="Logo de R&M Wiki" id="logo_nav">
+  </a>
+</div>
+
+    <nav class="site-nav">
+      <a class="site-nav__link"  href="index.html">Inicio</a>
+      <a class="site-nav__link" href="sobre_nosotros.html">Sobre nosotros</a>
+      <a class="site-nav__link" href="buscar_personajes.html">Buscar Personaje</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="page-hero">
+      <h1 class="page-hero__title">Proponer mejora</h1>
+      <p class="page-hero__subtitle">Ayuda a mejorar la wiki del multiverso.</p>
+    </section>
+
+    <form class="form" action="#" method="post">
+      <label class="form__field">
+        <span class="form__label">Título del artículo</span>
+        <input class="form__input" type="text" name="titulo" placeholder="Ej: Morty Smith" />
+      </label>
+
+      <label class="form__field">
+        <span class="form__label">Categoría</span>
+        <select class="form__select" name="categoria">
+          <option value="">Selecciona una</option>
+          <option>Personaje</option>
+          <option>Episodio</option>
+          <option>Lugar</option>
+          <option>Objeto</option>
+        </select>
+      </label>
+
+      <label class="form__field">
+        <span class="form__label">Descripción</span>
+        <textarea class="form__textarea" name="descripcion" rows="6" placeholder="Escribe la propuesta..."></textarea>
+      </label>
+
+      <fieldset class="form__fieldset">
+        <legend class="form__legend">Nivel de spoiler</legend>
+        <label class="form__radio">
+          <input type="radio" name="spoiler"class="radio-sin" />
+          <span id="spoilerSin">Sin spoilers</span>
+        </label>
+        <label class="form__radio">
+          <input type="radio" name="spoiler" class="radio-leve"/>
+          <span id="spoilerLeve">Leves</span>
+        </label>
+        <label class="form__radio">
+          <input type="radio" name="spoiler"class="radio-alto" />
+          <span id="spoilerAlto">Altos</span>
+        </label>
+      </fieldset>
+
+      <button class="btn" type="submit">Enviar propuesta</button>
+    </form>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__links">
+      <a href="https://imgs.search.brave.com/fp6HAlePR6VZAK21vH-5_cpoxBfN67lOIqNQTuGBA18/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly82NC5t/ZWRpYS50dW1ibHIu/Y29tL2E2MWQ0Yjc2/YzMwMjFlZTJhMWY1/Y2ZkYTVkOTBjYmYy/LzFmYWRlNmYzMzhj/NDU0NzAtMDkvczUw/MHg3NTAvNjIzNzRh/NGE1MTBhNDhlMWFj/NTViY2FkMGY0ZjA4/NzQxNWVmYzVhNi5n/aWZ2"
+        class="site-footer__link"><img src="img/Instagram_logo.png" alt="" id="Instagram"></a>
+      <a href="https://imgs.search.brave.com/fp6HAlePR6VZAK21vH-5_cpoxBfN67lOIqNQTuGBA18/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly82NC5t/ZWRpYS50dW1ibHIu/Y29tL2E2MWQ0Yjc2/YzMwMjFlZTJhMWY1/Y2ZkYTVkOTBjYmYy/LzFmYWRlNmYzMzhj/NDU0NzAtMDkvczUw/MHg3NTAvNjIzNzRh/NGE1MTBhNDhlMWFj/NTViY2FkMGY0ZjA4/NzQxNWVmYzVhNi5n/aWZ2"
+        class="site-footer__link"><img src="img/X_logo.png" alt="" id="X_logo"></a>
+      <a href="https://imgs.search.brave.com/fp6HAlePR6VZAK21vH-5_cpoxBfN67lOIqNQTuGBA18/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly82NC5t/ZWRpYS50dW1ibHIu/Y29tL2E2MWQ0Yjc2/YzMwMjFlZTJhMWY1/Y2ZkYTVkOTBjYmYy/LzFmYWRlNmYzMzhj/NDU0NzAtMDkvczUw/MHg3NTAvNjIzNzRh/NGE1MTBhNDhlMWFj/NTViY2FkMGY0ZjA4/NzQxNWVmYzVhNi5n/aWZ2"
+        class="site-footer__link"><img src="img/youtube_logo.png" alt="" id="youtube_logo"></a>
+    </div>
+<p class="site-footer__text">Contacto: <a href="mailto:contacto@rmwiki.com">contacto@rmwiki.com</a></p>
+</footer>
+</body>
+</html>
