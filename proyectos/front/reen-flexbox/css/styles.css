@@ -1,0 +1,242 @@
+:root {
+  --negro: black;
+  --blanco: white;
+  --morado: #4834d4;
+  --grisOscuro: #222;
+  --grisClaro: #6a85a1;
+  --crimson: crimson;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: all 0.5s;
+}
+
+<<<<<<< HEAD
+body,html{
+    font-family: "Roboto Condensed", sans-serif;
+=======
+body,
+html {
+  font-family: "roboto", sans-serif;
+>>>>>>> 45bbceb3ac6c5bc5d02616bb7a7c69e8871f3dbf
+  font-size: 14px;
+
+}
+
+img {
+  max-width: 100%;
+}
+<<<<<<< HEAD
+h1 & nav.menu{
+    font-family: "Roboto Condensed", sans-serif;
+    letter-spacing: 8px;
+=======
+
+a {
+  text-decoration: none;
+>>>>>>> 45bbceb3ac6c5bc5d02616bb7a7c69e8871f3dbf
+}
+
+h1 & nav.menu {
+  font-family: "Roboto condensed", sans-serif;
+  letter-spacing: 4px;
+}
+
+h2 {
+  font-size: 2rem;
+  color: var(--morado);
+}
+
+header#header {
+  /* modelo de caja */
+  /* width, height, margin, padding, display*/
+  max-width: 80%;
+  margin: auto;
+  padding: 45px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* background-color:yellow; */
+
+  nav.menu {
+    a {
+      color: var(--negro);
+      text-transform: uppercase;
+      font-weight: 900;
+      /* margin-left: 20px; */
+      border-left: solid 3px;
+      padding: 0 20px;
+      margin: 0 5px;
+
+      &:first-child {
+        border: none;
+      }
+
+      &:hover {
+        color: var(--morado);
+        border-color: var(--negro);
+      }
+
+    }
+  }
+
+  /* BANNER */
+}
+
+section#banner {
+  width: 100%;
+  min-height: 100vh;
+  /* background-color:yellow; */
+  background: url('../img/fondo.jpg') no-repeat center center / cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: var(--blanco);
+  text-align: center;
+
+  h1 {
+    font-size: 5vw;
+    text-transform: uppercase;
+
+  }
+
+  p {
+    font-size: 1.5rem;
+    max-width: 65%;
+    margin: 20px auto;
+    margin-bottom: 6rem;
+
+
+  }
+
+  a {
+    color: var(--blanco);
+    background-color: var(--morado);
+    text-transform: uppercase;
+    padding: 20px 50px;
+    font-weight: 700;
+
+    &:hover {
+      background-color: var(--crimson);
+    }
+  }
+}
+
+section#servicios {
+  display: flex;
+  border-bottom: solid 1px var(--grisClaro);
+  padding: 50px 0;
+  text-align: center;
+  flex-wrap: wrap;
+
+  div.arriba {
+    width: 100%;
+    margin: auto;
+    margin-bottom: 80px;
+
+    h2 {
+      margin: 20px 0;
+      font-size: 2rem;
+    }
+
+    p {
+      width: 90%;
+      max-width: 600px;
+      margin: 20px auto;
+      color: var(--grisClaro);
+    }
+  }
+
+  div.abajo {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 60px;
+    padding: 0 20px;
+
+    article {
+      width: 100%;
+      max-width: 280px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      align-content: flex-start;
+      gap: 15px;
+
+      img {
+        width: 55px;
+        height: 55px;
+        object-fit: contain;
+      }
+
+      h3 {
+        color: var(--grisClaro);
+        font-size: 1.4rem;
+        margin: 0;
+      }
+
+      p {
+        width: 100%;
+        text-align: left;
+        color: var(--grisClaro);
+        line-height: 1.5;
+      }
+    }
+  }
+}
+
+/* Sec GALERIA */
+section#galeria {
+
+  display: flex;
+  min-height: 60vh;
+  flex-wrap: wrap;
+  text-align: center;
+  gap: 20px;
+  justify-content: center;
+  align-content: center;
+
+  h2 {
+    width: 100%;
+    margin: 100px 0px;
+    color: var(--morado);
+  }
+
+  h3 {
+    color: var(--grisClaro);
+    margin-top: 3rem;
+    font-weight: bolder;
+  }
+
+  p {
+    color: var(--grisClaro);
+  }
+
+  img {
+    margin-bottom: 20px 0;
+  }
+}
+
+/* sec FOOTER */
+footer#footer {
+  margin-top: 10rem;
+  background-color: var(--negro);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1.5rem;
+
+  img {
+    width: 3rem;
+    margin: 100px auto;
+    padding: 100px auto;
+    background-color: var(--blanco);
+    border-radius: 360px;
+  }
+}

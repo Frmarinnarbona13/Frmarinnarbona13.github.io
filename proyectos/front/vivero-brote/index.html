@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vivero Brote · Plantas, macetas y talleres en Málaga</title>
+
+    <!-- Google Fonts: Fraunces (títulos) y Work Sans (texto) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Work+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap 6 (CSS) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css">
+
+    <!-- Tus estilos -->
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body>
+
+    <!-- ===== CABECERA (navbar) ===== -->
+    <header>
+        <nav class="navbar md:navbar-expand">
+            <div class="container">
+                <a class="navbar-brand" href="#inicio"><img alt="Vivero Brote" src="img/logo.svg"></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu"
+                    aria-controls="menu" aria-expanded="false" aria-label="Abrir menú">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse" id="menu">
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a class="nav-link" href="#plantas">Plantas</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#cuidados">Cuidados</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#talleres">Talleres</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#visitanos">Visítanos</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- ===== HERO (una sola columna centrada, sin imagen) ===== -->
+        <section id="inicio" class="hero">
+            <div class="container">
+                <div class="hero-contenido">
+                    <p class="etiqueta-hero">Vivero urbano · Málaga</p>
+                    <h1 class="hero-titulo">Cultiva calma en tu casa</h1>
+                    <p class="hero-texto">Plantas de temporada, macetas hechas a mano y asesoramiento personal para que
+                        tu
+                        espacio respire desde el primer día.</p>
+                    <div class="hero-botones">
+                        <a class="boton boton-principal" href="#plantas">Ver catálogo</a>
+                        <a class="boton boton-contorno" href="#talleres">Reservar un taller</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== CUIDADOS: tres reglas de oro (fondo blanco) ===== -->
+        <section id="cuidados" class="seccion">
+            <div class="container">
+                <h2 class="titulo-seccion">Tres reglas de oro</h2>
+                <p class="descripcion-seccion">Lo que necesita cualquier planta para crecer sana, según nuestro equipo
+                    de
+                    viveristas.</p>
+                <div class="row g-4">
+                    <div class="col-12 md:col-4">
+                        <article class="tarjeta-regla">
+                            <img class="icono-regla" alt="" src="img/icono-luz.svg">
+                            <h3 class="tarjeta-titulo">Luz indirecta</h3>
+                            <p class="tarjeta-texto">La mayoría de plantas de interior prefiere una ventana luminosa sin
+                                sol
+                                directo a mediodía.</p>
+                        </article>
+                    </div>
+                    <div class="col-12 md:col-4">
+                        <article class="tarjeta-regla">
+                            <img class="icono-regla" alt="" src="img/icono-agua.svg">
+                            <h3 class="tarjeta-titulo">Riego con cabeza</h3>
+                            <p class="tarjeta-texto">Regar cuando la capa superior de tierra esté seca. El exceso de
+                                agua es el
+                                error más común.</p>
+                        </article>
+                    </div>
+                    <div class="col-12 md:col-4">
+                        <article class="tarjeta-regla">
+                            <img class="icono-regla" alt="" src="img/icono-maceta.svg">
+                            <h3 class="tarjeta-titulo">Maceta con drenaje</h3>
+                            <p class="tarjeta-texto">Un agujero en la base evita que las raíces se pudran. Te regalamos
+                                el plato
+                                si compras con nosotros.</p>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== PLANTAS DE TEMPORADA (fondo suave, 2 columnas) ===== -->
+        <section id="plantas" class="seccion seccion-clara">
+            <div class="container">
+                <h2 class="titulo-seccion">Plantas de temporada</h2>
+                <p class="descripcion-seccion">Ejemplares cultivados en nuestro invernadero de Málaga, listos para
+                    estrenar
+                    casa.</p>
+                <div class="row g-4">
+                    <div class="col-12 md:col-6">
+                        <article class="tarjeta-planta">
+                            <div class="planta-imagen">
+                                <span class="insignia">Nueva</span>
+                                <img alt="Monstera en maceta naranja" src="img/monstera.svg">
+                            </div>
+                            <div class="planta-cuerpo">
+                                <p class="planta-categoria">Alta luz</p>
+                                <h3 class="tarjeta-titulo">Monstera</h3>
+                                <p class="planta-precio">24 €</p>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <article class="tarjeta-planta">
+                            <div class="planta-imagen">
+                                <img alt="Helecho nido en maceta verde" src="img/helecho.svg">
+                            </div>
+                            <div class="planta-cuerpo">
+                                <p class="planta-categoria">Ambiente húmedo</p>
+                                <h3 class="tarjeta-titulo">Helecho nido</h3>
+                                <p class="planta-precio">18 €</p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== PRÓXIMOS TALLERES (fondo blanco) ===== -->
+        <section id="talleres" class="seccion">
+            <div class="container">
+                <h2 class="titulo-seccion">Próximos talleres</h2>
+                <p class="descripcion-seccion">Grupos reducidos de seis personas. Incluye materiales y una planta para
+                    llevar.</p>
+                <ul class="lista-talleres">
+                    <li class="taller">
+                        <div class="taller-fecha"><span class="taller-dia">12</span><span class="taller-mes">Mar</span>
+                        </div>
+                        <div class="taller-info">
+                            <h3 class="taller-titulo">Macetas de cerámica en 2 horas</h3>
+                            <p class="taller-texto">Modela y esmalta tu propia maceta con drenaje.</p>
+                        </div>
+                        <span class="taller-plazas">4 plazas</span>
+                    </li>
+                    <li class="taller">
+                        <div class="taller-fecha"><span class="taller-dia">19</span><span class="taller-mes">Mar</span>
+                        </div>
+                        <div class="taller-info">
+                            <h3 class="taller-titulo">Propagación de esquejes</h3>
+                            <p class="taller-texto">Multiplica tus pothos y suculentas con agua y paciencia.</p>
+                        </div>
+                        <span class="taller-plazas">2 plazas</span>
+                    </li>
+                    <li class="taller">
+                        <div class="taller-fecha"><span class="taller-dia">26</span><span class="taller-mes">Mar</span>
+                        </div>
+                        <div class="taller-info">
+                            <h3 class="taller-titulo">Terrarios cerrados</h3>
+                            <p class="taller-texto">Un pequeño ecosistema en cristal que se cuida solo durante meses.
+                            </p>
+                        </div>
+                        <span class="taller-plazas">6 plazas</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== PIE ===== -->
+    <footer id="visitanos" class="pie">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-12 md:col-6">
+                    <div class="pie-logo"><img alt="Vivero Brote" src="img/logo.svg"></div>
+                    <ul class="pie-contacto">
+                        <li><img alt="" src="img/icono-ubicacion.svg">Calle de las Flores 8, Málaga</li>
+                        <li><img alt="" src="img/icono-telefono.svg">952 000 123</li>
+                        <li><img alt="" src="img/icono-email.svg">hola@viverobrote.es</li>
+                    </ul>
+                </div>
+                <div class="col-12 md:col-6">
+                    <h4 class="pie-titulo">Horario</h4>
+                    <dl class="pie-horario">
+                        <dt>Lunes a viernes</dt>
+                        <dd>10:00 – 20:00</dd>
+                        <dt>Sábados</dt>
+                        <dd>10:00 – 21:00</dd>
+                        <dt>Domingos</dt>
+                        <dd>11:00 – 15:00</dd>
+                    </dl>
+                </div>
+            </div>
+            <p class="pie-copy">© 2026 Vivero Brote. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 6 (JavaScript) -->
+    <script type="module"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

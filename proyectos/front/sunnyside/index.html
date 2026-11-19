@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <!-- Hace que el responsive funcione en móviles -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Frontend Mentor | Sunnyside agency landing page</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+
+  <!-- Fuentes de Google: Barlow y Fraunces -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@600&family=Fraunces:opsz,wght@9..144,700;9..144,900&display=swap" rel="stylesheet">
+
+  <!-- 1º Bootstrap, 2º nuestro CSS (así el nuestro puede sobrescribir a Bootstrap) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+
+<body>
+
+  <!-- ============ HEADER: navbar + hero ============ -->
+  <header class="d-flex flex-column">
+
+    <nav class="navbar lg:navbar-expand">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#"><img src="./images/logo.svg" alt="Sunnyside"></a>
+
+        <!-- Botón hamburguesa (solo se ve por debajo de sm) -->
+        <button class="btn-icon navbar-toggler" type="button" data-bs-toggle="drawer" data-bs-target="#menu"
+          aria-controls="menu" aria-expanded="false" aria-label="Abrir menú">
+          <span class="navbar-toggler-icon" aria-hidden="true"></span>
+        </button>
+
+        <!-- En móvil es un panel lateral; desde sm se ve en línea -->
+        <dialog class="drawer drawer-end" tabindex="-1" id="menu" aria-labelledby="menuTitulo">
+          <div class="drawer-header">
+            <h5 class="drawer-title" id="menuTitulo">Menú</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="drawer" aria-label="Cerrar"></button>
+          </div>
+          <div class="drawer-body">
+            <div class="navbar-nav ms-auto align-items-center gap-5">
+              <a class="nav-link" href="#">About</a>
+              <a class="nav-link" href="#">Services</a>
+              <a class="nav-link" href="#">Projects</a>
+              <a class="nav-link active" aria-current="page" href="#">Contact</a>
+            </div>
+          </div>
+        </dialog>
+      </div>
+    </nav>
+
+    <section id="hero" class="flex-grow-1 d-flex flex-column align-items-center text-center">
+      <h1 class="fg-white fs-2xl md:fs-4xl lg:fs-6xl">We are creatives</h1>
+      <img src="./images/icon-arrow-down.svg" alt="">
+    </section>
+
+  </header>
+
+  <main>
+
+    <!-- ============ SERVICIOS: 3 filas de 2 columnas ============ -->
+    <section id="servicios" class="container-fluid p-0">
+
+      <!-- Fila 1: texto | huevo (en móvil la foto va primero) -->
+      <div class="row g-0">
+        <div class="md:col-6 order-2 md:order-1 d-flex align-items-center justify-content-center text-center md:text-start bloque-texto">
+          <div>
+            <h2>Transform your brand</h2>
+            <p>We are a full-service creative agency specializing in helping brands grow fast.
+              Engage your clients through compelling visuals that do most of the marketing for you.</p>
+            <a href="#" class="learn-more amarillo">Learn more</a>
+          </div>
+        </div>
+        <div class="md:col-6 order-1 md:order-2">
+          <picture>
+            <source media="(width < 768px)" srcset="./images/mobile/image-transform.jpg">
+            <img src="./images/desktop/image-transform.jpg" class="w-100 h-100 object-fit-cover" alt="Huevo sobre fondo amarillo">
+          </picture>
+        </div>
+      </div>
+
+      <!-- Fila 2: copa | texto -->
+      <div class="row g-0">
+        <div class="md:col-6">
+          <picture>
+            <source media="(width < 768px)" srcset="./images/mobile/image-stand-out.jpg">
+            <img src="./images/desktop/image-stand-out.jpg" class="w-100 h-100 object-fit-cover" alt="Copa rosa">
+          </picture>
+        </div>
+        <div class="md:col-6 d-flex align-items-center justify-content-center text-center md:text-start bloque-texto">
+          <div>
+            <h2>Stand out to the right audience</h2>
+            <p>Using a collaborative formula of designers, researchers, photographers, videographers,
+              and copywriters, we'll build and extend your brand in digital places.</p>
+            <a href="#" class="learn-more rosa">Learn more</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fila 3: dos fotos con el texto encima -->
+      <div class="row g-0">
+        <div class="md:col-6 position-relative">
+          <picture>
+            <source media="(width < 768px)" srcset="./images/mobile/image-graphic-design.jpg">
+            <img src="./images/desktop/image-graphic-design.jpg" class="w-100" alt="Cerezas">
+          </picture>
+          <div class="position-absolute bottom-0 start-0 end-0 text-center p-9 texto-foto verde">
+            <h3>Graphic Design</h3>
+            <p>Great design makes you memorable. We deliver artwork that underscores your brand
+              message and captures potential clients' attention.</p>
+          </div>
+        </div>
+        <div class="md:col-6 position-relative">
+          <picture>
+            <source media="(width < 768px)" srcset="./images/mobile/image-photography.jpg">
+            <img src="./images/desktop/image-photography.jpg" class="w-100" alt="Naranja">
+          </picture>
+          <div class="position-absolute bottom-0 start-0 end-0 text-center p-9 texto-foto azul">
+            <h3>Photography</h3>
+            <p>Increase your credibility by getting the most stunning, high-quality photos
+              that improve your business image.</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============ TESTIMONIOS: 1 columna en móvil, 3 desde md ============ -->
+    <section id="testimonios">
+      <div class="container text-center">
+        <h2 class="titulo-testimonios mb-12">Client testimonials</h2>
+
+        <div class="row row-cols-1 md:row-cols-3 gy-12">
+          <div class="col">
+            <img src="./images/image-emily.jpg" class="rounded-circle mb-9" width="72" height="72" alt="Emily R.">
+            <p class="opinion">We put our trust in Sunnyside and they delivered, making sure our needs
+              were met and deadlines were always hit.</p>
+            <p class="nombre mb-1">Emily R.</p>
+            <p class="puesto">Marketing Director</p>
+          </div>
+          <div class="col">
+            <img src="./images/image-thomas.jpg" class="rounded-circle mb-9" width="72" height="72" alt="Thomas S.">
+            <p class="opinion">Sunnyside's enthusiasm coupled with their keen interest in our brand's
+              success made it a satisfying and enjoyable experience.</p>
+            <p class="nombre mb-1">Thomas S.</p>
+            <p class="puesto">Chief Operating Officer</p>
+          </div>
+          <div class="col">
+            <img src="./images/image-jennie.jpg" class="rounded-circle mb-9" width="72" height="72" alt="Jennie F.">
+            <p class="opinion">Incredible end result! Our sales increased over 400% when we worked
+              with Sunnyside. Highly recommended!</p>
+            <p class="nombre mb-1">Jennie F.</p>
+            <p class="puesto">Business Owner</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ GALERÍA: 2x2 en móvil, 4 en fila desde md ============ -->
+    <section id="galeria">
+      <div class="row g-0 row-cols-2 md:row-cols-4">
+        <div class="col">
+          <picture>
+            <source media="(width < 768px)" srcset="./images/mobile/image-gallery-milkbottles.jpg">
+            <img src="./images/desktop/image-gallery-milkbottles.jpg" class="w-100 h-100 object-fit-cover" alt="Botellas de leche">
+          </picture>
+        </div>
+        <div class="col">
+          <picture>
+            <source media="(width < 768px)" srcset="./images/mobile/image-gallery-orange.jpg">
+            <img src="./images/desktop/image-gallery-orange.jpg" class="w-100 h-100 object-fit-cover" alt="Naranja en un plato">
+          </picture>
+        </div>
+        <div class="col">
+          <picture>
+            <source media="(width < 768px)" srcset="./images/mobile/image-gallery-cone.jpg">
+            <img src="./images/desktop/image-gallery-cone.jpg" class="w-100 h-100 object-fit-cover" alt="Cono de helado">
+          </picture>
+        </div>
+        <div class="col">
+          <picture>
+            <source media="(width < 768px)" srcset="./images/mobile/image-gallery-sugar-cubes.jpg">
+            <img src="./images/desktop/image-gallery-sugarcubes.jpg" class="w-100 h-100 object-fit-cover" alt="Terrones de azúcar">
+          </picture>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ FOOTER: todo en una columna centrada ============ -->
+  <footer class="d-flex flex-column align-items-center gap-9 py-12">
+    <a href="#"><img src="./images/logo-footer.svg" alt="Sunnyside"></a>
+
+    <nav class="d-flex gap-9">
+      <a href="#" class="footer-link">About</a>
+      <a href="#" class="footer-link">Services</a>
+      <a href="#" class="footer-link">Projects</a>
+    </nav>
+
+    <div class="d-flex gap-5 mt-9">
+      <a href="#"><img src="./images/icon-facebook.svg" alt="Facebook"></a>
+      <a href="#"><img src="./images/icon-instagram.svg" alt="Instagram"></a>
+      <a href="#"><img src="./images/icon-twitter.svg" alt="Twitter"></a>
+      <a href="#"><img src="./images/icon-pinterest.svg" alt="Pinterest"></a>
+    </div>
+  </footer>
+
+  <!-- JS de Bootstrap (necesario para que el botón hamburguesa abra el drawer) -->
+  <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

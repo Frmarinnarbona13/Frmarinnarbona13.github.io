@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Francisco Marín · Desarrollador web</title>
+<meta name="description" content="Portfolio de Francisco Marín Narbona, estudiante de Desarrollo de Aplicaciones Web en Granada. Proyectos con Java, Spring Boot, JavaScript, PHP, SQL y desarrollo de videojuegos con IA.">
+<meta property="og:title" content="Francisco Marín · Desarrollador web">
+<meta property="og:description" content="Proyectos de 1.º y 2.º de DAW que puedes probar en el navegador, y videojuegos hechos con IA.">
+<meta property="og:image" content="img/avatar-192.png">
+<meta name="theme-color" content="#0f1129">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+<style>
+  /* =========================================================
+     PALETA: fondo azul noche + degradado rojo → morado → azul
+     ========================================================= */
+  :root{
+    --fondo:#0f1129;
+    --superficie:#161936;
+    --superficie-2:#1f2347;
+    --linea:#2b2f5e;
+    --texto:#f4f1ff;
+    --tenue:#a9a7c9;
+    --rojo:#ff5c7a;
+    --morado:#9d7bff;
+    --azul:#4d9bff;
+    --degradado:linear-gradient(120deg,var(--rojo),var(--morado) 52%,var(--azul));
+    --display:"Bricolage Grotesque",system-ui,sans-serif;
+    --cuerpo:"Instrument Sans",system-ui,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+    --ancho:1160px;
+    --radio:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;scroll-padding-top:100px}
+  body{background:var(--fondo);color:var(--texto);font:1.0625rem/1.6 var(--cuerpo);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:
+    radial-gradient(42rem 32rem at 88% 4%,rgba(157,123,255,.17),transparent 70%),
+    radial-gradient(36rem 28rem at 0% 45%,rgba(77,155,255,.09),transparent 70%),
+    radial-gradient(40rem 30rem at 60% 100%,rgba(255,92,122,.09),transparent 70%)}
+  a{color:inherit}
+  img,canvas,iframe{display:block;max-width:100%}
+  :focus-visible{outline:2px solid var(--morado);outline-offset:3px;border-radius:6px}
+  .contenedor{max-width:var(--ancho);margin:0 auto;padding:0 clamp(1.1rem,4vw,2rem)}
+  .degradado-texto{background:var(--degradado);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+  /* ---------- Botones (estilo rectangular con flecha) ---------- */
+  .boton{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;padding:.85rem 1.3rem;border-radius:8px;font:600 .95rem var(--cuerpo);text-decoration:none;border:1px solid var(--linea);background:var(--superficie);color:var(--texto);cursor:pointer;transition:transform .15s,filter .2s,border-color .2s,background .2s}
+  .boton svg{width:16px;height:16px;flex:none;transition:transform .2s}
+  .boton:hover{border-color:var(--morado)}
+  .boton:hover svg{transform:translate(2px,2px)}
+  .boton.externo:hover svg{transform:translate(2px,-2px)}
+  .boton:active{transform:translateY(1px)}
+  .boton.principal{background:var(--degradado);border:0;color:#fff;box-shadow:0 10px 30px -12px rgba(157,123,255,.7)}
+  .boton.principal:hover{filter:brightness(1.08)}
+  .boton.texto{background:none;border-color:transparent;padding-left:.4rem;padding-right:.4rem;color:var(--texto)}
+  .boton.texto:hover{color:var(--morado)}
+  .boton.peq{padding:.5rem .85rem;font-size:.86rem;gap:.45rem}
+  .boton.peq svg{width:14px;height:14px}
+
+  /* ---------- Cabecera ---------- */
+  .cabecera{position:sticky;top:0;z-index:20;background:rgba(15,17,41,.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .3s}
+  .cabecera.con-borde{border-bottom-color:var(--linea)}
+  .cabecera .contenedor{display:flex;align-items:center;justify-content:space-between;height:88px;gap:1rem}
+  .marca{display:flex;align-items:center;gap:.8rem;text-decoration:none;font:800 1.4rem var(--display);letter-spacing:-.01em}
+  .marca img{width:46px;height:46px;border-radius:11px;border:1px solid var(--linea)}
+  .marca-texto span{color:var(--tenue);font-weight:600}
+  nav{display:flex;align-items:center;gap:1rem}
+  .menu{display:flex;gap:.3rem;list-style:none}
+  .menu a{display:block;text-decoration:none;color:var(--tenue);font-size:1.05rem;font-weight:500;padding:.6rem 1rem;border-radius:8px;white-space:nowrap;transition:color .2s,background .2s}
+  .menu a:hover{color:var(--texto)}
+  .menu a.activo{color:var(--texto);background:var(--superficie-2)}
+  .boton-menu{display:none;background:none;border:1px solid var(--linea);color:var(--texto);border-radius:8px;width:44px;height:44px;cursor:pointer;place-items:center}
+
+  /* ---------- Portada ---------- */
+  .portada{min-height:calc(100svh - 88px);display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:clamp(2rem,5vw,4.5rem);padding:3rem 0 4rem}
+  .saludo{display:flex;align-items:center;gap:.7rem;color:var(--tenue);font:500 .9rem var(--mono);margin-bottom:1.4rem}
+  .saludo .punto{width:8px;height:8px;border-radius:50%;background:var(--morado);box-shadow:0 0 0 4px rgba(157,123,255,.2)}
+  .saludo .raya{width:60px;height:1px;background:var(--linea)}
+  .portada h1{font:800 clamp(2.8rem,7vw,5.4rem)/.98 var(--display);letter-spacing:-.04em;margin-bottom:1.5rem}
+  .portada h1 .rol{display:block;font-size:.72em;margin-top:.15em}
+  .portada p.lead{color:var(--tenue);font-size:clamp(1.05rem,1.6vw,1.2rem);max-width:40ch;margin-bottom:2rem}
+  .portada p.lead strong{color:var(--texto);font-weight:500}
+  .acciones{display:flex;gap:.8rem;flex-wrap:wrap;align-items:center}
+  .extra{margin-top:1.8rem;color:var(--tenue);font-size:.88rem;display:flex;gap:.5rem;align-items:center}
+  .extra b{color:var(--morado);font-weight:600}
+
+  /* Bloque visual: ventana de código inclinada */
+  .visual{position:relative;perspective:1400px;padding:2.5rem 1rem}
+  .ventana{position:relative;background:linear-gradient(180deg,#1a1d3e,#13152f);border:1px solid var(--linea);border-radius:14px;box-shadow:0 40px 80px -30px rgba(0,0,0,.7),0 0 0 1px rgba(157,123,255,.08);transform:rotateY(-9deg) rotateX(5deg);transform-style:preserve-3d;transition:transform .6s ease}
+  .visual:hover .ventana{transform:rotateY(-3deg) rotateX(2deg)}
+  .ventana::before{content:"";position:absolute;inset:-1px;border-radius:15px;padding:1px;background:var(--degradado);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.55;pointer-events:none}
+  .ventana-barra{display:flex;align-items:center;gap:.6rem;padding:.75rem 1rem;border-bottom:1px solid var(--linea);font:500 .8rem var(--mono);color:var(--tenue)}
+  .ventana-barra .puntos{display:flex;gap:6px}
+  .ventana-barra .puntos i{width:10px;height:10px;border-radius:50%;background:var(--linea)}
+  .ventana-barra .icono{background:#e76f00;color:#fff;font-size:.62rem;font-weight:700;border-radius:3px;padding:1px 4px}
+  .ventana-barra .rama{margin-left:auto}
+  .codigo{padding:1rem 0;font:400 clamp(.72rem,1.15vw,.86rem)/1.75 var(--mono);overflow:hidden}
+  .codigo div{display:flex;white-space:pre}
+  .codigo .n{width:3.2em;text-align:right;padding-right:1.2em;color:#4a4f86;flex:none;user-select:none}
+  .k{color:#ff7a93}.t{color:#7fb4ff}.s{color:#c9a8ff}.c{color:#6b6f9e;font-style:italic}.f{color:#f4f1ff}
+  .cursor{display:inline-block;width:.55em;background:var(--morado);animation:parpadeo 1.1s steps(1) infinite}
+  @keyframes parpadeo{50%{opacity:0}}
+  .ventana-pie{display:flex;justify-content:space-between;padding:.55rem 1rem;border-top:1px solid var(--linea);font:400 .72rem var(--mono);color:var(--tenue)}
+  .ventana-pie span:first-child::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--azul);margin-right:.45rem;vertical-align:middle}
+  .flotante{position:absolute;z-index:2;background:rgba(22,25,54,.92);backdrop-filter:blur(6px);border:1px solid var(--linea);border-radius:10px;box-shadow:0 18px 40px -18px rgba(0,0,0,.8)}
+  .chip{top:0;right:2%;display:flex;align-items:center;gap:.5rem;padding:.45rem .8rem;font:500 .8rem var(--mono);transform:rotate(3deg);animation:flotar 6s ease-in-out infinite}
+  .chip i{width:7px;height:7px;border-radius:50%;background:var(--rojo)}
+  .tarjeta-ultimo{bottom:0;right:0;display:flex;gap:.8rem;align-items:center;padding:.8rem 1rem;text-decoration:none;max-width:290px;animation:flotar 7s ease-in-out infinite reverse}
+  .tarjeta-ultimo .ico{width:46px;height:46px;border-radius:10px;background:var(--degradado);display:grid;place-items:center;flex:none}
+  .tarjeta-ultimo small{display:block;font:500 .68rem var(--mono);color:var(--tenue);letter-spacing:.04em}
+  .tarjeta-ultimo strong{display:block;font:800 1.05rem var(--display);line-height:1.15}
+  .tarjeta-ultimo em{display:block;font-style:normal;font-size:.75rem;color:var(--tenue)}
+  .tarjeta-ultimo svg.flecha{width:16px;color:var(--morado);margin-left:auto}
+  @keyframes flotar{50%{translate:0 -8px}}
+
+  /* ---------- Secciones ---------- */
+  section{padding:clamp(4rem,9vw,7rem) 0}
+  .cabeza-seccion{display:flex;align-items:flex-end;justify-content:space-between;gap:1.5rem 3rem;flex-wrap:wrap;margin-bottom:2.5rem}
+  .etiqueta-seccion{font:500 .85rem var(--mono);color:var(--morado);margin-bottom:.6rem;display:block}
+  .titulo-seccion{font:800 clamp(2.2rem,5vw,3.3rem)/1.04 var(--display);letter-spacing:-.03em}
+  .intro-seccion{color:var(--tenue);max-width:50ch}
+
+  /* Destacado */
+  .destacado{position:relative;border-radius:calc(var(--radio) + 4px);padding:1.5px;background:var(--degradado);margin-bottom:3.5rem}
+  .destacado-interior{background:var(--superficie);border-radius:calc(var(--radio) + 3px);padding:clamp(1.5rem,4vw,3rem);display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(1.5rem,4vw,3rem)}
+  .destacado .contexto{font:500 .85rem var(--mono);color:var(--rojo);margin-bottom:.6rem}
+  .destacado h3{font:800 clamp(2.3rem,5vw,3.4rem)/1 var(--display);letter-spacing:-.035em;margin-bottom:1rem}
+  .destacado p{color:var(--tenue);margin-bottom:1.6rem;max-width:52ch}
+  .pila{list-style:none;display:grid;align-content:start;background:var(--fondo);border:1px solid var(--linea);border-radius:var(--radio);padding:1.1rem 1.3rem}
+  .pila li{display:flex;justify-content:space-between;gap:1rem;font-size:.93rem;padding:.6rem 0;border-bottom:1px solid var(--linea)}
+  .pila li:last-child{border-bottom:0}
+  .pila li span:first-child{color:var(--tenue)}
+
+  /* Filtros */
+  .filtros{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2.5rem}
+  .filtro{--c:var(--texto);font:500 .9rem var(--cuerpo);background:var(--superficie);color:var(--tenue);border:1px solid var(--linea);border-radius:8px;padding:.5rem .95rem;cursor:pointer;display:inline-flex;align-items:center;gap:.5rem;transition:all .2s}
+  .filtro::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--c)}
+  .filtro:hover{color:var(--texto);border-color:var(--c)}
+  .filtro[aria-pressed="true"]{background:var(--superficie-2);border-color:var(--c);color:var(--texto)}
+  .filtro .num{font:500 .75rem var(--mono);color:var(--tenue)}
+
+  /* Línea de cursos */
+  .curso{display:grid;grid-template-columns:220px 1fr;gap:2rem;padding-bottom:3.5rem}
+  .curso-cabecera{position:sticky;top:116px;align-self:start}
+  .curso-cabecera h3{font:800 1.65rem/1.1 var(--display);letter-spacing:-.02em}
+  .curso-cabecera p{color:var(--tenue);font:500 .85rem var(--mono);margin-top:.3rem}
+  .en-curso{display:inline-flex;align-items:center;gap:.4rem;margin-top:.7rem;font:500 .78rem var(--mono);color:var(--morado);border:1px solid rgba(157,123,255,.4);border-radius:6px;padding:.15rem .55rem}
+  .en-curso::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--morado);animation:parpadeo 2s steps(1) infinite}
+  .lista{display:grid;gap:.6rem}
+  .vacio{color:var(--tenue);padding:1rem 0}
+  .proyecto{--c:var(--azul);background:var(--superficie);border:1px solid var(--linea);border-radius:var(--radio);position:relative;overflow:hidden;transition:border-color .25s}
+  .proyecto::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--c);opacity:0;transition:opacity .25s}
+  .proyecto:hover,.proyecto.abierto{border-color:color-mix(in srgb,var(--c) 45%,var(--linea))}
+  .proyecto:hover::before,.proyecto.abierto::before{opacity:1}
+  .proyecto[hidden]{display:none}
+  .fila{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:1rem;padding:1.1rem 1.2rem 1.1rem 1.4rem;cursor:pointer}
+  .alternar{background:none;border:0;color:inherit;font:inherit;text-align:left;cursor:pointer;padding:0}
+  .alternar .titulo{display:block;font:600 1.22rem/1.25 var(--display);letter-spacing:-.01em}
+  .alternar .resumen{display:block;color:var(--tenue);font-size:.95rem;margin-top:.1rem}
+  .etiquetas{display:flex;gap:.35rem;flex-wrap:wrap;justify-content:flex-end}
+  .etiqueta{font:500 .74rem var(--mono);color:var(--tenue);background:var(--superficie-2);border-radius:5px;padding:.15rem .5rem;white-space:nowrap}
+  .lado{display:flex;align-items:center;gap:.7rem}
+  .mas{width:22px;height:22px;color:var(--tenue);transition:transform .3s,color .3s;flex:none}
+  .proyecto.abierto .mas{transform:rotate(45deg);color:var(--c)}
+  .detalle{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
+  .proyecto.abierto .detalle{grid-template-rows:1fr}
+  .detalle > div{overflow:hidden}
+  .detalle-interior{padding:0 1.4rem 1.4rem;color:var(--tenue);max-width:74ch}
+  .detalle-interior .modulo{font:500 .82rem var(--mono);color:var(--c);margin-bottom:.6rem}
+  .detalle-interior ul{padding-left:1.1rem;margin-bottom:1rem}
+  .detalle-interior li{margin-bottom:.3rem}
+  .detalle-interior li::marker{color:var(--c)}
+  .detalle-interior .acciones{gap:.5rem}
+
+  /* ---------- Proyectos personales ---------- */
+  .juego{background:var(--superficie);border:1px solid var(--linea);border-radius:calc(var(--radio) + 4px);overflow:hidden}
+  .juego-cabecera{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(1.5rem,4vw,3rem);padding:clamp(1.5rem,4vw,3rem);position:relative}
+  .juego-cabecera::after{content:"";position:absolute;right:-10rem;top:-10rem;width:28rem;height:28rem;border-radius:50%;background:radial-gradient(circle,rgba(255,92,122,.16),transparent 65%);pointer-events:none}
+  .juego .contexto{font:500 .85rem var(--mono);color:var(--rojo);margin-bottom:.6rem}
+  .juego h3{font:800 clamp(2.2rem,5vw,3.3rem)/1 var(--display);letter-spacing:-.035em;margin-bottom:1rem}
+  .juego p{color:var(--tenue);max-width:58ch;margin-bottom:1rem}
+  .juego p strong{color:var(--texto);font-weight:500}
+  .socio{display:inline-flex;align-items:center;gap:.6rem;background:var(--fondo);border:1px solid var(--linea);border-radius:10px;padding:.55rem .9rem;text-decoration:none;font-size:.92rem;margin-top:.4rem;transition:border-color .2s}
+  .socio:hover{border-color:var(--morado)}
+  .socio code{font:500 .85rem var(--mono);color:var(--morado)}
+  .cifras{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-top:1.4rem}
+  .cifras div{background:var(--fondo);border:1px solid var(--linea);border-radius:10px;padding:.8rem}
+  .cifras b{display:block;font:800 1.6rem var(--display)}
+  .cifras span{font-size:.82rem;color:var(--tenue)}
+  .visor3d{position:relative;z-index:1;display:flex;flex-direction:column;background:radial-gradient(circle at 50% 55%,#2a2e62,#12142c 72%);border:1px solid var(--linea);border-radius:var(--radio);min-height:380px;overflow:hidden}
+  .visor3d model-viewer{flex:1;width:100%;min-height:340px;--poster-color:transparent}
+  .visor3d .leyenda{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.75rem 1rem;border-top:1px solid var(--linea);background:rgba(15,17,41,.6)}
+  .visor3d .leyenda strong{display:block;font:800 1.1rem var(--display)}
+  .visor3d .leyenda small{font:500 .75rem var(--mono);color:var(--tenue)}
+  .visor3d .pista{font:500 .72rem var(--mono);color:var(--tenue);white-space:nowrap}
+  .visor3d .vacio3d{position:absolute;inset:0;display:grid;place-items:center;color:var(--tenue);text-align:center;padding:2rem;font-size:.92rem}
+
+  .flujo{padding:clamp(1.5rem,4vw,3rem);border-top:1px solid var(--linea)}
+  .flujo h4{font:800 1.5rem var(--display);letter-spacing:-.02em;margin-bottom:.4rem}
+  .flujo > p{color:var(--tenue);max-width:65ch;margin-bottom:1.6rem}
+  .pasos-ia{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;counter-reset:paso}
+  .pasos-ia li{counter-increment:paso;background:var(--fondo);border:1px solid var(--linea);border-radius:12px;padding:1rem 1.1rem;position:relative}
+  .pasos-ia li::before{content:counter(paso,decimal-leading-zero);font:500 .75rem var(--mono);color:var(--morado);display:block;margin-bottom:.4rem}
+  .pasos-ia strong{display:block;font:600 1rem var(--display);margin-bottom:.25rem}
+  .pasos-ia span{font-size:.9rem;color:var(--tenue)}
+  .pasos-ia .herr{display:inline-block;margin-top:.5rem;font:500 .72rem var(--mono);color:var(--texto);background:var(--superficie-2);border-radius:5px;padding:.1rem .45rem}
+
+  .galeria{padding:0 clamp(1.5rem,4vw,3rem) clamp(1.5rem,4vw,3rem)}
+  .galeria h4{font:800 1.5rem var(--display);letter-spacing:-.02em;margin-bottom:.4rem}
+  .galeria > p{color:var(--tenue);margin-bottom:1.2rem;max-width:65ch}
+  .tira{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.8rem}
+  .tira figure{background:var(--fondo);border:1px solid var(--linea);border-radius:12px;overflow:hidden}
+  .tira img{width:100%;aspect-ratio:16/10;object-fit:contain;background:#8c8c94;cursor:zoom-in;transition:transform .3s}
+  .tira figure:hover img{transform:scale(1.03)}
+  .tira figcaption{padding:.55rem .75rem;font-size:.85rem;color:var(--tenue)}
+  .tira figcaption b{color:var(--texto);font-weight:600}
+  .modelos{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.8rem;margin-top:.8rem}
+  .modelos .visor3d{min-height:320px}.modelos .visor3d model-viewer{min-height:260px}
+  .proximo{border:1.5px dashed var(--linea);border-radius:var(--radio);padding:1.2rem 1.4rem;color:var(--tenue);margin-top:1.2rem;font-size:.95rem}
+
+  /* Lightbox */
+  .caja-luz{border:0;background:transparent;max-width:min(1100px,94vw);max-height:92vh;margin:auto;padding:0}
+  .caja-luz::backdrop{background:rgba(8,9,24,.85);backdrop-filter:blur(4px)}
+  .caja-luz img{max-width:100%;max-height:86vh;border-radius:12px;background:#fff}
+  .caja-luz p{color:var(--texto);text-align:center;margin-top:.6rem}
+  .caja-luz button{position:fixed;top:1rem;right:1rem}
+
+
+  /* ---------- Capturas de los proyectos ---------- */
+  .fila{grid-template-columns:auto 1fr auto auto}
+  .miniatura{width:120px;height:75px;object-fit:cover;object-position:top;border-radius:8px;border:1px solid var(--linea);background:var(--fondo)}
+  .detalle-interior{display:grid;grid-template-columns:1fr minmax(240px,340px);gap:1.4rem;max-width:none;align-items:start}
+  .captura{position:relative;display:block;padding:0;border:1px solid var(--linea);border-radius:12px;overflow:hidden;background:var(--fondo);cursor:pointer;width:100%}
+  .captura img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top;transition:transform .4s,filter .3s}
+  .captura > span{position:absolute;inset:auto .6rem .6rem auto;display:inline-flex;align-items:center;gap:.4rem;font:600 .82rem var(--cuerpo);color:#fff;background:rgba(15,17,41,.85);border:1px solid var(--linea);border-radius:8px;padding:.35rem .7rem}
+  .captura > span svg{width:12px;height:12px}
+  .captura:hover img{transform:scale(1.03);filter:brightness(1.05)}
+  .captura:hover{border-color:var(--morado)}
+  .lado-destacado{display:grid;gap:1rem;align-content:start}
+
+  /* ---------- Visor de demos ---------- */
+  .visor{border:0;padding:0;background:transparent;color:var(--texto);width:min(1280px,96vw);height:min(900px,92vh);max-width:none;max-height:none;margin:auto}
+  .visor::backdrop{background:rgba(8,9,24,.8);backdrop-filter:blur(5px)}
+  .visor-caja{height:100%;display:flex;flex-direction:column;background:var(--superficie);border:1px solid var(--linea);border-radius:var(--radio);overflow:hidden}
+  .visor-barra{display:flex;align-items:center;gap:.75rem;padding:.7rem .8rem .7rem 1.1rem;border-bottom:1px solid var(--linea)}
+  .visor-barra .puntos{display:flex;gap:6px}
+  .visor-barra .puntos i{width:11px;height:11px;border-radius:50%}
+  .visor-barra .puntos i:nth-child(1){background:var(--rojo)} .visor-barra .puntos i:nth-child(2){background:var(--morado)} .visor-barra .puntos i:nth-child(3){background:var(--azul)}
+  .visor-titulo{font:600 1rem var(--display);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .visor-barra a,.visor-barra button,.interruptor{font:500 .88rem var(--cuerpo);color:var(--tenue);background:none;border:1px solid var(--linea);border-radius:8px;padding:.4rem .85rem;text-decoration:none;cursor:pointer;white-space:nowrap}
+  .visor-barra a:hover,.visor-barra button:hover,.interruptor:hover{color:var(--texto);border-color:var(--morado)}
+  .visor iframe{flex:1;width:100%;border:0;background:#fff}
+
+  /* ---------- Steal An Disasters ---------- */
+  .juego + .juego{margin-top:1.5rem}
+  .bloque-juego{padding:clamp(1.5rem,4vw,3rem);border-top:1px solid var(--linea)}
+  .bloque-juego h4{font:800 1.5rem var(--display);letter-spacing:-.02em;margin-bottom:.4rem}
+  .bloque-juego > p{color:var(--tenue);max-width:65ch;margin-bottom:1.4rem}
+  .criatura{position:relative;z-index:1;margin:0;border-radius:var(--radio);overflow:hidden;border:1px solid var(--linea);background:#e9e9ec;align-self:center}
+  .criatura > img{width:100%;aspect-ratio:16/9;object-fit:cover;cursor:zoom-in}
+  .criatura-pie{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.9rem 1rem;background:var(--superficie-2);border-top:1px solid var(--linea)}
+  .criatura-pie strong{display:block;font:800 1.15rem var(--display)}
+  .criatura-pie small{font:500 .75rem var(--mono);color:var(--tenue)}
+  .ias{list-style:none;display:grid;grid-template-columns:repeat(5,1fr);gap:.7rem}
+  .ias li{background:var(--fondo);border:1px solid var(--linea);border-radius:12px;padding:1rem}
+  .ias strong{display:block;font:800 1.1rem var(--display);margin-bottom:.2rem;background:var(--degradado);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .ias span{font-size:.88rem;color:var(--tenue)}
+  .musica{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem}
+  .pista-musica{display:grid;grid-template-columns:auto 1fr auto;gap:.8rem;align-items:center;background:var(--fondo);border:1px solid var(--linea);border-radius:12px;padding:.8rem .9rem;transition:border-color .2s}
+  .pista-musica.sonando{border-color:var(--morado)}
+  .pista-musica .play{width:44px;height:44px;border-radius:50%;border:0;background:var(--degradado);color:#fff;display:grid;place-items:center;cursor:pointer}
+  .pista-musica .play svg{width:16px;height:16px}
+  .pista-musica strong{display:block;font-weight:600}
+  .pista-musica small{font-size:.8rem;color:var(--tenue)}
+  .barra-audio{height:6px;border-radius:3px;background:var(--superficie-2);margin-top:.45rem;cursor:pointer;overflow:hidden}
+  .barra-audio span{display:block;height:100%;width:0;background:var(--degradado)}
+  .pista-musica .tiempo{font:500 .75rem var(--mono);color:var(--tenue);white-space:nowrap}
+  .obras{display:inline-block;vertical-align:middle;font:600 .8rem var(--mono);letter-spacing:0;color:#1d1606;background:repeating-linear-gradient(-45deg,#ffc857 0 10px,#ffb020 10px 20px);border-radius:6px;padding:.25rem .6rem;margin-left:.4rem}
+  .captura-juego{align-self:center;position:relative;z-index:1}
+  .captura-juego .cinta{inset:.8rem auto auto .8rem!important;color:#1d1606!important;background:repeating-linear-gradient(-45deg,#ffc857 0 10px,#ffb020 10px 20px)!important;border:0!important;font-family:var(--mono)!important}
+  .nota-controles{font-size:.88rem;margin-top:1rem}
+
+  /* Visor 3D */
+  .escena-3d{position:relative;flex:1;background:radial-gradient(circle at 50% 45%,#3a3f78,#14162f 70%)}
+  .escena-3d model-viewer{width:100%;height:100%;--poster-color:transparent}
+  .estado-3d{position:absolute;inset:0;display:grid;place-items:center;color:var(--tenue);text-align:center;padding:2rem}
+  .controles-3d{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;padding:.8rem 1rem;border-top:1px solid var(--linea)}
+  .controles-3d > span{font:500 .8rem var(--mono);color:var(--morado)}
+  .controles-3d small{margin-left:auto;color:var(--tenue);font-size:.8rem}
+  #estado-3d[hidden]{display:none}
+  .animaciones{display:flex;gap:.45rem;flex-wrap:wrap}
+  .animaciones .boton[aria-pressed="true"]{background:var(--degradado);border-color:transparent;color:#fff}
+  .interruptor{display:inline-flex;align-items:center;gap:.45rem}
+  .interruptor input{accent-color:var(--morado)}
+
+  /* ---------- Sobre mí ---------- */
+  .sobre{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(2rem,6vw,4.5rem);align-items:start}
+  .foto{position:relative;border-radius:calc(var(--radio) + 4px);padding:1.5px;background:var(--degradado);max-width:420px}
+  .foto img{width:100%;height:auto;border-radius:calc(var(--radio) + 3px);background:#f8f7f6}
+  .foto .sello{position:absolute;bottom:1rem;left:-1rem;background:var(--superficie);border:1px solid var(--linea);border-radius:10px;padding:.55rem .85rem;font:500 .78rem var(--mono);color:var(--tenue);box-shadow:0 14px 30px -14px rgba(0,0,0,.8)}
+  .foto .sello b{color:var(--texto);font-weight:600}
+  .sobre p{color:var(--tenue);margin-bottom:1rem;max-width:60ch}
+  .sobre p strong{color:var(--texto);font-weight:500}
+  .habilidades{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:1.8rem}
+  .habilidad{background:var(--superficie);border:1px solid var(--linea);border-radius:12px;padding:1rem 1.1rem}
+  .habilidad h3{font:500 .8rem var(--mono);color:var(--morado);margin-bottom:.35rem}
+  .habilidad p{margin:0;color:var(--texto);font-size:.93rem}
+
+  /* ---------- Contacto ---------- */
+  .contacto-caja{position:relative;background:var(--superficie);border:1px solid var(--linea);border-radius:calc(var(--radio) + 6px);padding:clamp(2rem,6vw,4.5rem);overflow:hidden;display:grid;grid-template-columns:1.2fr 1fr;gap:2rem;align-items:end}
+  .contacto-caja::before{content:"";position:absolute;inset:auto 0 0 0;height:4px;background:var(--degradado)}
+  .contacto-caja::after{content:"";position:absolute;right:-8rem;top:-8rem;width:24rem;height:24rem;border-radius:50%;background:radial-gradient(circle,rgba(157,123,255,.18),transparent 65%);pointer-events:none}
+  .contacto-caja h2{font:800 clamp(2.4rem,6vw,4rem)/1 var(--display);letter-spacing:-.04em;margin-bottom:1rem}
+  .contacto-caja p{color:var(--tenue);max-width:44ch}
+  .contacto-datos{display:grid;gap:.7rem;position:relative;z-index:1}
+  .correo{display:flex;align-items:center;justify-content:space-between;gap:1rem;font:500 clamp(.9rem,2.2vw,1.05rem) var(--mono);background:var(--fondo);border:1px solid var(--linea);border-radius:10px;padding:.9rem 1rem;color:var(--texto);text-decoration:none;word-break:break-all}
+  .correo button{flex:none;font:500 .8rem var(--cuerpo);background:var(--superficie-2);border:1px solid var(--linea);color:var(--texto);border-radius:6px;padding:.35rem .7rem;cursor:pointer}
+  .redes{display:flex;gap:.6rem;flex-wrap:wrap}
+  footer{padding:2.5rem 0 3rem;color:var(--tenue);font-size:.85rem}
+  footer .contenedor{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:980px){
+    .portada{grid-template-columns:1fr;min-height:auto;padding:2.5rem 0 3rem}
+    .visual{max-width:560px;width:100%}
+    .destacado-interior,.juego-cabecera,.sobre,.contacto-caja{grid-template-columns:1fr}
+    .curso{grid-template-columns:1fr;gap:1rem}
+    .curso-cabecera{position:static;display:flex;align-items:baseline;gap:.8rem;flex-wrap:wrap}
+    .curso-cabecera .en-curso{margin-top:0}
+    .pasos-ia{grid-template-columns:1fr 1fr}
+    .foto{max-width:300px}
+  }
+  @media (max-width:760px){
+    .boton-menu{display:grid}
+    .menu{position:absolute;top:88px;left:0;right:0;flex-direction:column;gap:0;background:var(--fondo);border-bottom:1px solid var(--linea);padding:.5rem clamp(1.1rem,4vw,2rem) 1rem;display:none}
+    .menu.abierto{display:flex}
+    .menu a{padding:.85rem .9rem;font-size:1.05rem}
+    nav .boton.externo{display:none}
+    .fila{grid-template-columns:1fr auto;padding:1rem 1rem 1rem 1.2rem}
+    .fila .etiquetas{display:none}
+    .detalle-interior{padding:0 1.2rem 1.25rem}
+    .habilidades,.pasos-ia{grid-template-columns:1fr}
+    .ventana{transform:none}
+    .chip{right:0}
+    .tarjeta-ultimo{position:relative;margin:.8rem 0 0 auto}
+    .cifras b{font-size:1.3rem}
+  }
+  @media (max-width:440px){
+    .codigo .n{width:2.4em;padding-right:.8em}
+  }
+  @media (max-width:980px){
+    .ias{grid-template-columns:repeat(2,1fr)}
+    .musica{grid-template-columns:1fr}
+    .detalle-interior{grid-template-columns:1fr}
+  }
+  @media (max-width:760px){
+    .fila{grid-template-columns:auto 1fr auto}
+    .miniatura{width:72px;height:54px}
+    .visor{width:100vw;height:100dvh}
+    .visor-caja{border-radius:0;border:0}
+    .visor-barra .puntos{display:none}
+    .visor-barra a{display:none}
+    .controles-3d small{display:none}
+  }
+  @media (max-width:560px){ .fila{grid-template-columns:1fr auto auto} .fila .miniatura{display:none} }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation:none!important;transition:none!important}
+  }
+</style>
+</head>
+<body>
+
+<header class="cabecera" id="cabecera">
+  <div class="contenedor">
+    <a class="marca" href="#inicio" aria-label="Francisco Marín, inicio"><img src="img/avatar-192.png" alt="" width="46" height="46"><span class="marca-texto">frmarin<span>.dev</span></span></a>
+    <nav aria-label="Principal">
+      <ul class="menu" id="menu">
+        <li><a href="#proyectos">Proyectos</a></li>
+        <li><a href="#personales">Personales</a></li>
+        <li><a href="#sobre-mi">Sobre mí</a></li>
+      </ul>
+      <a class="boton externo" href="#contacto">Hablemos <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></a>
+      <button class="boton-menu" id="boton-menu" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="contenedor">
+    <section class="portada" id="inicio" aria-label="Presentación">
+      <div>
+        <p class="saludo"><span class="punto" aria-hidden="true"></span>Hola, soy Fran<span class="raya" aria-hidden="true"></span></p>
+        <h1>Francisco Marín<span class="rol degradado-texto">Desarrollador web</span></h1>
+        <p class="lead">Estudio <strong>2.º de Desarrollo de Aplicaciones Web</strong> en Granada. Hago APIs con Java y Spring Boot, webs que se pueden usar y videojuegos donde la IA trabaja conmigo.</p>
+        <div class="acciones">
+          <a class="boton principal" href="#proyectos">Explorar proyectos <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 5l6 6M11 6v5H6"/></svg></a>
+          <a class="boton texto" id="enlace-github-hero" href="#contacto">Escríbeme <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></a>
+        </div>
+        <p class="extra"><b>+</b> Todos los proyectos se pueden probar desde el navegador.</p>
+      </div>
+
+      <div class="visual" aria-hidden="true">
+        <div class="flotante chip"><i></i>del servidor al navegador</div>
+        <div class="ventana">
+          <div class="ventana-barra"><span class="puntos"><i></i><i></i><i></i></span><span class="icono">J</span>Desarrollador.java<span class="rama">main</span></div>
+          <div class="codigo" id="codigo"></div>
+          <div class="ventana-pie"><span>Listo para el siguiente reto</span><span>UTF-8 · Java 17</span></div>
+        </div>
+        <a class="flotante tarjeta-ultimo" href="#personales" tabindex="-1">
+          <span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><path d="M12 3c3 4 6 6 6 10a6 6 0 0 1-12 0c0-2 1-4 3-5 0 2 1 3 2 3 0-3 0-5 1-8z"/></svg></span>
+          <span><small>ÚLTIMO PROYECTO</small><strong>Steal An Disasters</strong><em>Roblox · IA · 3D</em></span>
+          <svg class="flecha" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 11 11 5M6 5h5v5"/></svg>
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= PROYECTOS DE CLASE ================= -->
+  <section id="proyectos">
+    <div class="contenedor">
+      <div class="cabeza-seccion">
+        <div><span class="etiqueta-seccion">// proyectos de clase</span><h2 class="titulo-seccion">Proyectos</h2></div>
+        <p class="intro-seccion">Ordenados por curso. Despliega uno para ver cómo está hecho, o pulsa «Probar» para usarlo aquí mismo, sin salir de la página.</p>
+      </div>
+
+      <article class="destacado" aria-labelledby="stemgame-titulo">
+        <div class="destacado-interior">
+          <div>
+            <p class="contexto">Proyecto final · 1.º DAW</p>
+            <h3 id="stemgame-titulo">STEMGAME</h3>
+            <p>Una plataforma web para descubrir videojuegos y reseñarlos: catálogo por plataforma, filtros por género o nombre, ficha de cada juego, reseñas con estrellas y un panel de administración con CRUD para todas las entidades. La demo usa mi frontend original con el servidor Spring Boot simulado en el navegador.</p>
+            <div class="acciones" id="stemgame-acciones">
+              <button class="boton principal" type="button" data-probar="proyectos/stemgame/index.html" data-titulo="STEMGAME"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg>Probar STEMGAME</button>
+            </div>
+          </div>
+          <div class="lado-destacado">
+          <button class="captura" type="button" data-probar="proyectos/stemgame/index.html" data-titulo="STEMGAME"><img src="img/capturas/stemgame.webp" alt="Página de inicio de STEMGAME"><span><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg> Probar aquí</span></button>
+          <ul class="pila" aria-label="Tecnologías de STEMGAME">
+            <li><span>Backend</span><span>Java 17, Spring Boot</span></li>
+            <li><span>Datos</span><span>Spring Data JPA, H2</span></li>
+            <li><span>Frontend</span><span>JavaScript con módulos ES</span></li>
+            <li><span>Pruebas</span><span>JUnit</span></li>
+            <li><span>Datos de prueba</span><span>JavaFaker</span></li>
+            <li><span>Documentación</span><span>Javadoc, UML</span></li>
+          </ul>
+          </div>
+        </div>
+      </article>
+
+      <div class="filtros" role="group" aria-label="Filtrar proyectos por tecnología" id="filtros"></div>
+      <div id="cursos"></div>
+    </div>
+  </section>
+
+  <!-- ================= PROYECTOS PERSONALES ================= -->
+  <section id="personales">
+    <div class="contenedor">
+      <div class="cabeza-seccion">
+        <div><span class="etiqueta-seccion">// fuera del aula</span><h2 class="titulo-seccion">Proyectos personales</h2></div>
+        <p class="intro-seccion">Lo que hago por mi cuenta, con la inteligencia artificial como parte del equipo de desarrollo.</p>
+      </div>
+      <article class="juego" id="steal-an-disasters">
+        <div class="juego-cabecera">
+          <div style="position:relative;z-index:1">
+            <p class="contexto">Videojuego en Roblox · desarrollo con IA</p>
+            <h3>Steal An Disasters</h3>
+            <p>Un juego de Roblox en el que recorres zonas castigadas por desastres naturales, robas frascos con criaturas y escapas de los jefes de cada zona antes de que te atrapen. Lo desarrollo con <a href="https://ikerbueno.dev/#proyectos" target="_blank" rel="noopener">Iker Bueno</a> y la IA está en todo el proceso: el código, las criaturas, los modelos 3D, sus animaciones y también <strong>la música, generada con IA</strong>.</p>
+            <a class="socio" href="https://ikerbueno.dev/#proyectos" target="_blank" rel="noopener">Desarrollado con <strong>Iker Bueno</strong> <code>ikerbueno.dev</code> <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></a>
+            <div class="cifras"><div><b class="degradado-texto">7</b><span>zonas con su jefe</span></div><div><b class="degradado-texto">+70</b><span>criaturas diseñadas</span></div><div><b class="degradado-texto">3</b><span>temas con IA</span></div></div>
+          </div>
+          <figure class="criatura" id="criatura"></figure>
+        </div>
+
+        <div class="bloque-juego">
+          <h4>IAs que uso en el proyecto</h4>
+          <ul class="ias" id="ias"></ul>
+        </div>
+
+        <div class="bloque-juego">
+          <h4>Cómo creamos cada criatura</h4>
+          <p>Una cadena de herramientas de IA conectadas entre sí para pasar de una idea a un modelo dentro del juego sin trabajo repetitivo.</p>
+          <ol class="pasos-ia">
+            <li><strong>Claude escribe el prompt</strong><span>Describo la criatura y Claude redacta un prompt detallado: estilo low poly, colores de la zona y tres vistas.</span><br><span class="herr">Claude</span></li>
+            <li><strong>Gemini genera las 3 vistas</strong><span>Como tengo Claude conectado a mi cuenta de Google, envía los prompts a Gemini uno por uno y Gemini dibuja la criatura de frente, de lado y de espaldas.</span><br><span class="herr">Gemini</span></li>
+            <li><strong>La imagen pasa a 3D</strong><span>Esas tres vistas entran en Hyper3D, que genera el modelo con texturas, lo riggea y le pone animaciones.</span><br><span class="herr">Hyper3D</span></li>
+            <li><strong>Se guarda solo en Drive</strong><span>Cada modelo se guarda automáticamente en Google Drive, en la carpeta de su zona y tipo.</span><br><span class="herr">Google Drive</span></li>
+            <li><strong>Registro en Google Docs</strong><span>Cuando el modelo entra en el juego, se añade una entrada al documento compartido con qué cambió y qué falta.</span><br><span class="herr">Google Docs</span></li>
+            <li><strong>Trabajo compartido</strong><span>Iker ve en el momento cada criatura nueva y cada cambio, sin pasarnos archivos a mano.</span><br><span class="herr">ikerbueno.dev</span></li>
+          </ol>
+        </div>
+
+        <div class="bloque-juego">
+          <h4>Banda sonora generada con IA</h4>
+          <p>El tema del lobby y sus remixes para los eventos de Halloween y Navidad.</p>
+          <div class="musica" id="musica"></div>
+        </div>
+
+        <div class="bloque-juego">
+          <h4>Criaturas diseñadas</h4>
+          <p>Algunas de las criaturas que he generado con Gemini para las nuevas zonas.</p>
+          <div class="tira" id="galeria-disaster"></div>
+        </div>
+      </article>
+
+      <article class="juego juego-z2d" id="z2d">
+        <div class="juego-cabecera">
+          <div style="position:relative;z-index:1">
+            <p class="contexto">Videojuego en Godot 4 · GDScript</p>
+            <h3>Z2D <span class="obras">En construcción</span></h3>
+            <p>Un shooter de zombis en vista cenital inspirado en el modo Zombies de Call of Duty. Ya funcionan el movimiento con <strong>sprint y estamina</strong>, las armas con daño según la distancia, la munición y la recarga, el disparo automático y la caja misteriosa.</p>
+            <p>Lo siguiente: oleadas de zombis, puntos por impacto, bebidas con mejoras y barricadas que se pueden reparar.</p>
+            <div class="acciones">
+              <button class="boton principal" type="button" data-probar="proyectos/z2d/juego/index.html" data-titulo="Z2D · demo en construcción"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg>Probar la demo</button>
+            </div>
+            <p class="nota-controles">Flechas para moverte, Mayús para esprintar y ratón para apuntar y disparar.</p>
+          </div>
+          <button class="captura captura-juego" type="button" data-probar="proyectos/z2d/juego/index.html" data-titulo="Z2D · demo en construcción"><img src="img/capturas/z2d.webp" alt="Captura de Z2D: jugador con pistola sobre un mapa de césped"><span class="cinta">En construcción</span></button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ================= SOBRE MÍ ================= -->
+  <section id="sobre-mi">
+    <div class="contenedor sobre">
+      <figure class="foto">
+        <img src="img/fran.jpg" alt="Francisco Marín" width="745" height="820">
+        <figcaption class="sello"><b>Granada</b> · Disponible para prácticas</figcaption>
+      </figure>
+      <div>
+        <span class="etiqueta-seccion">// sobre mí</span>
+        <h2 class="titulo-seccion" style="margin-bottom:1.5rem">Sobre mí</h2>
+        <p>Soy estudiante de <strong>Desarrollo de Aplicaciones Web</strong> con un perfil creativo y muchas ganas de construir cosas que la gente use. Empecé con <strong>Java</strong> y hoy trabajo sobre todo en el lado servidor: APIs REST con Spring Boot, bases de datos relacionales y PHP.</p>
+        <p>Antes de programar me formé en <strong>instalaciones eléctricas</strong> y trabajé como técnico e instalador, así que estoy acostumbrado a trabajar en equipo, con plazos reales y resolviendo problemas sobre la marcha. Cuando algo se complica, prefiero volver a una solución simple que funcione.</p>
+        <p>Fuera de clase hago videojuegos y uso la <strong>IA</strong> como compañera de desarrollo: para prototipar más rápido, generar recursos y automatizar el trabajo en equipo.</p>
+        <div class="acciones" style="margin-top:1.4rem">
+          <a class="boton principal" href="cv/index.html">Ver mi currículum <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></a>
+          <a class="boton" href="cv/CV_Francisco_Marin.pdf" download>Descargar PDF <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 2v9M4 7l4 4 4-4M3 14h10"/></svg></a>
+        </div>
+        <div class="habilidades">
+          <div class="habilidad"><h3>lenguajes</h3><p>Java, JavaScript, PHP, SQL, Bash, Luau</p></div>
+          <div class="habilidad"><h3>backend</h3><p>Spring Boot, Spring Data JPA, API REST, Maven</p></div>
+          <div class="habilidad"><h3>frontend</h3><p>HTML, CSS, Grid, Bootstrap, Tailwind, JavaScript, WordPress</p></div>
+          <div class="habilidad"><h3>ia y videojuegos</h3><p>Claude, Gemini, Codex, Hyper3D, Roblox Studio, Godot</p></div>
+          <div class="habilidad"><h3>herramientas</h3><p>Git y GitHub, Postman, draw.io, Linux, XAMPP, AWS</p></div>
+          <div class="habilidad"><h3>idiomas</h3><p>Español nativo, inglés B1 (Cambridge)</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACTO ================= -->
+  <section id="contacto">
+    <div class="contenedor">
+      <div class="contacto-caja">
+        <div>
+          <span class="etiqueta-seccion">// contacto</span>
+          <h2>¿Hablamos?</h2>
+          <p>Busco prácticas y proyectos donde seguir aprendiendo. Escríbeme y te respondo.</p>
+        </div>
+        <div class="contacto-datos">
+          <a class="correo" id="correo" href="#"><span id="correo-texto"></span><button type="button" id="copiar">Copiar</button></a>
+          <div class="redes" id="redes"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="contenedor"><span id="pie"></span><span>Hecho a mano con HTML, CSS y JavaScript</span></div></footer>
+
+<!-- Visor de demos dentro de la página -->
+<dialog class="visor" id="visor" aria-labelledby="visor-titulo">
+  <div class="visor-caja">
+    <div class="visor-barra">
+      <span class="puntos" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="visor-titulo" id="visor-titulo"></span>
+      <a id="visor-nueva" href="#" target="_blank" rel="noopener">Pantalla completa</a>
+      <button type="button" id="visor-cerrar">Cerrar</button>
+    </div>
+    <iframe id="visor-marco" title="Proyecto en funcionamiento" allow="autoplay; fullscreen"></iframe>
+  </div>
+</dialog>
+
+<!-- Visor 3D de la criatura -->
+<dialog class="visor visor3d-dialogo" id="visor-3d" aria-labelledby="titulo-3d">
+  <div class="visor-caja">
+    <div class="visor-barra">
+      <span class="puntos" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="visor-titulo" id="titulo-3d"></span>
+      <label class="interruptor"><input type="checkbox" id="interruptor-textura" checked> Textura</label>
+      <button type="button" id="cerrar-3d">Cerrar</button>
+    </div>
+    <div class="escena-3d">
+      <model-viewer id="modelo-3d" camera-controls touch-action="none" shadow-intensity="1" exposure="1.05" interaction-prompt="none" camera-orbit="20deg 75deg auto" alt="Modelo 3D de Mainframe Mutator"></model-viewer>
+      <p class="estado-3d" id="estado-3d" hidden>Todavía no está el archivo del modelo 3D.</p>
+    </div>
+    <div class="controles-3d"><span>Animación</span><div id="animaciones" class="animaciones"></div><small>Arrastra para girar · rueda para acercar</small></div>
+  </div>
+</dialog>
+
+<dialog class="caja-luz" id="caja-luz" aria-label="Imagen ampliada">
+  <button class="boton peq" type="button" id="cerrar-luz">Cerrar</button>
+  <img id="img-luz" alt="">
+  <p id="texto-luz"></p>
+</dialog>
+
+<script>
+/* ================================================================
+   CONFIGURACIÓN: cambia aquí tus datos y enlaces.
+   Si dejas un enlace vacío (''), no se muestra.
+   ================================================================ */
+const CONFIG = {
+  correo: 'frmarinnarbona13@gmail.com',
+  github: '',            // ej. 'https://github.com/tuusuario'
+  linkedin: '',          // ej. 'https://www.linkedin.com/in/tuusuario'
+  codigoStemgame: ''     // enlace al repositorio de STEMGAME
+};
+
+/* Categorías (filtros). Colores dentro de la paleta rojo-morado-azul */
+const CATEGORIAS = {
+  java:     { texto:'Java',           color:'#ff5c7a' },
+  web:      { texto:'Web',            color:'#4d9bff' },
+  diseno:   { texto:'Diseño web',     color:'#ff7ab8' },
+  php:      { texto:'PHP',            color:'#9d7bff' },
+  bd:       { texto:'Bases de datos', color:'#c77dff' },
+  sistemas: { texto:'Sistemas',       color:'#6fb7ff' }
+};
+
+/* Proyectos de clase.
+   demo: página que se abre dentro del portfolio con el botón «Probar».
+   captura: imagen de la página.
+   demos: demos extra dentro del detalle. */
+const PROYECTOS = [
+  // ---------- 1.º DAW ----------
+  { curso:1, titulo:'STEMGAME', resumen:'Plataforma de videojuegos con API REST y panel de administración',
+    modulo:'Proyecto final · tercer trimestre',
+    detalle:['Backend en capas: entidades, repositorios, servicios y controladores REST.','Cinco entidades relacionadas: juegos, plataformas, desarrolladoras, clientes y reseñas.','Frontend en JavaScript sin frameworks, con un módulo de API por entidad.','Datos de prueba con JavaFaker, pruebas con JUnit y documentación con Javadoc.'],
+    etiquetas:['Spring Boot','JPA','JavaScript'], tipo:['java','web','bd'], demo:'proyectos/stemgame/index.html', captura:'img/capturas/stemgame-catalogo.webp' },
+
+  { curso:1, titulo:'Taskify', resumen:'API REST para gestionar tareas',
+    modulo:'Programación · tercer trimestre',
+    detalle:['Endpoints para crear, consultar, editar y borrar tareas con fecha límite y estado.','Separación en modelo, repositorio, servicio y controlador.','La demo es una consola tipo Postman para lanzar las peticiones.'],
+    etiquetas:['Spring Boot','JPA'], tipo:['java'], demo:'proyectos/api-rest/index.html?app=taskify', captura:'img/capturas/taskify.webp' },
+
+  { curso:1, titulo:'CRUD de mascotas', resumen:'Mi primera API REST completa',
+    modulo:'Programación · tercer trimestre',
+    detalle:['Alta, consulta, edición y borrado de mascotas.','Primer proyecto con la arquitectura en capas que luego usé en STEMGAME.'],
+    etiquetas:['Spring Boot','JPA'], tipo:['java'], demo:'proyectos/api-rest/index.html?app=mascotas', captura:'img/capturas/mascotas.webp' },
+
+  { curso:1, titulo:'Gestión de cines', resumen:'Proyecto intermodular: la misma idea en tres asignaturas',
+    modulo:'Programación, Entornos de Desarrollo y Bases de Datos · segundo trimestre',
+    detalle:['Programación: aplicación de consola en Java orientado a objetos con cines, salas de 10×20 butacas, películas, proyecciones y clientes. Evita que se solapen las sesiones y calcula la hora de fin.','Entornos: diagrama UML de clases, proyecto Maven, convención de commits y trabajo con ramas.','Bases de Datos: modelo entidad-relación, procedimiento de compra de entradas y consultas de estadísticas.'],
+    etiquetas:['Java','UML','SQL'], tipo:['java','bd'], demo:'proyectos/cines-java/index.html', captura:'img/capturas/cines-java.webp',
+    demos:[{texto:'Probar la base de datos', url:'proyectos/sql/index.html?db=cines'}] },
+
+  { curso:1, titulo:'STEM Farm', resumen:'Juego de gestión de una granja en el navegador',
+    modulo:'Programación · primer trimestre',
+    detalle:['Cada turno es un día: los animales comen, se ensucian, enferman, nacen y mueren según cómo los cuides.','Tienda con mejoras para la granja y gestión del dinero.','JavaScript puro, con arrays y bucles como base.'],
+    etiquetas:['JavaScript'], tipo:['web'], demo:'proyectos/stem-farm/index.html', captura:'img/capturas/stem-farm.webp' },
+
+  { curso:1, titulo:'R&M Wiki', resumen:'Buscador de personajes de Rick y Morty',
+    modulo:'Lenguajes de Marcas · segundo trimestre',
+    detalle:['Busca personajes por nombre o por número y muestra uno al azar.','Consume la API pública de Rick and Morty con fetch.','Diseño propio con tipografía y cursores personalizados.'],
+    etiquetas:['HTML','CSS','JavaScript','API'], tipo:['web'], demo:'proyectos/rm-wiki/index.html', captura:'img/capturas/rm-wiki.webp' },
+
+  { curso:1, titulo:'Parkings GUEMI', resumen:'Web de un parking con datos en XML',
+    modulo:'Lenguajes de Marcas · primer trimestre',
+    detalle:['Páginas de inicio, registro y contacto en HTML.','Abonados, plazas, tarifas y registro de accesos en XML, transformados con XSLT y validados con DTD y XSD.'],
+    etiquetas:['HTML','XML','XSLT'], tipo:['web'], demo:'proyectos/guemi/index.html', captura:'img/capturas/guemi.webp' },
+
+  { curso:1, titulo:'Red social', resumen:'Modelo relacional de una red social',
+    modulo:'Bases de Datos · primer trimestre',
+    detalle:['Usuarios, famosos, publicaciones, comentarios, seguidores, mejores amigos, «me gusta» y republicaciones.','La demo carga mi script SQL en una base de datos dentro del navegador para lanzar consultas.'],
+    etiquetas:['SQL'], tipo:['bd'], demo:'proyectos/sql/index.html?db=redsocial', captura:'img/capturas/red-social.webp' },
+
+  { curso:1, titulo:'Usuarios y permisos en Linux', resumen:'Administración de un sistema con grupos y permisos',
+    modulo:'Sistemas Informáticos · primer trimestre',
+    detalle:['Creación de grupos y usuarios por lotes con bucles de Bash.','Carpeta compartida con permisos distintos para técnicos, desarrolladores y administradores.','Caducidad de contraseñas, tareas programadas con cron y bloqueo de cuentas.'],
+    etiquetas:['Linux','Bash'], tipo:['sistemas'], demo:'proyectos/terminal-linux/index.html?modo=usuarios', captura:'img/capturas/linux.webp' },
+
+  { curso:1, titulo:'Consola de comandos en Bash', resumen:'Un script con su propio repertorio de comandos',
+    modulo:'Sistemas Informáticos · segundo trimestre',
+    detalle:['Opciones para crear carpetas, contar procesos, listar ficheros, hacer copias de seguridad y gestionar usuarios y grupos.','Registro de cada ejecución en un log con rotación.','Incluye la serie de Fibonacci y algún easter egg.'],
+    etiquetas:['Bash'], tipo:['sistemas'], demo:'proyectos/terminal-linux/index.html?modo=script', captura:'img/capturas/bash.webp' },
+
+  // ---------- 2.º DAW ----------
+  { curso:2, titulo:'Catálogo Felino', resumen:'Reserva de visitas a los gatos de un refugio',
+    modulo:'Desarrollo Web en Entorno Servidor',
+    detalle:['Dos formularios encadenados por POST con validación en el servidor.','Separa los gatos disponibles según la franja y asigna a cada uno un cuidador.','Calcula los horarios consecutivos según la confianza entre gato y cuidador.'],
+    etiquetas:['PHP'], tipo:['php','web'], demo:'proyectos/catalogo-felino/index.html', captura:'img/capturas/felino.webp' },
+
+  { curso:2, titulo:'Operación Cortacandados', resumen:'Expedientes de bicicletas robadas',
+    modulo:'Desarrollo Web en Entorno Servidor',
+    detalle:['Genera un expediente con pistas elegidas al azar y sin repetir.','Valora las decisiones del investigador, calcula la prioridad y la depreciación de la bicicleta.'],
+    etiquetas:['PHP'], tipo:['php','web'], demo:'proyectos/cortacandados/index.html', captura:'img/capturas/cortacandados.webp' },
+
+  { curso:2, titulo:'Tienda Barlovento', resumen:'Catálogo de muebles maquetado con CSS Grid',
+    modulo:'Diseño de Interfaces Web',
+    detalle:['Rejilla de productos con grid-template-columns y grid-template-rows.','Productos destacados que ocupan varias columnas con grid-column.','Copia de una tienda real a partir de una captura de referencia.'],
+    etiquetas:['CSS Grid','HTML'], tipo:['diseno','web'], demo:'proyectos/front/tienda-grid/index.html', captura:'img/capturas/tienda-grid.webp' },
+
+  { curso:2, titulo:'Studio Broker', resumen:'Landing de una agencia con Flexbox y CSS puro',
+    modulo:'Diseño de Interfaces Web',
+    detalle:['Toda la maquetación con Flexbox, sin frameworks.','Cabecera a pantalla completa, bloques de servicios y pie con redes.'],
+    etiquetas:['Flexbox','CSS'], tipo:['diseno','web'], demo:'proyectos/front/broker-flexbox/index.html', captura:'img/capturas/broker-flexbox.webp' },
+
+  { curso:2, titulo:'REEN.', resumen:'Web de una agencia creativa, responsive con media queries',
+    modulo:'Diseño de Interfaces Web',
+    detalle:['Maquetación con Flexbox y CSS puro.','Hoja de estilos responsive con varios puntos de corte que reordenan los bloques.'],
+    etiquetas:['Flexbox','Responsive','CSS'], tipo:['diseno','web'], demo:'proyectos/front/reen-flexbox/index.html', captura:'img/capturas/reen-flexbox.webp' },
+
+  { curso:2, titulo:'Vivero Brote', resumen:'Landing de un vivero hecha en Bootstrap 6 (práctica de examen)',
+    modulo:'Desarrollo Web en Entorno Cliente',
+    detalle:['Hecha con Bootstrap 6: navbar plegable, rejilla de columnas y tarjetas.','Estilos propios encima del framework para la identidad del vivero.','Adaptada a móvil y escritorio.'],
+    etiquetas:['Bootstrap 6','Responsive'], tipo:['diseno','web'], demo:'proyectos/front/vivero-brote/index.html', captura:'img/capturas/vivero-brote.webp' },
+
+  { curso:2, titulo:'Sunnyside', resumen:'Reto de Frontend Mentor maquetado con Bootstrap 6',
+    modulo:'Desarrollo Web en Entorno Cliente',
+    detalle:['Reproduce el diseño de escritorio y de móvil del reto.','Rejilla de Bootstrap para la galería y los testimonios, menú hamburguesa en móvil.'],
+    etiquetas:['Bootstrap 6','Responsive'], tipo:['diseno','web'], demo:'proyectos/front/sunnyside/index.html', captura:'img/capturas/sunnyside.webp' },
+
+  { curso:2, titulo:'Stklm', resumen:'Web de estudio con Bootstrap 6',
+    modulo:'Desarrollo Web en Entorno Cliente',
+    detalle:['Cabecera con imagen, sección de trabajos y equipo con el sistema de columnas de Bootstrap.','Navbar que se pliega en pantallas pequeñas.'],
+    etiquetas:['Bootstrap 6'], tipo:['diseno','web'], demo:'proyectos/front/stklm/index.html', captura:'img/capturas/stklm.webp' }
+];
+
+const CURSOS = [
+  { n:1, nombre:'Primer curso', anios:'2025 — 2026' },
+  { n:2, nombre:'Segundo curso', anios:'2026 — 2027', enCurso:true }
+];
+
+/* ================= Steal An Disasters ================= */
+const DISASTER = {
+  /* IAs usadas en el proyecto */
+  ias: [
+    { nombre:'Claude', uso:'Programación en Luau, prompts y documentación' },
+    { nombre:'Gemini', uso:'Diseño de criaturas en tres vistas' },
+    { nombre:'Hyper3D', uso:'Modelos 3D, rigging y animaciones' },
+    { nombre:'Codex', uso:'Cambios en el mapa y registro técnico' },
+    { nombre:'IA musical', uso:'Banda sonora del juego' }
+  ],
+  /* Criatura con visor 3D. El .glb debe tener las animaciones con estos nombres
+     (o parecidos: se buscan por palabra clave). */
+  criatura: {
+    nombre:'Mainframe Mutator', zona:'Cyber Collapse · épico',
+    imagen:'proyectos/disaster/img/mainframe-mutator.webp',
+    modelo:'proyectos/disaster/modelo/mainframe-mutator.glb',
+    animaciones: [
+      { texto:'Reposo',       clave:['idle'] },
+      { texto:'Andar',        clave:['walk'] },
+      { texto:'Hip Hop',      clave:['hiphop','hip hop'] },
+      { texto:'Dance 1',      clave:['dance'] },
+      { texto:'Salsa 1',      clave:['salsa'] },
+      { texto:'Dying 2',      clave:['dying','death','die'] }
+    ]
+  },
+  musica: [
+    { titulo:'Lobby', nota:'tema principal', src:'proyectos/disaster/musica/lobby.mp3' },
+    { titulo:'Lobby · Halloween', nota:'remix de evento', src:'proyectos/disaster/musica/lobby-halloween.mp3' },
+    { titulo:'Lobby · Navidad', nota:'remix de evento', src:'proyectos/disaster/musica/lobby-navidad.mp3' }
+  ],
+  galeria: [
+    { src:'proyectos/disaster/img/mainframe-mutator.webp', nombre:'Mainframe Mutator', nota:'Cyber Collapse · épico' },
+    { src:'proyectos/disaster/img/zero-day-overlord.webp', nombre:'Zero-Day Overlord', nota:'Cyber Collapse · legendario' },
+    { src:'proyectos/disaster/img/ransomware-raptor.webp', nombre:'Ransomware Raptor', nota:'Cyber Collapse · raro' },
+    { src:'proyectos/disaster/img/pem-golem.webp', nombre:'EMP Golem', nota:'Cyber Collapse · raro' },
+    { src:'proyectos/disaster/img/toxic-bloom.webp', nombre:'Toxic Bloom', nota:'Jungle Hazard · raro' },
+    { src:'proyectos/disaster/img/overgrowth-behemoth.webp', nombre:'Overgrowth Behemoth', nota:'Jungle Hazard · épico' },
+    { src:'proyectos/disaster/img/golem-radiactivo.webp', nombre:'Gólem radiactivo', nota:'Zona radiactiva' }
+  ]
+};
+
+/* ---------------- Utilidades ---------------- */
+const $ = (s, el=document) => el.querySelector(s);
+const crear = (tag, props={}, hijos=[]) => {
+  const el = Object.assign(document.createElement(tag), props);
+  hijos.forEach(h => h && el.append(h));
+  return el;
+};
+const FLECHA_EXT = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg>';
+const ICONO_PLAY = '<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg>';
+const MAS = '<svg class="mas" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+/* Botón que abre una demo dentro del propio portfolio */
+const botonProbar = (titulo, url, texto='Probar', clase='boton peq') => {
+  const b = crear('button', {className:clase, type:'button', innerHTML:`${ICONO_PLAY}<span>${texto}</span>`});
+  b.addEventListener('click', ev => { ev.stopPropagation(); abrirVisor(titulo, url); });
+  return b;
+};
+
+/* ---------------- Código del hero ---------------- */
+function pintarCodigo(){
+  const lineas = [
+    '<span class="c">// Un poco sobre mí</span>',
+    '<span class="k">public record</span> <span class="t">Desarrollador</span>(',
+    '    <span class="t">String</span> nombre,',
+    '    <span class="t">List</span>&lt;<span class="t">String</span>&gt; stack,',
+    '    <span class="t">String</span> objetivo) {',
+    '',
+    '  <span class="k">static</span> <span class="t">Desarrollador</span> <span class="f">fran</span>() {',
+    '    <span class="k">return new</span> <span class="t">Desarrollador</span>(',
+    '      <span class="s">"Francisco Marín"</span>,',
+    '      <span class="t">List</span>.<span class="f">of</span>(<span class="s">"Java"</span>, <span class="s">"Spring Boot"</span>, <span class="s">"PHP"</span>),',
+    '      <span class="s">"Aprender construyendo"</span>);',
+    '  }',
+    '}<span class="cursor">&nbsp;</span>'
+  ];
+  $('#codigo').innerHTML = lineas.map((l,i) => `<div><span class="n">${String(i+1).padStart(2,'0')}</span><span>${l}</span></div>`).join('');
+}
+
+/* ---------------- Proyectos de clase ---------------- */
+function pintarCursos(){
+  const cont = $('#cursos');
+  CURSOS.forEach(c => {
+    const cab = crear('div', {className:'curso-cabecera'}, [
+      crear('h3', {textContent:c.nombre}),
+      crear('p', {textContent:c.anios}),
+      c.enCurso ? crear('span', {className:'en-curso', textContent:'en curso'}) : null
+    ]);
+    const lista = crear('div', {className:'lista'});
+    PROYECTOS.filter(p => p.curso === c.n).forEach((p, i) => lista.append(pintarProyecto(p, `${c.n}-${i}`)));
+    lista.append(crear('p', {className:'vacio', hidden:true, textContent:'No hay proyectos de este tipo en este curso.'}));
+    cont.append(crear('div', {className:'curso'}, [cab, lista]));
+  });
+}
+
+function pintarProyecto(p, id){
+  const art = crear('article', {className:'proyecto'});
+  art.dataset.tipo = p.tipo.join(' ');
+  art.style.setProperty('--c', CATEGORIAS[p.tipo[0]].color);
+
+  const alternar = crear('button', {className:'alternar', type:'button'});
+  alternar.setAttribute('aria-expanded', 'false');
+  alternar.setAttribute('aria-controls', 'det-' + id);
+  alternar.append(crear('span', {className:'titulo', textContent:p.titulo}), crear('span', {className:'resumen', textContent:p.resumen}));
+
+  const mini = p.captura ? crear('img', {className:'miniatura', src:p.captura, alt:'', loading:'lazy', width:160, height:100}) : crear('span');
+  const etiquetas = crear('div', {className:'etiquetas'}, p.etiquetas.map(t => crear('span', {className:'etiqueta', textContent:t})));
+  const lado = crear('div', {className:'lado'});
+  if (p.demo) lado.append(botonProbar(p.titulo, p.demo));
+  lado.insertAdjacentHTML('beforeend', MAS);
+  const fila = crear('div', {className:'fila'}, [mini, alternar, etiquetas, lado]);
+
+  const acciones = crear('div', {className:'acciones'});
+  if (p.demo) acciones.append(botonProbar(p.titulo, p.demo, 'Probar ' + p.titulo, 'boton peq principal'));
+  (p.demos || []).forEach(d => acciones.append(botonProbar(p.titulo, d.url, d.texto)));
+  const texto = crear('div', {}, [
+    crear('p', {className:'modulo', textContent:p.modulo}),
+    crear('ul', {}, p.detalle.map(d => crear('li', {textContent:d}))),
+    acciones
+  ]);
+  const captura = p.captura ? crear('button', {className:'captura', type:'button', innerHTML:`<img src="${p.captura}" alt="Captura de ${p.titulo}" loading="lazy"><span>${ICONO_PLAY} Probar aquí</span>`}) : null;
+  if (captura) captura.addEventListener('click', () => abrirVisor(p.titulo, p.demo));
+  const interior = crear('div', {className:'detalle-interior'}, [texto, captura]);
+  const det = crear('div', {className:'detalle', id:'det-' + id}, [crear('div', {}, [interior])]);
+
+  fila.addEventListener('click', ev => {
+    if (ev.target.closest('.lado .boton')) return;
+    const abierto = art.classList.toggle('abierto');
+    alternar.setAttribute('aria-expanded', String(abierto));
+  });
+  art.append(fila, det);
+  return art;
+}
+
+function pintarFiltros(){
+  const cont = $('#filtros');
+  const opciones = [{id:'todo', texto:'Todo', color:'#f4f1ff'}].concat(Object.entries(CATEGORIAS).map(([id, c]) => ({id, texto:c.texto, color:c.color})));
+  opciones.forEach(f => {
+    const cuantos = f.id === 'todo' ? PROYECTOS.length : PROYECTOS.filter(p => p.tipo.includes(f.id)).length;
+    if (!cuantos) return;
+    const b = crear('button', {className:'filtro', type:'button'});
+    b.style.setProperty('--c', f.color);
+    b.append(f.texto + ' ', crear('span', {className:'num', textContent:cuantos}));
+    b.setAttribute('aria-pressed', f.id === 'todo' ? 'true' : 'false');
+    b.addEventListener('click', () => {
+      cont.querySelectorAll('.filtro').forEach(x => x.setAttribute('aria-pressed', 'false'));
+      b.setAttribute('aria-pressed', 'true');
+      document.querySelectorAll('.lista').forEach(lista => {
+        let visibles = 0;
+        lista.querySelectorAll('.proyecto').forEach(pr => {
+          const ok = f.id === 'todo' || pr.dataset.tipo.split(' ').includes(f.id);
+          pr.hidden = !ok; if (ok) visibles++;
+        });
+        $('.vacio', lista).hidden = visibles > 0;
+      });
+    });
+    cont.append(b);
+  });
+}
+
+/* ---------------- Visor de demos (dentro de la página) ---------------- */
+const visor = $('#visor');
+function abrirVisor(titulo, url){
+  $('#visor-titulo').textContent = titulo;
+  $('#visor-nueva').href = url;
+  $('#visor-marco').src = url;
+  visor.showModal();
+  document.body.style.overflow = 'hidden';
+}
+visor.addEventListener('close', () => { $('#visor-marco').src = 'about:blank'; document.body.style.overflow = ''; });
+$('#visor-cerrar').addEventListener('click', () => visor.close());
+visor.addEventListener('click', ev => { if (ev.target === visor) visor.close(); });
+
+/* ---------------- Proyectos personales ---------------- */
+function pintarPersonales(){
+  const d = DISASTER, c = d.criatura;
+  $('#ias').innerHTML = d.ias.map(i => `<li><strong>${i.nombre}</strong><span>${i.uso}</span></li>`).join('');
+  $('#criatura').innerHTML = `
+    <img src="${c.imagen}" alt="${c.nombre} en tres vistas, generado con Gemini">
+    <div class="criatura-pie">
+      <span><strong>${c.nombre}</strong><small>${c.zona}</small></span>
+      <button class="boton principal" type="button" id="abrir-3d"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M8 1.5 14 5v6l-6 3.5L2 11V5zM2 5l6 3.5L14 5M8 8.5v6"/></svg>Ver en 3D</button>
+    </div>`;
+  $('#abrir-3d').addEventListener('click', abrir3D);
+
+  $('#musica').innerHTML = d.musica.map((m, i) => `
+    <div class="pista-musica" data-i="${i}">
+      <button class="play" type="button" aria-label="Reproducir ${m.titulo}">${ICONO_PLAY}</button>
+      <div class="info"><strong>${m.titulo}</strong><small>${m.nota}</small>
+        <div class="barra-audio"><span></span></div></div>
+      <span class="tiempo">0:00</span>
+    </div>`).join('');
+  iniciarMusica();
+
+  $('#galeria-disaster').innerHTML = d.galeria.map(g => `<figure><img src="${g.src}" alt="${g.nombre}" loading="lazy" data-nota="${g.nota}"><figcaption><b>${g.nombre}</b> · ${g.nota}</figcaption></figure>`).join('');
+  document.querySelectorAll('#galeria-disaster img, #criatura > img').forEach(img => img.addEventListener('click', () => {
+    $('#img-luz').src = img.src; $('#img-luz').alt = img.alt;
+    $('#texto-luz').textContent = img.alt;
+    $('#caja-luz').showModal();
+  }));
+}
+$('#cerrar-luz').addEventListener('click', () => $('#caja-luz').close());
+$('#caja-luz').addEventListener('click', e => { if (e.target.id === 'caja-luz') e.target.close(); });
+
+/* Reproductor de música */
+function iniciarMusica(){
+  const audio = new Audio(); audio.preload = 'none';
+  let actual = -1;
+  const pistas = [...document.querySelectorAll('.pista-musica')];
+  const fmt = t => isFinite(t) ? `${Math.floor(t/60)}:${String(Math.floor(t%60)).padStart(2,'0')}` : '0:00';
+  pistas.forEach(p => {
+    const i = +p.dataset.i;
+    $('.play', p).addEventListener('click', () => {
+      if (actual === i && !audio.paused){ audio.pause(); return; }
+      if (actual !== i){ audio.src = DISASTER.musica[i].src; actual = i; }
+      audio.play().catch(() => {});
+    });
+    $('.barra-audio', p).addEventListener('click', e => {
+      if (actual !== i || !audio.duration) return;
+      const r = e.currentTarget.getBoundingClientRect();
+      audio.currentTime = (e.clientX - r.left) / r.width * audio.duration;
+    });
+  });
+  const refrescar = () => pistas.forEach(p => {
+    const i = +p.dataset.i, sonando = i === actual && !audio.paused;
+    p.classList.toggle('sonando', sonando);
+    $('.play', p).innerHTML = sonando ? '<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/></svg>' : ICONO_PLAY;
+    $('.play', p).setAttribute('aria-label', (sonando ? 'Pausar ' : 'Reproducir ') + DISASTER.musica[i].titulo);
+    if (i === actual){ $('.barra-audio span', p).style.width = (audio.currentTime / (audio.duration || 1) * 100) + '%'; $('.tiempo', p).textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration); }
+  });
+  ['play','pause','timeupdate','ended','loadedmetadata'].forEach(ev => audio.addEventListener(ev, refrescar));
+}
+
+/* Visor 3D de la criatura */
+let texturasOriginales = null;
+function abrir3D(){
+  const c = DISASTER.criatura, d = $('#visor-3d');
+  $('#titulo-3d').textContent = c.nombre;
+  const mv = $('#modelo-3d');
+  if (!mv.getAttribute('src')) mv.setAttribute('src', c.modelo);
+  d.showModal();
+  document.body.style.overflow = 'hidden';
+}
+$('#visor-3d').addEventListener('close', () => { document.body.style.overflow = ''; const mv = $('#modelo-3d'); mv.pause && mv.pause(); });
+$('#cerrar-3d').addEventListener('click', () => $('#visor-3d').close());
+
+function prepararModelo(){
+  const mv = $('#modelo-3d'), c = DISASTER.criatura;
+  const botones = $('#animaciones');
+  mv.addEventListener('error', () => { $('#estado-3d').hidden = false; });
+  mv.addEventListener('load', () => {
+    $('#estado-3d').hidden = true;
+    texturasOriginales = mv.model.materials.map(m => m.pbrMetallicRoughness.baseColorTexture.texture);
+    const disponibles = mv.availableAnimations || [];
+    botones.innerHTML = '';
+    const usadas = new Set();
+    const animar = (nombre, b) => {
+      botones.querySelectorAll('.boton').forEach(x => x.setAttribute('aria-pressed', 'false'));
+      b.setAttribute('aria-pressed', 'true');
+      mv.animationName = nombre; mv.currentTime = 0; mv.play({repetitions: /dying|death|die/i.test(nombre) ? 1 : Infinity});
+    };
+    c.animaciones.forEach(a => {
+      const encontrada = disponibles.find(n => !usadas.has(n) && a.clave.some(k => n.toLowerCase().replace(/[_-]/g,' ').includes(k.replace(/[_-]/g,' '))));
+      if (!encontrada) return;
+      usadas.add(encontrada);
+      const b = crear('button', {className:'boton peq', type:'button', textContent:a.texto});
+      b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', () => animar(encontrada, b));
+      botones.append(b);
+    });
+    disponibles.filter(n => !usadas.has(n)).forEach(n => {
+      const b = crear('button', {className:'boton peq', type:'button', textContent:n});
+      b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', () => animar(n, b));
+      botones.append(b);
+    });
+    const primero = botones.querySelector('.boton');
+    if (primero) primero.click(); else mv.pause();
+  });
+  $('#interruptor-textura').addEventListener('change', async e => {
+    if (!mv.model) return;
+    const con = e.target.checked;
+    mv.model.materials.forEach((m, i) => {
+      const pbr = m.pbrMetallicRoughness;
+      if (con){ if (texturasOriginales[i]) pbr.baseColorTexture.setTexture(texturasOriginales[i]); pbr.setBaseColorFactor([1,1,1,1]); }
+      else { pbr.baseColorTexture.setTexture(null); pbr.setBaseColorFactor([0.5,0.5,0.58,1]); }
+    });
+  });
+}
+
+/* ---------------- Contacto ---------------- */
+function pintarContacto(){
+  const correo = $('#correo');
+  $('#correo-texto').textContent = CONFIG.correo;
+  correo.href = 'mailto:' + CONFIG.correo;
+  $('#copiar').addEventListener('click', async e => {
+    e.preventDefault();
+    try { await navigator.clipboard.writeText(CONFIG.correo); e.target.textContent = 'Copiado'; }
+    catch { e.target.textContent = 'Cópialo a mano'; }
+    setTimeout(() => (e.target.textContent = 'Copiar'), 2000);
+  });
+  [['GitHub', CONFIG.github], ['LinkedIn', CONFIG.linkedin]].forEach(([t, url]) => {
+    if (url) $('#redes').append(crear('a', {className:'boton peq externo', href:url, target:'_blank', rel:'noopener', innerHTML:`${t} ${FLECHA_EXT}`}));
+  });
+  if (CONFIG.github){
+    const h = $('#enlace-github-hero'); h.href = CONFIG.github; h.target = '_blank'; h.rel = 'noopener'; h.firstChild.textContent = 'Mi GitHub ';
+  }
+  if (CONFIG.codigoStemgame) $('#stemgame-acciones').append(crear('a', {className:'boton externo', href:CONFIG.codigoStemgame, target:'_blank', rel:'noopener', innerHTML:`Ver el código ${FLECHA_EXT}`}));
+  document.querySelectorAll('[data-probar]').forEach(b => b.addEventListener('click', () => abrirVisor(b.dataset.titulo, b.dataset.probar)));
+  $('#pie').textContent = '© ' + new Date().getFullYear() + ' Francisco Marín Narbona';
+}
+
+/* ---------------- Cabecera y menú móvil ---------------- */
+function cabecera(){
+  const cab = $('#cabecera');
+  addEventListener('scroll', () => cab.classList.toggle('con-borde', scrollY > 8), {passive:true});
+  const boton = $('#boton-menu'), menu = $('#menu');
+  boton.addEventListener('click', () => {
+    const abierto = menu.classList.toggle('abierto');
+    boton.setAttribute('aria-expanded', String(abierto));
+  });
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { menu.classList.remove('abierto'); boton.setAttribute('aria-expanded', 'false'); }));
+  const enlaces = [...menu.querySelectorAll('a')];
+  const obs = new IntersectionObserver(entradas => entradas.forEach(e => {
+    if (e.isIntersecting) enlaces.forEach(a => a.classList.toggle('activo', a.getAttribute('href') === '#' + e.target.id));
+  }), {rootMargin:'-45% 0px -50% 0px'});
+  document.querySelectorAll('main section[id]').forEach(s => obs.observe(s));
+}
+
+pintarCodigo();
+pintarCursos();
+pintarFiltros();
+pintarPersonales();
+prepararModelo();
+pintarContacto();
+cabecera();
+</script>
+</body>
+</html>

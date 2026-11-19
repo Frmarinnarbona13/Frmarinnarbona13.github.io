@@ -1,0 +1,200 @@
+/* ===================================================
+   VARIABLES: colores y fuentes de la GuiaEstilo.md
+   =================================================== */
+:root {
+  --salmon: hsl(7, 99%, 70%);
+  --amarillo: hsl(51, 100%, 49%);
+  --texto-diseno: hsl(167, 40%, 24%);      /* texto "Graphic Design" */
+  --texto-foto: hsl(198, 62%, 26%);        /* texto "Photography" */
+  --footer-texto: hsl(168, 34%, 41%);
+
+  --azul-muy-oscuro: hsl(212, 27%, 19%);   /* títulos */
+  --gris-muy-oscuro: hsl(213, 9%, 39%);    /* opiniones */
+  --gris-oscuro: hsl(232, 10%, 55%);       /* párrafos */
+  --gris: hsl(210, 4%, 67%);               /* textos secundarios */
+  --crema: #fffaf5;
+  --footer-fondo: #90d4c5;
+
+  --fuente-texto: "Barlow", sans-serif;
+  --fuente-titulos: "Fraunces", serif;
+}
+
+body {
+  font-family: var(--fuente-texto);
+  font-weight: 600;
+  font-size: 1.125rem;   /* 18px, como dice la guía */
+}
+
+/* ===================================================
+   HEADER
+   =================================================== */
+header {
+  background-image: url(../images/desktop/image-header.jpg);
+  background-size: cover;        /* la imagen rellena todo el header */
+  background-position: center;
+  min-height: 800px;
+  padding: 1.3rem;
+}
+
+/* En móvil, imagen de móvil */
+@media (width < 768px) {
+  header {
+    background-image: url(../images/mobile/image-header.jpg);
+    min-height: 600px;
+  }
+}
+
+/* Navbar transparente (Bootstrap le pone fondo blanco por defecto) */
+header .navbar {
+  --bs-navbar-bg: transparent;
+}
+
+/* Botón "CONTACT" */
+header .nav-link.active {
+  background-color: white;
+  color: var(--azul-muy-oscuro);
+  border-radius: 3rem;
+  text-transform: uppercase;
+  font-family: var(--fuente-titulos);
+  font-weight: 900;
+  padding: .9rem 2rem;
+}
+
+/* Desde lg los enlaces están sobre la foto: van en blanco.
+   (Por debajo de lg están dentro del drawer blanco y se quedan oscuros) */
+@media (width >= 1024px) {
+  header .nav-link:not(.active) {
+    color: white;
+  }
+}
+
+/* Hero */
+#hero {
+  padding-top: 7rem;   /* espacio sobre el título */
+  gap: 5rem;           /* espacio entre título y flecha */
+}
+
+#hero h1 {
+  font-family: var(--fuente-titulos);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .4rem;
+}
+
+/* ===================================================
+   SERVICIOS
+   =================================================== */
+.bloque-texto {
+  background-color: var(--crema);
+  padding: 4rem 2rem;
+}
+
+.bloque-texto > div {
+  max-width: 440px;
+}
+
+.bloque-texto h2 {
+  font-family: var(--fuente-titulos);
+  font-weight: 900;
+  font-size: 2.5rem;
+  color: var(--azul-muy-oscuro);
+  margin-bottom: 2rem;
+}
+
+.bloque-texto p {
+  color: var(--gris-oscuro);
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+}
+
+/* "LEARN MORE" con franja de color debajo */
+.learn-more {
+  font-family: var(--fuente-titulos);
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--azul-muy-oscuro);
+  text-decoration: none;
+  padding: 0 .3rem;
+  border-radius: 1rem;
+}
+
+.learn-more.amarillo { box-shadow: inset 0 -.6rem 0 hsl(51, 100%, 49%, .3); }
+.learn-more.rosa     { box-shadow: inset 0 -.6rem 0 hsl(7, 99%, 70%, .3); }
+
+/* Texto encima de las fotos de la fila 3 */
+.texto-foto h3 {
+  font-family: var(--fuente-titulos);
+  font-weight: 900;
+  margin-bottom: 1.5rem;
+}
+
+.texto-foto p {
+  font-size: 1rem;
+  max-width: 330px;
+  margin: 0 auto 2rem;
+}
+
+.texto-foto.verde { color: var(--texto-diseno); }
+.texto-foto.azul  { color: var(--texto-foto); }
+
+/* ===================================================
+   TESTIMONIOS
+   =================================================== */
+#testimonios {
+  background-color: var(--crema);
+  padding: 10rem 1.5rem;
+}
+
+#testimonios .container {
+  max-width: 1110px;
+}
+
+.titulo-testimonios {
+  font-family: var(--fuente-titulos);
+  font-weight: 900;
+  font-size: 1.125rem;
+  text-transform: uppercase;
+  letter-spacing: .4rem;
+  color: var(--gris);
+}
+
+.opinion {
+  color: var(--gris-muy-oscuro);
+  line-height: 1.8;
+  max-width: 330px;
+  margin: 0 auto 4rem;   /* centrado y espacio debajo */
+}
+
+.nombre {
+  font-family: var(--fuente-titulos);
+  font-weight: 900;
+  color: var(--azul-muy-oscuro);
+}
+
+.puesto {
+  font-size: .875rem;
+  color: var(--gris);
+}
+
+/* ===================================================
+   FOOTER
+   =================================================== */
+footer {
+  background-color: var(--footer-fondo);
+}
+
+.footer-link {
+  color: var(--footer-texto);
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  color: white;
+}
+
+/* En móvil, menos espacio entre letras para que el título quepa */
+@media (width < 768px) {
+  #hero h1 {
+    letter-spacing: .2rem;
+  }
+}

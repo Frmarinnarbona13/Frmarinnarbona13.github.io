@@ -1,0 +1,153 @@
+/* ===================================================
+   VARIABLES
+   =================================================== */
+:root {
+  --turquesa: #43ccb3;
+  --rojo: #f0656f;
+  --oscuro: #222;
+  --gris: #999;
+}
+
+body {
+  font-family: "Raleway", sans-serif;
+  color: var(--oscuro);
+}
+
+/* ===================================================
+   HEADER (navbar + hero)
+   =================================================== */
+#header {
+  background-color: var(--turquesa);
+}
+
+/* Navbar transparente sobre el turquesa */
+.navbar {
+  --bs-navbar-bg: transparent;
+}
+
+.navbar .nav-link {
+  font-weight: 800;
+  font-size: .85rem;
+  text-transform: uppercase;
+}
+
+/* Desde md los enlaces están sobre el turquesa: van en blanco.
+   (Por debajo están en el drawer blanco y se quedan oscuros) */
+@media (width >= 768px) {
+  .navbar .nav-link {
+    color: white;
+  }
+  .navbar .nav-link:hover {
+    color: var(--oscuro);
+  }
+}
+
+#hero {
+  min-height: 460px;
+  padding-top: 5rem;
+}
+
+/* start-50 la lleva al centro y translate la recoloca la mitad hacia la izquierda */
+.hero-foto {
+  transform: translateX(-50%);
+  height: 90%;
+  width: auto;
+}
+
+#hero h1 {
+  font-weight: 200;
+  font-size: clamp(2.8rem, 9vw, 6.5rem);   /* crece con la pantalla */
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.hero-sub {
+  font-weight: 800;
+  font-size: clamp(1.3rem, 3vw, 2.2rem);
+  text-transform: uppercase;
+}
+
+/* ===================================================
+   TÍTULOS DE SECCIÓN con raya debajo
+   =================================================== */
+.titulo {
+  font-weight: 600;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+}
+
+.raya {
+  width: 2.2rem;
+  border: 0;
+  border-top: 2px solid var(--turquesa);
+  opacity: 1;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.raya-roja {
+  border-top-color: var(--rojo);
+}
+
+.intro {
+  max-width: 700px;
+  font-size: .9rem;
+  font-weight: 300;
+  color: var(--gris);
+}
+
+/* ===================================================
+   SOPORTE
+   =================================================== */
+.soporte-fila {
+  max-width: 1000px;
+}
+
+.icono {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  flex-shrink: 0;   /* que el icono no se encoja si el texto es largo */
+}
+
+.soporte-titulo {
+  font-weight: 600;
+  font-size: .85rem;
+  text-transform: uppercase;
+  margin-bottom: .4rem;
+}
+
+.soporte-texto {
+  font-size: .85rem;
+  font-weight: 300;
+  color: var(--gris);
+}
+
+/* ===================================================
+   EQUIPO
+   =================================================== */
+#equipo img {
+  aspect-ratio: 380 / 470;
+  object-fit: cover;
+}
+
+.nombre {
+  font-weight: 600;
+  font-size: .75rem;
+  text-transform: uppercase;
+}
+
+.cargo {
+  font-size: .75rem;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--gris);
+}
+
+/* ===================================================
+   FOOTER
+   =================================================== */
+footer {
+  background-color: var(--turquesa);
+  padding: 4rem 0;
+}
