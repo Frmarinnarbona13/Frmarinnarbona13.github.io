@@ -755,7 +755,7 @@ const DISASTER = {
   criatura: {
     nombre:'Mainframe Mutator', zona:'Cyber Collapse · épico',
     imagen:'proyectos/disaster/img/mainframe-mutator.webp',
-    modelo:'proyectos/disaster/modelo/mainframe-mutator.glb',
+    modelo:'proyectos/disaster/modelo/mainframe-mutator.glb?v=2',
     animaciones: [
       { texto:'Reposo',       clave:['idle'] },
       { texto:'Andar',        clave:['walk'] },
@@ -988,7 +988,7 @@ $('#cerrar-3d').addEventListener('click', () => $('#visor-3d').close());
 function prepararModelo(){
   const mv = $('#modelo-3d'), c = DISASTER.criatura;
   const botones = $('#animaciones');
-  mv.addEventListener('error', () => { $('#estado-3d').hidden = false; });
+  mv.addEventListener('error', e => { const d = e.detail || {}; $('#estado-3d').textContent = d.type === 'webglcontextlost' ? 'Tu navegador no ha podido iniciar el 3D (WebGL).' : 'No se ha podido cargar el modelo 3D. Recarga la página con Ctrl+F5.'; $('#estado-3d').hidden = false; console.error('model-viewer', d); });
   mv.addEventListener('load', () => {
     $('#estado-3d').hidden = true;
     texturasOriginales = mv.model.materials.map(m => m.pbrMetallicRoughness.baseColorTexture.texture);
